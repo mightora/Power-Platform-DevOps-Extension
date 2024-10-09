@@ -1,0 +1,57 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "47a6e861-898d-4d2a-bba1-8c66b39d379a",
+    "name": "test",
+    "friendlyName": "Mightora Test Task",
+    "instanceNameFormat": "Mightora Task Name Format",
+    "description": "Test Task description",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 2,
+        "Patch": 4
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "projectFolder",
+            "type": "string",
+            "label": "Project Folder",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Enter a full path to your project",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "outputFolder",
+            "type": "string",
+            "label": "Output Folder",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Enter output folder",
+            "groupName": "outputGroup"
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(currentDirectory)"
+        }
+    }
+}

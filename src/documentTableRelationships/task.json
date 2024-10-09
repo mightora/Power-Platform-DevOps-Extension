@@ -1,0 +1,83 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "37a71da0-e3c8-4647-ada9-13621222d8e6",
+    "name": "documentTableRelationships",
+    "friendlyName": "Mightora Power Platform Table Relationship Documentation Generator",
+    "instanceNameFormat": "Mightora Power Platform Table Relationship Documentation Generator",
+    "description": "This task automates the process of documenting Dataverse table relationships. By parsing relationship data from XML files, it generates Markdown documentation that details relationships between tables, including one-to-many, many-to-one, and many-to-many associations. Choose between outputting the documentation into a single file or individual files for each table, making it easier to manage and understand the relationships within your Dataverse environment.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 1,
+        "Patch": 13
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "locationOfUnpackedSolution",
+            "type": "string",
+            "label": "Unpacked Solution Folder",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The path to the directory containing the Dataverse unpacked Solution, each of which should have an Entity.xml file.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "wikiLocation",
+            "type": "string",
+            "label": "Wiki Location",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The directory where the generated Markdown documentation files will be stored. If this directory doesn't exist, the script will create it.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "useSingleFile",
+            "type": "boolean",
+            "label": "Output to Single File",
+            "defaultValue": "true",
+            "required": true,
+            "helpMarkDown": "Choose between: True = output to Single File or false = File per Table.",
+            "groupName": "inputGroup",
+            "properties": {
+                "trueOption": "Single File",
+                "falseOption": "File per Table"
+            }
+        },
+        {
+            "name": "createFullERD",
+            "type": "boolean",
+            "label": "Create Full ERD (PREVIEW)",
+            "defaultValue": "true",
+            "required": true,
+            "helpMarkDown": "Choose between: True = Creates full ERD at the end of the single document or false = No ERD.",
+            "groupName": "inputGroup",
+            "properties": {
+                "trueOption": "Single File",
+                "falseOption": "File per Table"
+            }
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(Build.SourcesDirectory)"
+        }
+    }
+}

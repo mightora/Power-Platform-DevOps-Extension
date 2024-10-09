@@ -1,0 +1,48 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "579190ac-ccd4-4451-a199-a6150001cf1a",
+    "name": "commitToRepo",
+    "friendlyName": "Mightora Commit To Git Repository",
+    "instanceNameFormat": "Mightora Commit To Git Repository",
+    "description": "Effortlessly commit your pipeline's working directory changes to your Git repository. This task handles everything from staging all modifications to pushing them using secure authentication via the System.AccessToken variable. It simplifies the process of managing Git commits during your build or release pipeline, ensuring your repository is always up-to-date with the latest changes.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 2,
+        "Patch": 11
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "commitMsg",
+            "type": "string",
+            "label": "Commit message",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Commit message",
+            "groupName": "inputGroup"
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(currentDirectory)"
+        }
+    }
+}

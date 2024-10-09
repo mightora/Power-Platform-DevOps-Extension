@@ -1,0 +1,157 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "dc2ea7c9-949d-4264-8855-3eeb6d1a885b",
+    "name": "dataverse4TeamsImport",
+    "friendlyName": "Mightora Power Platform Dataverse 4 Teams Import (PREVIEW)",
+    "instanceNameFormat": "Mightora Power Platform Dataverse 4 Teams Import (PREVIEW)",
+    "description": "Dataverse 4 Teams Import. MAKE SURE YOU HAVE INSTALLED PAC CLI",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 1,
+        "Patch": 8
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "solutionZipPath",
+            "type": "filePath",
+            "label": "Solution Zip File Path",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The path to the solution zip file to import",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "environment",
+            "type": "string",
+            "label": "Environment URL",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The URL of the environment where the solution will be imported",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "forceOverwrite",
+            "type": "boolean",
+            "label": "Force Overwrite",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Forces overwriting existing customizations and managed solutions in the target environment",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "convertToManaged",
+            "type": "boolean",
+            "label": "Convert to Managed",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "If true, converts the solution to managed during import",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "activatePlugins",
+            "type": "boolean",
+            "label": "Activate Plugins and Workflows",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Activates plug-ins and workflows upon importing the solution",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "publishChanges",
+            "type": "boolean",
+            "label": "Publish Changes",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Publish changes upon successful import",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "importAsHolding",
+            "type": "boolean",
+            "label": "Import As Holding Solution",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Imports the solution as a holding solution",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "skipDependencyCheck",
+            "type": "boolean",
+            "label": "Skip Dependency Check",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Skips checking for solution dependencies flagged as product updates",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "skipLowerVersion",
+            "type": "boolean",
+            "label": "Skip Lower Version",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Skips solution import if the same or higher version exists in the environment",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "stageAndUpgrade",
+            "type": "boolean",
+            "label": "Stage and Upgrade",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Stage and upgrade the solution during the import",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "async",
+            "type": "boolean",
+            "label": "Run Import Asynchronously",
+            "defaultValue": "false",
+            "required": false,
+            "helpMarkDown": "Runs the import operation asynchronously",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "maxAsyncWaitTime",
+            "type": "string",
+            "label": "Max Async Wait Time (minutes)",
+            "defaultValue": "60",
+            "required": false,
+            "helpMarkDown": "Maximum time (in minutes) to wait for the asynchronous import to complete",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "solutionSettingsPath",
+            "type": "filePath",
+            "label": "Solution Settings File Path",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The path to the JSON settings file for connection references and environment variables",
+            "groupName": "inputGroup"
+        }
+        
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(Build.SourcesDirectory)"
+        }
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "87b12e0a-7559-4141-aff4-ec9ef1357d3f",
+    "name": "solutionXMLNodeUpdater",
+    "friendlyName": "Mightora Power Platform Solution XML Node Updater",
+    "instanceNameFormat": "Mightora Power Platform Solution XML Node Updater",
+    "description": "This PowerShell script is designed to automate the updating of solution components inside a pipeline.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 1,
+        "Patch": 6
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "XmlFilePath",
+            "type": "string",
+            "label": "Xml File Path",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Path of the XML file we want to edit.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "NodeXPath",
+            "type": "string",
+            "label": "Node XPath",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The XPath expression to locate the node you want to update.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "NewValue",
+            "type": "string",
+            "label": "New Value",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The new value you wish to assign to the node.",
+            "groupName": "inputGroup"
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(Build.SourcesDirectory)"
+        }
+    }
+}

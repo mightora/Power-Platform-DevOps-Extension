@@ -1,0 +1,70 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "05a28972-d984-46d1-8e68-779a4efb7c81",
+    "name": "documentSolutionTables",
+    "friendlyName": "Mightora Power Platform Table Documentation Generator",
+    "instanceNameFormat": "Mightora Power Platform Table Documentation Generator",
+    "description": "Streamline the documentation process for Dataverse entities with this automated task. It extracts entity details, including attributes and properties, from the Entity.xml files in your unpacked solution and generates Markdown documentation. You can choose to output the documentation into a single file or separate files for each entity. This task simplifies managing and understanding Dataverse tables, providing readable and accessible entity schema documentation.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 2,
+        "Patch": 17
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "locationOfUnpackedSolution",
+            "type": "string",
+            "label": "Unpacked Solution Folder",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The path to the directory containing the Dataverse unpacked Solution, each of which should have an Entity.xml file.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "wikiLocation",
+            "type": "string",
+            "label": "Wiki Location",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The directory where the generated Markdown documentation files will be stored. If this directory doesn't exist, the script will create it.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "useSingleFile",
+            "type": "boolean",
+            "label": "Output to Single File",
+            "defaultValue": "true",
+            "required": true,
+            "helpMarkDown": "Choose between: True = output to Single File or false = File per Table.",
+            "groupName": "inputGroup",
+            "properties": {
+                "trueOption": "Single File",
+                "falseOption": "File per Table"
+            }
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(Build.SourcesDirectory)"
+        }
+    }
+}

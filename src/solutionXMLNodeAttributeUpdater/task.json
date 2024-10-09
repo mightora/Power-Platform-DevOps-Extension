@@ -1,0 +1,75 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "63a17026-912b-4242-a76c-1aefdfe6e929",
+    "name": "solutionXMLNodeAttributeUpdater",
+    "friendlyName": "Mightora Power Platform Solution XML Node Attribute Updater",
+    "instanceNameFormat": "Mightora Power Platform Solution XML Node Attribute Updater",
+    "description": "Easily update XML node values within your solution components during a pipeline run. This task automates the modification of XML nodes based on XPath expressions, allowing you to dynamically adjust key values in your Power Platform solution XML files. Perfect for scenarios where configuration values need to be modified on the fly in build and release pipelines.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 1,
+        "Patch": 9
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "XmlFilePath",
+            "type": "string",
+            "label": "Xml File Path",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Path of the XML file we want to edit.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "NodeXPath",
+            "type": "string",
+            "label": "Node XPath",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The XPath expression to locate the node you want to update.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "attributeName",
+            "type": "string",
+            "label": "Attribute Name",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The name of the attribute whose value you want to update.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "NewValue",
+            "type": "string",
+            "label": "New Value",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The new value you wish to assign to the node.",
+            "groupName": "inputGroup"
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(Build.SourcesDirectory)"
+        }
+    }
+}

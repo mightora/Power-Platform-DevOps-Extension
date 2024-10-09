@@ -1,0 +1,17 @@
+{
+    "name": "DevOps Extension Development",
+    "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-18",
+    "customizations": {
+        "vscode": {
+          "extensions": [
+            "dbaeumer.vscode-eslint"
+          ]
+        }
+      },
+    "postCreateCommand": "npm install -g tfx-cli && npm install && npm run build",
+    "forwardPorts": [3000],
+    "features": {
+      "ghcr.io/devcontainers/features/azure-cli:1": {}
+    }
+  }
+  
