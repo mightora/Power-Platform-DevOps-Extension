@@ -1,5 +1,6 @@
 # Power-Platform-DevOps-Extension
 [![Visual Studio Marketplace](https://img.shields.io/badge/Marketplace-View%20Extension-blue?logo=visual-studio)](https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-power-platform-devOps-extension)
+
 This repository contains the Mightora Power Platform DevOps Extension, a set of tasks that streamline development, deployment, and management of Power Platform solutions. Automating solution export, documentation, and XML updates, it integrates seamlessly with Azure DevOps to optimize Power Platform development workflows.
 
 # Mightora Power Platform DevOps Extension
