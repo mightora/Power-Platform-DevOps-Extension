@@ -6,8 +6,31 @@ on:
       - main
 
 jobs:
+  # CodeQL analysis job
+  codeql-analysis:
+    name: "CodeQL Analysis"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'powershell', 'javascript' ]  # You can specify other languages if necessary
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  # Release job that publishes the extension
   release:
     runs-on: ubuntu-latest
+    needs: codeql-analysis  # Ensures CodeQL analysis completes first
 
     steps:
       # Check out the code from the repository
