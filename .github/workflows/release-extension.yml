@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'powershell', 'javascript' ]  # You can specify other languages if necessary
+        language: [ 'javascript' ]  # Removed PowerShell, kept JavaScript
 
     steps:
       - name: Checkout code
