@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension",
     "name": "Mightora.io Power Platform DevOps Extension",
-    "version": "1.0.101",
+    "version": "1.0.103",
     "publisher": "mightoraio",
     "galleryFlags": [
         "Public",
@@ -42,51 +42,73 @@
             "uri": "https://mightora.io"
         },
         "repository": {
-            "uri": "https://mightora.io"
+            "uri": "https://github.com/mightora/Power-Platform-DevOps-Extension"
         },
         "issues": {
-            "uri": "https://mightora.io"
+            "uri": "https://github.com/mightora/Power-Platform-DevOps-Extension/issues"
         }
     },
     "repository": {
         "type": "git",
-        "uri": "https://github.com/mightora"
+        "uri": "https://github.com/mightora/Power-Platform-DevOps-Extension"
     },
+    "badges": [
+        {
+            "href": "https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-power-platform-devOps-extension",
+            "uri": "https://img.shields.io/badge/Marketplace-View%20Extension-blue?logo=visual-studio",
+            "description": "VS Marketplace"
+        },
+        {
+            "href": "https://deepscan.io/dashboard#view=project&tid=25106&pid=28110&bid=903222",
+            "uri": "https://deepscan.io/api/teams/25106/projects/28110/branches/903222/badge/grade.svg",
+            "description": "DeepScan grade"
+        },
+        {
+            "href": "https://isitmaintained.com/project/mightora/Power-Platform-DevOps-Extension",
+            "uri": "http://isitmaintained.com/badge/resolution/mightora/Power-Platform-DevOps-Extension.svg",
+            "description": "Issue Open issues"
+        },
+        {
+            "href": "https://isitmaintained.com/project/mightora/Power-Platform-DevOps-Extension",
+            "uri": "http://isitmaintained.com/badge/open/mightora/Power-Platform-DevOps-Extension.svg",
+            "description": "Open issues"
+        }
+    ],
     "files": [
         {
-            "path": "src/test",
+            "path": "tasks/test",
             "packagePath": "test"
         },
         {
-            "path": "src/documentSolutionTables",
+            "path": "tasks/documentSolutionTables",
             "packagePath": "documentSolutionTables"
         },
         {
-            "path": "src/commitToRepo",
+            "path": "tasks/commitToRepo",
             "packagePath": "commitToRepo"
         },
         {
-            "path": "src/documentTableRelationships",
+            "path": "tasks/documentTableRelationships",
             "packagePath": "documentTableRelationships"
         },
         {
-            "path": "src/solutionXMLNodeUpdater",
+            "path": "tasks/solutionXMLNodeUpdater",
             "packagePath": "solutionXMLNodeUpdater"
         },
         {
-            "path": "src/solutionXMLNodeAttributeUpdater",
+            "path": "tasks/solutionXMLNodeAttributeUpdater",
             "packagePath": "solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "src/dataverse4TeamsImport",
+            "path": "tasks/dataverse4TeamsImport",
             "packagePath": "dataverse4TeamsImport"
         },
         {
-            "path": "src/dataverse4TeamsExport",
+            "path": "tasks/dataverse4TeamsExport",
             "packagePath": "mightora-dataverse4TeamsExport"
         },
         {
-            "path": "src/documentRoles",
+            "path": "tasks/documentRoles",
             "packagePath": "mightora-documentRoles"
         }
     ],
