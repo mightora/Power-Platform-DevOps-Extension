@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension",
     "name": "Mightora.io Power Platform DevOps Extension",
-    "version": "1.0.107",
+    "version": "1.0.108",
     "publisher": "mightoraio",
     "galleryFlags": [
         "Public",
@@ -72,6 +72,11 @@
             "href": "https://isitmaintained.com/project/mightora/Power-Platform-DevOps-Extension",
             "uri": "http://isitmaintained.com/badge/open/mightora/Power-Platform-DevOps-Extension.svg",
             "description": "Open issues"
+        },
+        {
+            "href": "https://mightora.io",
+            "uri": "https://img.shields.io/badge/Mightora-Visit-blue?logo=https://raw.githubusercontent.com/mightora/mightora.io/main/static/favicon-32x32.png&link=https://mightora.io",
+            "description": "mightora.io"
         }
     ],
     "files": [
