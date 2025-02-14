@@ -14,7 +14,12 @@
 
 [CmdletBinding()]
 
-param()
+param(
+    [string]$locationOfUnpackedSolution,
+    [string]$wikiLocation,
+    [bool]$useSingleFile,
+    [bool]$devMode = $false
+)
 
 # Output the script information at runtime
 Write-Host "==========================================================="
@@ -26,10 +31,12 @@ Write-Host "Contributors:"
 Write-Host "==========================================================="
 
 
-# Get inputs from the task
-$locationOfUnpackedSolution = Get-VstsInput -Name 'locationOfUnpackedSolution'
-$wikiLocation = Get-VstsInput -Name 'wikiLocation'
-$useSingleFile = Get-VstsInput -Name 'useSingleFile'
+if (-not $devMode) {
+    # Get inputs from the task
+    $locationOfUnpackedSolution = Get-VstsInput -Name 'locationOfUnpackedSolution'
+    $wikiLocation = Get-VstsInput -Name 'wikiLocation'
+    $useSingleFile = Get-VstsInput -Name 'useSingleFile'
+}
 
 # Validation: Check if rootFolder and targetFolder have been provided
 if (-not $locationOfUnpackedSolution -or -not $wikiLocation) {
@@ -85,19 +92,31 @@ foreach ($folder in $entityFolders) {
             $entityName = $xmlContent.Entity.Name.OriginalName
         }
 
+        # Extracting the entity description
+        $entityDescription = $xmlContent.Entity.EntityInfo.entity.Descriptions.Description.description
+
+
         # Initialize Markdown content with entity details
         $markdownContent = "# Entity: $entityName`n"
         $markdownContent += "## Localized Name: $($xmlContent.Entity.Name.LocalizedName)`n`n"
+        $markdownContent += "**Description:** $entityDescription`n`n"
+
 
         # Start Attributes table
         $markdownContent += "## Attributes`n"
-        $markdownContent += "| Name | Type | Display Name | Required Level | Is Custom Field | Is Searchable |`n"
-        $markdownContent += "|------|------|--------------|----------------|-----------------|---------------|`n"
+        $markdownContent += "| Name | Type | Display Name | Description | Required Level | Is Custom Field | Is Searchable | Format | Max Length | Auto Number Format | IME Mode |`n"
+        $markdownContent += "|------|------|--------------|-------------|----------------|-----------------|---------------|--------|------------|--------------------|---------|`n"
+
 
         # Fill the table with attribute details
         foreach ($attribute in $xmlContent.Entity.EntityInfo.entity.attributes.attribute) {
             $displayName = $attribute.displaynames.displayname.description
-            $markdownContent += "| $($attribute.Name) | $($attribute.Type) | $displayName | $($attribute.RequiredLevel) | $($attribute.IsCustomField) | $($attribute.IsSearchable) |`n"
+            $description = $attribute.Descriptions.Description.description
+            $format = $attribute.Format
+            $maxLength = $attribute.MaxLength
+            $autoNumberFormat = $attribute.AutoNumberFormat
+            $imeMode = $attribute.ImeMode
+            $markdownContent += "| $($attribute.Name) | $($attribute.Type) | $displayName | $description | $($attribute.RequiredLevel) | $($attribute.IsCustomField) | $($attribute.IsSearchable) | $format | $maxLength | $autoNumberFormat | $imeMode |`n"
         }
 
         if ($useSingleFile) {
@@ -107,7 +126,7 @@ foreach ($folder in $entityFolders) {
             # Define the output Markdown file name using the entity name and save it to the wiki location
             $mdFileName = Join-Path -Path $wikiLocation -ChildPath "$entityName.md"
             # Save the Markdown content to a file
-            $markdownContent | Out-File -FilePath $mdFileName -Encoding UTF8
+            $markdownContent | Out-File -FilePath $mdFileName -Encoding UTF8  
             Write-Output "Markdown documentation generated for entity '$entityName' at: $mdFileName"
         }
     } else {

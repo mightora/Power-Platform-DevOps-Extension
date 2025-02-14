@@ -25,9 +25,10 @@ Write-Host "Contributors:"
 #Write-Host " - Developer B (Contributions: Added support for custom commit messages)"
 Write-Host "==========================================================="
 
-
 # Get inputs from the task
 $commitMsg = Get-VstsInput -Name 'commitMsg'
+$branchName = Get-VstsInput -Name 'branchName'
+$tags = Get-VstsInput -Name 'tags'
 
 Write-Output "Commit all changes"
 
@@ -58,8 +59,8 @@ git config user.email "$userEmail"
 Write-Host "Configuring Git user.name with: $userName"
 git config user.name "$userName"
 
-# Checkout the main branch, create it if it doesn't exist
-git checkout -b main
+# Checkout the specified branch, create it if it doesn't exist
+git checkout -b $branchName
 
 # Stage all changes
 git add --all
@@ -67,7 +68,20 @@ git add --all
 # Use the $commitMsg parameter for the commit message
 git commit -m "$commitMsg"
 
+# Add tags if specified
+if (![string]::IsNullOrEmpty($tags)) {
+    $tagsArray = $tags -split ","
+    foreach ($tag in $tagsArray) {
+        git tag $tag.Trim()
+    }
+}
+
 Write-Output "Push code to repo"
 
 # Push changes with authentication using System.AccessToken
-git -c http.extraheader="AUTHORIZATION: bearer $env:SYSTEM_ACCESSTOKEN" push origin main
+git -c http.extraheader="AUTHORIZATION: bearer $env:SYSTEM_ACCESSTOKEN" push origin $branchName
+
+# Push tags if specified
+if (![string]::IsNullOrEmpty($tags)) {
+    git -c http.extraheader="AUTHORIZATION: bearer $env:SYSTEM_ACCESSTOKEN" push origin --tags
+}

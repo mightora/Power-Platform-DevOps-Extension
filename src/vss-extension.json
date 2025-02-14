@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension",
     "name": "Mightora.io Power Platform DevOps Extension",
-    "version": "1.0.109",
+    "version": "2.0.1",
     "publisher": "mightoraio",
     "galleryFlags": [
         "Public",
@@ -81,10 +81,6 @@
     ],
     "files": [
         {
-            "path": "tasks/test",
-            "packagePath": "test"
-        },
-        {
             "path": "tasks/documentSolutionTables",
             "packagePath": "documentSolutionTables"
         },
@@ -95,6 +91,10 @@
         {
             "path": "tasks/documentTableRelationships",
             "packagePath": "documentTableRelationships"
+        },
+        {
+            "path": "tasks/documentTableRelationshipsAsERDiagram",
+            "packagePath": "mightora-powerplatform-documentationgenerator-erdiagram"
         },
         {
             "path": "tasks/solutionXMLNodeUpdater",
@@ -115,19 +115,18 @@
         {
             "path": "tasks/documentRoles",
             "packagePath": "mightora-documentRoles"
+        },
+        {
+            "path": "tasks/testNodeJS",
+            "packagePath": "mightora-test-nodejs"
+        },
+        {
+            "path": "tasks/convertMarkdownToDocx",
+            "packagePath": "mightora-convertMarkdownToDocx"
         }
     ],
     "contributions": [
-        {
-            "id": "mightora-test-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "test"
-            }
-        },
+
         {
             "id": "mightora-documentSolutionTables-task",
             "type": "ms.vss-distributed-task.task",
@@ -156,6 +155,16 @@
             ],
             "properties": {
                 "name": "documentTableRelationships"
+            }
+        },
+        {
+            "id": "mightora-powerplatform-documentationgenerator-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-powerplatform-documentationgenerator-erdiagram"
             }
         },
         {
@@ -206,6 +215,26 @@
             ],
             "properties": {
                 "name": "mightora-documentRoles"
+            }
+        },
+        {
+            "id": "mightora-test-nodejs-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+              "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+              "name": "mightora-test-nodejs"
+            }
+        },
+        {
+            "id": "mightora-convertMarkdownToDocx",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+              "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+              "name": "mightora-convertMarkdownToDocx"
             }
         }
     ]
