@@ -117,10 +117,6 @@
             "packagePath": "mightora-documentRoles"
         },
         {
-            "path": "tasks/testNodeJS",
-            "packagePath": "mightora-test-nodejs"
-        },
-        {
             "path": "tasks/convertMarkdownToDocx",
             "packagePath": "mightora-convertMarkdownToDocx"
         }
@@ -215,16 +211,6 @@
             ],
             "properties": {
                 "name": "mightora-documentRoles"
-            }
-        },
-        {
-            "id": "mightora-test-nodejs-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-              "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-              "name": "mightora-test-nodejs"
             }
         },
         {
