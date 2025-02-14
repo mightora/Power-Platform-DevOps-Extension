@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "a1550398-57bc-4f2e-91ef-5d0351161bbb",
     "name": "mightora-dataverse4TeamsExport",
-    "friendlyName": "Mightora Power Platform Dataverse 4 Teams Export (PREVIEW)",
+    "friendlyName": "Dataverse 4 Teams Export",
     "instanceNameFormat": "Mightora Power Platform Dataverse 4 Teams Export (PREVIEW)",
     "description": "Easily export solutions from your Dataverse for Teams environment. This task automates the export of your solution. Ensure PAC CLI is installed in your pipeline environment.",
     "helpMarkDown": "See [mightora.io](https://mightora.io)",

@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "dc2ea7c9-949d-4264-8855-3eeb6d1a885b",
     "name": "dataverse4TeamsImport",
-    "friendlyName": "Mightora Power Platform Dataverse 4 Teams Import (PREVIEW)",
+    "friendlyName": "Dataverse 4 Teams Import",
     "instanceNameFormat": "Mightora Power Platform Dataverse 4 Teams Import (PREVIEW)",
     "description": "Dataverse 4 Teams Import. MAKE SURE YOU HAVE INSTALLED PAC CLI",
     "helpMarkDown": "See [mightora.io](https://mightora.io)",

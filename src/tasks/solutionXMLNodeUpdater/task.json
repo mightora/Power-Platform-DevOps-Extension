@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "87b12e0a-7559-4141-aff4-ec9ef1357d3f",
     "name": "solutionXMLNodeUpdater",
-    "friendlyName": "Mightora Power Platform Solution XML Node Updater",
+    "friendlyName": "Solution XML Node Updater",
     "instanceNameFormat": "Mightora Power Platform Solution XML Node Updater",
     "description": "This PowerShell script is designed to automate the updating of solution components inside a pipeline.",
     "helpMarkDown": "See [mightora.io](https://mightora.io)",
