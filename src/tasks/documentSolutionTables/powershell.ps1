@@ -35,7 +35,7 @@ if (-not $devMode) {
     # Get inputs from the task
     $locationOfUnpackedSolution = Get-VstsInput -Name 'locationOfUnpackedSolution'
     $wikiLocation = Get-VstsInput -Name 'wikiLocation'
-    $useSingleFile = Get-VstsInput -Name 'useSingleFile'
+    $useSingleFile = [bool](Get-VstsInput -Name 'useSingleFile')
 }
 
 # Validation: Check if rootFolder and targetFolder have been provided
