@@ -9,7 +9,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
-    "description": "Another tool from TechTweedie to help developers on the Power Paltform.",
+    "description": "Power Platform Documentation Extension, allows users of this extension to quickly and easily document out their solutions in to easy to read documentation.",
     "categories": [
         "Azure Pipelines"
     ],
