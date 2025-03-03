@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension",
-    "name": "Mightora.io Power Platform DevOps Extension",
-    "version": "2.0.4",
+    "name": "Power Platform Documentation Extension",
+    "version": "2.0.5",
     "publisher": "mightoraio",
     "galleryFlags": [
         "Public",
@@ -13,7 +13,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
-    "description": "Another tool from TechTweedie to help developers on the Power Paltform.",
+  "description": "Power Platform Documentation Extension, allows users of this extension to quickly and easily document out their solutions in to easy to read documentation. This tool is another tool from TechTweedie to help developers on the Power Paltform.",
     "categories": [
         "Azure Pipelines"
     ],
