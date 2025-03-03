@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 35
+        "Patch": 36
     },
     "groups": [
         {
@@ -46,7 +46,7 @@
         }
     ],
     "execution": {
-        "Node": {
+        "Node20_1": {
           "target": "script.js"
             }
         }
