@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 36
+        "Patch": 37
     },
     "groups": [
         {
@@ -42,6 +42,15 @@
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "The directory where the generated Markdown documentation files will be stored. If this directory doesn't exist, the script will create it.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "templateFile",
+            "type": "string",
+            "label": "templateFile",
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "The path to the template file that will be used to generate the Markdown documentation. This file should be in the same directory as the script.",
             "groupName": "inputGroup"
         }
     ],
