@@ -1,0 +1,53 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "cda9a03e-0d85-48e8-945a-365ce0769692",
+    "name": "convertConvertInlineDiagrams",
+    "friendlyName": "Convert Inline Diagrams to Images",
+    "instanceNameFormat": "convertInlineDiagramsToImages",
+    "description": "Converts inline diagrams in Markdown files to images.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 1,
+        "Patch": 9
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "locationOfSourceMDFiles",
+            "type": "string",
+            "label": "Location Of Source MD Files",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The directory where the Markdown files are located.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "outputLocation",
+            "type": "string",
+            "label": "outputLocation",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The directory where the images and new MD files will be saved.",
+            "groupName": "inputGroup"
+        }
+    ],
+    "execution": {
+        "Node20_1": {
+          "target": "script.js"
+            }
+        }
+}

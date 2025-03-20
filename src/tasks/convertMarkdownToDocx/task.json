@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 37
+        "Patch": 52
     },
     "groups": [
         {
@@ -51,6 +51,24 @@
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The path to the template file that will be used to generate the Markdown documentation. This file should be in the same directory as the script.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "includeTOC",
+            "type": "boolean",
+            "label": "Include TOC",
+            "defaultValue": false,
+            "required": false,
+            "helpMarkDown": "Include a Table of Contents in the generated documentation.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "tocDepth",
+            "type": "number",
+            "label": "TOC Depth",
+            "defaultValue": 2,
+            "required": false,
+            "helpMarkDown": "The depth of the Table of Contents to include in the generated documentation.",
             "groupName": "inputGroup"
         }
     ],

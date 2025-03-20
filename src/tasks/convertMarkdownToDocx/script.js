@@ -8,21 +8,22 @@ function run() {
         const locationOfMDFiles = tl.getInput('locationOfMDFiles', true);
         const outputLocation = tl.getInput('outputLocation', true);
         const templateFile = tl.getInput('templateFile', false);
-        const diagramsDir = path.join(outputLocation, 'diagrams');
+        const includeTOC = tl.getBoolInput('includeTOC', false);
+        const tocDepth = tl.getInput('tocDepth', false);
 
         console.log(`Location of MD Files: ${locationOfMDFiles}`);
         console.log(`Output Location: ${outputLocation}`);
-        console.log(`Diagrams Directory: ${diagramsDir}`);
         if (templateFile) {
             console.log(`Template File: ${templateFile}`);
         }
+        console.log(`Include TOC: ${includeTOC}`);
+        if (includeTOC) {
+            console.log(`TOC Depth: ${tocDepth}`);
+        }
 
-        // Ensure output and diagrams directories exist
+        // Ensure output directory exists
         if (!fs.existsSync(outputLocation)) {
             fs.mkdirSync(outputLocation, { recursive: true });
-        }
-        if (!fs.existsSync(diagramsDir)) {
-            fs.mkdirSync(diagramsDir, { recursive: true });
         }
 
         // Install necessary tools
@@ -38,18 +39,40 @@ function run() {
         console.log('Installing imagemagick...');
         execSync('choco install imagemagick -y', { stdio: 'inherit' });
 
-        // Read all Markdown files from the input directory
-        const mdFiles = fs.readdirSync(locationOfMDFiles).filter(file => file.endsWith('.md'));
+        // Function to recursively process directories
+        function processDirectory(currentDir, outputDir) {
+            const items = fs.readdirSync(currentDir);
 
-        mdFiles.forEach(mdFile => {
-            const mdFilePath = path.join(locationOfMDFiles, mdFile);
-            const docxFileName = path.basename(mdFile, '.md').replace(/\s+/g, '_') + '.docx';
-            const docxFilePath = path.join(outputLocation, docxFileName);
+            items.forEach(item => {
+                const itemPath = path.join(currentDir, item);
+                const itemOutputPath = path.join(outputDir, item);
+
+                if (fs.statSync(itemPath).isDirectory()) {
+                    // Ensure the output directory exists
+                    if (!fs.existsSync(itemOutputPath)) {
+                        fs.mkdirSync(itemOutputPath, { recursive: true });
+                    }
+                    // Recursively process the subdirectory
+                    processDirectory(itemPath, itemOutputPath);
+                } else if (item.endsWith('.md')) {
+                    // Process the Markdown file
+                    processMarkdownFile(itemPath, itemOutputPath.replace(/\.md$/, '.docx'));
+                }
+            });
+        }
+
+        // Function to process a single Markdown file
+        function processMarkdownFile(mdFilePath, docxFilePath) {
+            const diagramsDir = path.join(path.dirname(docxFilePath), 'diagrams');
+
+            // Ensure diagrams directory exists
+            if (!fs.existsSync(diagramsDir)) {
+                fs.mkdirSync(diagramsDir, { recursive: true });
+            }
 
             // Read the Markdown content
             const mdContent = fs.readFileSync(mdFilePath, 'utf8');
 
-            console.log(`====================================================================================================`);
             console.log(`====================================================================================================`);
             console.log(`Converting ${mdFilePath} to ${docxFilePath}`);
             console.log(`====================================================================================================`);
@@ -124,8 +147,8 @@ function run() {
             console.log(`All PlantUML diagrams generated for ${mdFilePath}`);
 
             // Write the updated Markdown content to a temporary file
-            const tempMdFileName = `z-temp-${path.basename(mdFile).replace(/\s+/g, '_')}`;
-            const tempMdFilePath = path.join(outputLocation, tempMdFileName);
+            const tempMdFileName = `z-temp-${path.basename(mdFilePath).replace(/\s+/g, '_')}`;
+            const tempMdFilePath = path.join(path.dirname(docxFilePath), tempMdFileName);
             console.log(`Writing temporary Markdown file: ${tempMdFilePath}`);
             fs.writeFileSync(tempMdFilePath, updatedMdContent);
 
@@ -137,7 +160,7 @@ function run() {
             tempMdContent = tempMdContent.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText, imgPath) => {
                 console.log(`Found image path: ${imgPath}`);
                 if (!imgPath.startsWith('http')) {
-                    const fullPath = path.resolve(locationOfMDFiles, imgPath);
+                    const fullPath = path.resolve(path.dirname(mdFilePath), imgPath);
                     if (fs.existsSync(fullPath)) {
                         console.log(`Updated image path to: ${fullPath}`);
                         return `![${altText}](${fullPath})`;
@@ -158,7 +181,11 @@ function run() {
                 pandocCommand += ` --reference-doc=${templateFile}`;
                 console.log(`Using template file: ${templateFile}`);
             }
-            execSync(pandocCommand);
+            if (includeTOC) {
+                pandocCommand += ` --toc --toc-depth=${tocDepth}`;
+                console.log(`Including TOC with depth: ${tocDepth}`);
+            }
+            execSync(pandocCommand, { cwd: path.dirname(mdFilePath) });
 
             // Comment out the cleanup of the temporary file
             fs.unlinkSync(tempMdFilePath);
@@ -166,8 +193,10 @@ function run() {
             console.log(`Converted ${mdFilePath} to ${docxFilePath}`);
             
             console.log(`====================================================================================================`);
-            console.log(`====================================================================================================`);
-        });
+        }
+
+        // Start processing from the root directory
+        processDirectory(locationOfMDFiles, outputLocation);
 
     } catch (err) {
         tl.setResult(tl.TaskResult.Failed, err.message);
