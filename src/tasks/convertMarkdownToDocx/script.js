@@ -1,10 +1,41 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const https = require('https'); // Add this to make HTTP requests
 const tl = require('azure-pipelines-task-lib/task');
 
-function run() {
+// Function to fetch the developer message
+function fetchDeveloperMessage() {
+    const url = 'https://developer-message.mightora.io/api/HttpTrigger?appname=convertMarkdownToDocx';
+
+    return new Promise((resolve, reject) => {
+        https.get(url, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const jsonResponse = JSON.parse(data);
+                    resolve(jsonResponse.message);
+                } catch (error) {
+                    reject('Developer message not available.');
+                }
+            });
+        }).on('error', () => {
+            reject('Developer message not available.');
+        });
+    });
+}
+
+async function run() {
     try {
+        // Fetch and display the developer message
+        const developerMessage = await fetchDeveloperMessage().catch((err) => err);
+        console.log(`Developer Message: ${developerMessage}`);
+
         const locationOfMDFiles = tl.getInput('locationOfMDFiles', true);
         const outputLocation = tl.getInput('outputLocation', true);
         const templateFile = tl.getInput('templateFile', false);

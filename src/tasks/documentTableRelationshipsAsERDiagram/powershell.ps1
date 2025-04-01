@@ -20,6 +20,21 @@ param(
     [string[]]$authors
 )
 
+# Function to fetch the developer message
+function Fetch-DeveloperMessage {
+    $url = "https://developer-message.mightora.io/api/HttpTrigger?appname=documentTableRelationshipsAsERDiagram"
+    try {
+        $response = Invoke-RestMethod -Uri $url -Method Get -ErrorAction Stop
+        return $response.message
+    } catch {
+        return "Developer message not available."
+    }
+}
+
+# Display the developer message
+$developerMessage = Fetch-DeveloperMessage
+Write-Host "Developer Message: $developerMessage"
+
 # Output the script information at runtime
 Write-Host "==========================================================="
 Write-Host "Task: Mightora Power Platform Table Relationship Documentation ER Diagram Generator"

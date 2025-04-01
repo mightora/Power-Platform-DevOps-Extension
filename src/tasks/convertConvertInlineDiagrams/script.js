@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const tl = require('azure-pipelines-task-lib/task');
+const https = require('https'); // Add this to make HTTP requests
 
 function getAllMarkdownFiles(dir, fileList = []) {
     const files = fs.readdirSync(dir);
@@ -16,8 +17,37 @@ function getAllMarkdownFiles(dir, fileList = []) {
     return fileList;
 }
 
-function run() {
+function fetchDeveloperMessage() {
+    const url = 'https://developer-message.mightora.io/api/HttpTrigger?appname=convertConvertInlineDiagrams';
+
+    return new Promise((resolve, reject) => {
+        https.get(url, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const jsonResponse = JSON.parse(data);
+                    resolve(jsonResponse.message);
+                } catch (error) {
+                    reject('Developer message not available.');
+                }
+            });
+        }).on('error', () => {
+            reject('Developer message not available.');
+        });
+    });
+}
+
+async function run() {
     try {
+        // Fetch and display the developer message
+        const developerMessage = await fetchDeveloperMessage().catch((err) => err);
+        console.log(`Developer Message: ${developerMessage}`);
+
         const locationOfMDFiles = tl.getInput('locationOfSourceMDFiles', true);
         const outputLocation = tl.getInput('outputLocation', true);
 

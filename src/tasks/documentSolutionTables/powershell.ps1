@@ -21,6 +21,21 @@ param(
     [bool]$devMode = $false
 )
 
+# Function to fetch the developer message
+function Fetch-DeveloperMessage {
+    $url = "https://developer-message.mightora.io/api/HttpTrigger?appname=documentSolutionTables"
+    try {
+        $response = Invoke-RestMethod -Uri $url -Method Get -ErrorAction Stop
+        return $response.message
+    } catch {
+        return "Developer message not available."
+    }
+}
+
+# Display the developer message
+$developerMessage = Fetch-DeveloperMessage
+Write-Host "Developer Message: $developerMessage"
+
 # Output the script information at runtime
 Write-Host "==========================================================="
 Write-Host "Task: Mightora Power Platform Table Documentation Generator"
