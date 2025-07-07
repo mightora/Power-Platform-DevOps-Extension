@@ -1,0 +1,83 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "8e42a891-3f65-4c2d-9b87-f12a8c9e4d73",
+    "name": "documentSolutionManifest",
+    "friendlyName": "Solution Manifest Documentation Generator",
+    "instanceNameFormat": "Mightora Power Platform Solution Manifest Documentation Generator",
+    "description": "Comprehensive documentation generator for Power Platform solution manifests. This task extracts and documents all information from the Solution.xml file including solution metadata, publisher details, root components, missing dependencies, and version information. Perfect for creating detailed solution documentation and tracking solution composition across environments.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 1
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "outputGroup",
+            "displayName": "Output",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "solutionXmlPath",
+            "type": "string",
+            "label": "Solution.xml File Path",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The path to the Solution.xml file located in the src/Other/ folder of your unpacked solution.",
+            "groupName": "inputGroup"
+        },
+        {
+            "name": "outputLocation",
+            "type": "string",
+            "label": "Output Location",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The directory where the generated Markdown documentation files will be stored. If this directory doesn't exist, the script will create it.",
+            "groupName": "outputGroup"
+        },
+        {
+            "name": "includeComponents",
+            "type": "boolean",
+            "label": "Include Component Details",
+            "defaultValue": "true",
+            "required": false,
+            "helpMarkDown": "Include detailed breakdown of all root components in the solution.",
+            "groupName": "outputGroup",
+            "properties": {
+                "trueOption": "Include Components",
+                "falseOption": "Summary Only"
+            }
+        },
+        {
+            "name": "includeDependencies",
+            "type": "boolean",
+            "label": "Include Missing Dependencies",
+            "defaultValue": "true",
+            "required": false,
+            "helpMarkDown": "Include details about missing dependencies in the documentation.",
+            "groupName": "outputGroup",
+            "properties": {
+                "trueOption": "Include Dependencies",
+                "falseOption": "Skip Dependencies"
+            }
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1",
+            "platforms": [
+                "windows"
+            ],
+            "workingDirectory": "$(Build.SourcesDirectory)"
+        }
+    }
+}

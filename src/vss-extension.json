@@ -123,6 +123,10 @@
         {
             "path": "tasks/convertConvertInlineDiagrams",
             "packagePath": "mightora-convertConvertInlineDiagrams"
+        },
+        {
+            "path": "tasks/documentSolutionManifest",
+            "packagePath": "documentSolutionManifest"
         }
     ],
     "contributions": [
@@ -235,6 +239,16 @@
             ],
             "properties": {
               "name": "mightora-convertConvertInlineDiagrams"
+            }
+        },
+        {
+            "id": "mightora-documentSolutionManifest-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentSolutionManifest"
             }
         }
     ]

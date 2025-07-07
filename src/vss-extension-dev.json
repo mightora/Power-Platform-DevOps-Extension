@@ -76,6 +76,10 @@
         {
             "path": "src/dataverse4TeamsImport",
             "packagePath": "dataverse4TeamsImport"
+        },
+        {
+            "path": "src/documentSolutionManifest",
+            "packagePath": "documentSolutionManifest"
         }
     ],
     "contributions": [
@@ -147,6 +151,16 @@
             ],
             "properties": {
                 "name": "dataverse4TeamsImport"
+            }
+        },
+        {
+            "id": "mightora-documentSolutionManifest-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentSolutionManifest"
             }
         }
     ]

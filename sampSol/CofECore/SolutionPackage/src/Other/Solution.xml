@@ -24,16 +24,16 @@
         <Address>
           <AddressNumber>1</AddressNumber>
           <AddressTypeCode>1</AddressTypeCode>
-          <City xsi:nil="true"></City>
-          <County xsi:nil="true"></County>
-          <Country xsi:nil="true"></Country>
+          <City xsi:nil="true">London</City>
+          <County xsi:nil="true">Inner London</County>
+          <Country xsi:nil="true">United Kindom</Country>
           <Fax xsi:nil="true"></Fax>
           <FreightTermsCode xsi:nil="true"></FreightTermsCode>
           <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
           <Latitude xsi:nil="true"></Latitude>
-          <Line1 xsi:nil="true"></Line1>
-          <Line2 xsi:nil="true"></Line2>
-          <Line3 xsi:nil="true"></Line3>
+          <Line1 xsi:nil="true">Line1</Line1>
+          <Line2 xsi:nil="true">Line 2</Line2>
+          <Line3 xsi:nil="true">Line 3</Line3>
           <Longitude xsi:nil="true"></Longitude>
           <Name xsi:nil="true"></Name>
           <PostalCode xsi:nil="true"></PostalCode>
@@ -41,7 +41,7 @@
           <PrimaryContactName xsi:nil="true"></PrimaryContactName>
           <ShippingMethodCode>1</ShippingMethodCode>
           <StateOrProvince xsi:nil="true"></StateOrProvince>
-          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone1 xsi:nil="true">0101015</Telephone1>
           <Telephone2 xsi:nil="true"></Telephone2>
           <Telephone3 xsi:nil="true"></Telephone3>
           <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
