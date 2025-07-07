@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{80d6be5b-3c27-452f-8b97-47d092a8a892}</savedqueryid>
+    <layoutxml>
+      <grid name="admin_pvas" jump="admin_name" select="1" icon="1" preview="1">
+        <row name="admin_pva" id="admin_pvaid">
+          <cell name="admin_name" width="300" />
+          <cell name="admin_pvaenvironmentdisplayname" width="228" />
+          <cell name="admin_pvaowner" width="126" />
+          <cell name="admin_pvacreatedon" width="171" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>2</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="admin_pva">
+          <attribute name="admin_pvaid" />
+          <attribute name="admin_name" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="admin_pvaowner" />
+          <attribute name="admin_pvaenvironmentdisplayname" />
+          <attribute name="admin_pvacreatedon" />
+          <order attribute="admin_name" descending="false" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Bot Associated View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{fffb9515-5781-43f4-84ba-5da511fa8248}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="admin_name" select="1" icon="1" preview="1">
+        <row name="result" id="admin_connectionreferenceidentityid">
+          <cell name="admin_name" width="173" />
+          <cell name="admin_accountname" width="100" />
+          <cell name="admin_environment" width="114" />
+          <cell name="admin_connector" width="175" />
+          <cell name="admin_noneorcrosstenantidentity" width="100" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="admin_connectionreferenceidentity">
+          <attribute name="admin_connectionreferenceidentityid" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="admin_accountname" />
+          <attribute name="admin_noneorcrosstenantidentity" />
+          <attribute name="admin_environment" />
+          <attribute name="admin_connector" />
+          <attribute name="admin_name" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Connection Reference Identities" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

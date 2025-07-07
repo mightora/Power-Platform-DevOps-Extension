@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{cd089837-9f39-499e-a8bf-eac7dad9f6d6}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{0ad99263-9daa-4b73-95f4-3a2625675bdd}" IsUserDefined="1">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{4d270d73-5226-4f2f-8495-a6d1acbff623}">
+                  <labels>
+                    <label description="GENERAL" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{babef50d-c9b8-4011-a311-ef2317e6df5c}">
+                        <labels>
+                          <label description="Capacity Type" languagecode="1033" />
+                        </labels>
+                        <control id="admin_capacitytype" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="admin_capacitytype" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c8b51efb-1670-44d1-a658-0cb1003df2af}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Approved Capacity" languagecode="1033" />
+                        </labels>
+                        <control id="admin_approvedcapacity" classid="{C3EFE0C3-0EC6-42BE-8349-CBD9079DFD8E}" datafieldname="admin_approvedcapacity" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{52d53f22-a2ce-456d-8a4d-0a68eb63cfb0}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Actual Consumption" languagecode="1033" />
+                        </labels>
+                        <control id="admin_actualconsumption" classid="{C3EFE0C3-0EC6-42BE-8349-CBD9079DFD8E}" datafieldname="admin_actualconsumption" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{50d1ecb1-10f2-45f1-bcbd-b519b66750fa}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Rated Consumption" languagecode="1033" />
+                        </labels>
+                        <control id="admin_ratedconsumption" classid="{C3EFE0C3-0EC6-42BE-8349-CBD9079DFD8E}" datafieldname="admin_ratedconsumption" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{195c770c-b018-4883-9ecd-8c0c2abaf62e}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Capacity Unit" languagecode="1033" />
+                        </labels>
+                        <control id="admin_capacityunit" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_capacityunit" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{bd77c090-fca2-4de2-b62e-8f7cf15018ae}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Capacity Updated On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_capacityupdatedon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_capacityupdatedon" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{21b6f612-82db-4e24-b6a2-cf1d7a6f1edb}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+  </systemform>
+</forms>

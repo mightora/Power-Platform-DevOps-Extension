@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{4d38705e-20db-ee11-904d-000d3a3411d9}" Name="HELPER - Get Connections to Clean" Description="This flow is called from Manage Permissions app and returns  connections from the tenant for the admin to explore." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <JsonFileName>/Workflows/HELPER-GetConnectionstoClean-4D38705E-20DB-EE11-904D-000D3A3411D9.json</JsonFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>5</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <RunAs>1</RunAs>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>4.23.12</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <BillingContext>[{"id":"admin_PowerPlatformAdminView","type":"UnifiedApp","metadata":{"displayName":"Power Platform Admin View"}},{"id":"admin_ManagePermissions","type":"UnifiedApp","metadata":{"displayName":"Manage Permissions"}}]</BillingContext>
+  <PrimaryEntity>none</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="HELPER - Get Connections to Clean" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="This flow is called from Manage Permissions app and returns  connections from the tenant for the admin to explore." />
+  </Descriptions>
+</Workflow>

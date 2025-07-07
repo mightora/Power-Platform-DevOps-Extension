@@ -1,0 +1,2077 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse2"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_commondataserviceforapps_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverseEnvRequest"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365users": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreO365Users"
+        },
+        "api": {
+          "name": "shared_office365users"
+        }
+      },
+      "shared_webcontents": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreHTTPWithAzureAD"
+        },
+        "api": {
+          "name": "shared_webcontents"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Graph URL Environment Variable (admin_GraphURLEnvironmentVariable)": {
+          "defaultValue": "https://graph.microsoft.com/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_GraphURLEnvironmentVariable",
+            "description": "Inventory - REQUIRED. The URL used to get graph information for your cloud. Ex https://graph.microsoft.com/"
+          }
+        },
+        "Disabled Users are Orphaned (admin_DisabledUsersareOrphaned)": {
+          "defaultValue": false,
+          "type": "Bool",
+          "metadata": {
+            "schemaName": "admin_DisabledUsersareOrphaned",
+            "description": "Inventory - If true (Yes), then when an AD User is marked as disabled (Account enabled = false), they will be considered as orphaned. Default is false (No)"
+          }
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "c7b62e55-6c83-4a32-a64b-afef5bce1014"
+          },
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "MakerID",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "boolean": {
+                  "title": "Recheck",
+                  "type": "boolean",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please select yes or no",
+                  "x-ms-content-hint": "BOOLEAN"
+                }
+              },
+              "required": [
+                "text",
+                "boolean"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Initialize_isOrphan": {
+          "runAfter": {
+            "Initialize_Maker_Object": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dfd6c5fa-821e-4a60-9cab-793104b90f9f"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "isOrphan",
+                "type": "boolean",
+                "value": "@false"
+              }
+            ]
+          }
+        },
+        "early_short_circuit": {
+          "actions": {
+            "If_not_system._Check_for_Short_Circuit": {
+              "actions": {
+                "If_so_exit_now_with_existing_values": {
+                  "actions": {
+                    "Respond_via_short_circuit": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "526efde3-fecd-47c0-a2e2-94f042d55fcf"
+                      },
+                      "type": "Response",
+                      "kind": "PowerApp",
+                      "inputs": {
+                        "statusCode": 200,
+                        "body": {
+                          "userisorphan": "@if(equals(true, first(outputs('Maker_checked_today')?['body/value'])?['admin_makerisorphaned']), true, false)",
+                          "userissystem": "@false",
+                          "userisserviceprinciple": "@if(equals(true, first(outputs('Maker_checked_today')?['body/value'])?['admin_userisserviceprinciple']), true, false)",
+                          "usercompany": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_company'], '')}",
+                          "userdepartment": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_department'], '')}",
+                          "userdisplayname": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_displayname'], '')}",
+                          "usercity": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_city'], '')}",
+                          "usercountry": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_country'], '')}",
+                          "userpreferredlanguage": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_preferredlanguage'], 'en-US')}",
+                          "userid": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_makerid'], triggerBody()['text'])}",
+                          "useremail": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_useremail'], '')}",
+                          "usermanagerid": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_managerid'], '')}",
+                          "usermanagername": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_managerdisplayname'], '')}",
+                          "userisenabled": "@if(equals(true, first(outputs('Maker_checked_today')?['body/value'])?['admin_accountenabled']), true, false)",
+                          "userupn": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_userprincipalname'], '')}",
+                          "userstate": "@{coalesce(first(outputs('Maker_checked_today')?['body/value'])?['admin_stateorprovince'], '')}",
+                          "userisguest": "@{if(equals(true, first(outputs('Maker_checked_today')?['body/value'])?['admin_userisguest']), true, false)}"
+                        },
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "userisorphan": {
+                              "title": "userIsOrPhan",
+                              "x-ms-dynamically-added": true,
+                              "type": "boolean"
+                            },
+                            "userissystem": {
+                              "title": "userIsSystem",
+                              "x-ms-dynamically-added": true,
+                              "type": "boolean"
+                            },
+                            "userisserviceprinciple": {
+                              "title": "userIsServicePrinciple",
+                              "x-ms-dynamically-added": true,
+                              "type": "boolean"
+                            },
+                            "usercompany": {
+                              "title": "userCompany",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userdepartment": {
+                              "title": "userDepartment",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userdisplayname": {
+                              "title": "userDisplayName",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "usercity": {
+                              "title": "userCity",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "usercountry": {
+                              "title": "userCountry",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userpreferredlanguage": {
+                              "title": "userPreferredLanguage",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userid": {
+                              "title": "userID",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "useremail": {
+                              "title": "userEmail",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "usermanagerid": {
+                              "title": "userManagerID",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "usermanagername": {
+                              "title": "userManagerName",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userisenabled": {
+                              "title": "userIsEnabled",
+                              "x-ms-dynamically-added": true,
+                              "type": "boolean"
+                            },
+                            "userupn": {
+                              "title": "userUPN",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userstate": {
+                              "title": "userState",
+                              "x-ms-dynamically-added": true,
+                              "type": "string"
+                            },
+                            "userisguest": {
+                              "title": "userIsGuest",
+                              "x-ms-dynamically-added": true,
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Terminate": {
+                      "runAfter": {
+                        "Respond_via_short_circuit": [
+                          "Succeeded",
+                          "Skipped"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "3df87f96-89ea-4e4a-8bd3-6243156d3fa1"
+                      },
+                      "type": "Terminate",
+                      "inputs": {
+                        "runStatus": "Succeeded"
+                      }
+                    },
+                    "not_writing_completion_to_coe_metadata_table_for_API_reasons": {
+                      "runAfter": {
+                        "Terminate": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "3ae3446f-89b7-458c-a574-c3554cdc9b40"
+                      },
+                      "type": "Compose",
+                      "inputs": "not writing to metadata table for API reasons"
+                    }
+                  },
+                  "runAfter": {
+                    "Maker_checked_today": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "and": [
+                      {
+                        "greater": [
+                          "@length(outputs('Maker_checked_today')?['body/value'])",
+                          0
+                        ]
+                      },
+                      {
+                        "equals": [
+                          "@triggerBody()['boolean']",
+                          "@false"
+                        ]
+                      }
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "8068db47-05ca-431a-a0d7-8bfbd8e60515"
+                  },
+                  "type": "If"
+                },
+                "Maker_checked_today": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "ef37f898-6b74-420c-99da-d051929f38fa"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "admin_makers",
+                      "$select": "admin_makerisorphaned, admin_userisserviceprinciple, admin_useremail, admin_company, admin_department, admin_displayname, admin_city, admin_stateorprovince, admin_country, admin_preferredlanguage, admin_makerid, admin_userprincipalname, admin_managerid, admin_accountenabled, admin_managerdisplayname",
+                      "$filter": "admin_makerid eq @{triggerBody()['text']} and modifiedon gt @{addDays(utcNow(), -1)}"
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                    }
+                  }
+                }
+              },
+              "runAfter": {},
+              "expression": {
+                "and": [
+                  {
+                    "not": {
+                      "equals": [
+                        "@triggerBody()['text']",
+                        "@null"
+                      ]
+                    }
+                  },
+                  {
+                    "not": {
+                      "equals": [
+                        "@triggerBody()['text']",
+                        "SYSTEM"
+                      ]
+                    }
+                  },
+                  {
+                    "not": {
+                      "equals": [
+                        "@triggerBody()['boolean']",
+                        "@true"
+                      ]
+                    }
+                  },
+                  {
+                    "not": {
+                      "equals": [
+                        "@length(triggerBody()['text'])",
+                        0
+                      ]
+                    }
+                  }
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78168176-59fa-41d7-b1e5-9ce79630cf46"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "28b58849-1279-4745-8c4e-1f3204169f86"
+          },
+          "type": "Scope",
+          "description": "will rethink a way to make the rest less costly and called. but adding early bail here for now"
+        },
+        "Maker_Check_Scope": {
+          "actions": {
+            "If_System": {
+              "actions": {
+                "Get_System_User_GUID_for_ID": {
+                  "actions": {
+                    "Is_System_Maker": {
+                      "actions": {
+                        "Compose_isSystem_true": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "acff48ef-b519-4fa3-843d-d4238db2d904"
+                          },
+                          "type": "Compose",
+                          "inputs": "@setProperty(variables('varMakerArray'), 'isSystem', true)",
+                          "description": "setProperty(variables('varMakerArray'), 'isSystem', true)"
+                        },
+                        "Compose_System_Id": {
+                          "runAfter": {
+                            "update_variable_-_isSystem_true": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "acff48ef-b519-4fa3-843d-d4238db2d904"
+                          },
+                          "type": "Compose",
+                          "inputs": "@setProperty(variables('varMakerArray'), 'ID', first(body('List_Makers')?['value'])?['admin_makerid'])",
+                          "description": "setProperty(variables('varMakerArray'), 'ID', first(body('List_Makers')?['value'])?['admin_makerid'])"
+                        },
+                        "update_variable_-_isSystem_true": {
+                          "runAfter": {
+                            "Compose_isSystem_true": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "310bd735-115f-47f7-984e-c388d5f6c8ad"
+                          },
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "varMakerArray",
+                            "value": "@outputs('Compose_isSystem_true')"
+                          }
+                        },
+                        "update_variable_-_System_Id": {
+                          "runAfter": {
+                            "Compose_System_Id": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "ced62cee-42d4-43a7-9894-8efa16d3a4bb"
+                          },
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "varMakerArray",
+                            "value": "@outputs('Compose_System_Id')"
+                          }
+                        },
+                        "Compose_System_DisplayName": {
+                          "runAfter": {
+                            "update_variable_-_System_Id": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "acff48ef-b519-4fa3-843d-d4238db2d904"
+                          },
+                          "type": "Compose",
+                          "inputs": "@setProperty(variables('varMakerArray'), 'DisplayName', 'SYSTEM')",
+                          "description": "setProperty(variables('varMakerArray'), 'DisplayName', 'SYSTEM')"
+                        },
+                        "update_variable_-_System_DisplayName": {
+                          "runAfter": {
+                            "Compose_System_DisplayName": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "e6f738ac-6c97-4096-8ab7-651e86ab7823"
+                          },
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "varMakerArray",
+                            "value": "@outputs('Compose_System_DisplayName')"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "List_Makers": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "greater": [
+                          "@length(outputs('List_Makers')?['body/value'])",
+                          0
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "8645a2a6-bfa1-42a0-98ce-a92b2c149cbb"
+                      },
+                      "type": "If",
+                      "description": "length(outputs('List_Makers')?['body/value'])"
+                    },
+                    "List_Makers": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "c4cecee4-c6a1-498a-a942-0054aa58fbad"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "ListRecords",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "admin_makers",
+                          "$select": "admin_makerid",
+                          "$filter": "admin_displayname eq 'SYSTEM'"
+                        },
+                        "authentication": {
+                          "type": "Raw",
+                          "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                        },
+                        "retryPolicy": {
+                          "type": "exponential",
+                          "count": 10,
+                          "interval": "PT10S"
+                        }
+                      },
+                      "runtimeConfiguration": {
+                        "paginationPolicy": {
+                          "minimumItemCount": 100000
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "de15e9bf-5a09-486f-8d39-230c345ca715"
+                  },
+                  "type": "Scope"
+                }
+              },
+              "runAfter": {},
+              "else": {
+                "actions": {
+                  "If_MakerID_is_null_or_empty": {
+                    "actions": {
+                      "Compose_isOrphan_to_true": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "4537e0fe-b746-4374-8387-ae66e97cd5b9"
+                        },
+                        "type": "Compose",
+                        "inputs": "@setProperty(variables('varMakerArray'), 'isOrphan', true)"
+                      },
+                      "Set_isOrphan_to_true": {
+                        "runAfter": {
+                          "Compose_isOrphan_to_true": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "0d0b2a87-75e0-4089-94f0-4e6f84bba592"
+                        },
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "varMakerArray",
+                          "value": "@outputs('Compose_isOrphan_to_true')"
+                        }
+                      }
+                    },
+                    "runAfter": {},
+                    "else": {
+                      "actions": {
+                        "Short_Circuit_Check_-_if_maker_already_updated_today,_use_its_properties": {
+                          "actions": {
+                            "Set_varMakerArray_second_short_circuit": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "418c0690-1017-412a-9f62-caf12880c9a3"
+                              },
+                              "type": "SetVariable",
+                              "inputs": {
+                                "name": "varMakerArray",
+                                "value": {
+                                  "isOrphan": "@first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])['admin_makerisorphaned']",
+                                  "isEnabled": "@first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])['admin_accountenabled']",
+                                  "isSystem": "@if(equals(triggerBody()?['text'], 'SYSTEM'), true, false)",
+                                  "isServicePrinciple": "@first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])['admin_userisserviceprinciple']",
+                                  "isGuestUser": "@first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])['admin_userisguest']",
+                                  "ID": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_makerid'], triggerBody()['text'])",
+                                  "Company": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_company'], '')",
+                                  "Department": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_department'], '')",
+                                  "DisplayName": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_displayname'], '')",
+                                  "City": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_city'], '')",
+                                  "State": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_stateorprovince'], '')",
+                                  "Country": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_country'], '')",
+                                  "preferredLanguage": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_preferredlanguage'], 'en-US')",
+                                  "Email": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_useremail'], '')",
+                                  "UPN": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_userprincipalname'], '')",
+                                  "hasManager": "@if(equals(length(coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_managerid'], '')), 0), false, true)",
+                                  "ManagerID": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_managerid'], '')",
+                                  "ManagerName": "@coalesce(first(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])?['admin_managerdisplayname'], '')",
+                                  "ForceRecheckOrphan": "@triggerBody()['boolean']"
+                                }
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "See_if_maker_exists_and_updated_already_today": [
+                              "Succeeded"
+                            ]
+                          },
+                          "else": {
+                            "actions": {
+                              "Switch": {
+                                "runAfter": {
+                                  "Get_user_profile_(V2)": [
+                                    "Succeeded",
+                                    "Failed"
+                                  ]
+                                },
+                                "cases": {
+                                  "200_Success": {
+                                    "case": 200,
+                                    "actions": {
+                                      "Update_or_Insert_Maker": {
+                                        "actions": {
+                                          "Update_Maker": {
+                                            "runAfter": {},
+                                            "metadata": {
+                                              "operationMetadataId": "c710c77d-ef52-4970-a66a-1294458fe0ac"
+                                            },
+                                            "type": "OpenApiConnection",
+                                            "inputs": {
+                                              "host": {
+                                                "connectionName": "shared_commondataserviceforapps",
+                                                "operationId": "UpdateRecord",
+                                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                              },
+                                              "parameters": {
+                                                "entityName": "admin_makers",
+                                                "recordId": "@triggerBody()['text']",
+                                                "item/admin_displayname": "@outputs('Get_user_profile_(V2)')?['body/displayName']",
+                                                "item/admin_accountenabled": "@outputs('Get_user_profile_(V2)')?['body/accountEnabled']",
+                                                "item/admin_city": "@outputs('Get_user_profile_(V2)')?['body/city']",
+                                                "item/admin_company": "@outputs('Get_user_profile_(V2)')?['body/companyName']",
+                                                "item/admin_country": "@outputs('Get_user_profile_(V2)')?['body/country']",
+                                                "item/admin_datemakermarkedorphan": "@null",
+                                                "item/admin_department": "@outputs('Get_user_profile_(V2)')?['body/department']",
+                                                "item/admin_jobtitle": "@outputs('Get_user_profile_(V2)')?['body/jobTitle']",
+                                                "item/admin_makerisorphaned": "@variables('isOrphan')",
+                                                "item/admin_office": "@outputs('Get_user_profile_(V2)')?['body/officeLocation']",
+                                                "item/admin_preferredlanguage": "@if(equals(outputs('Get_user_profile_(V2)')?['body/preferredLanguage'], null), 'en-US', outputs('Get_user_profile_(V2)')?['body/preferredLanguage'])",
+                                                "item/admin_recordguidasstring": "@triggerBody()['text']",
+                                                "item/admin_stateorprovince": "@outputs('Get_user_profile_(V2)')?['body/state']",
+                                                "item/admin_useremail": "@outputs('Get_user_profile_(V2)')?['body/mail']",
+                                                "item/admin_userprincipalname": "@outputs('Get_user_profile_(V2)')?['body/userPrincipalName']",
+                                                "item/admin_userisguest": "@if(equals(outputs('Get_user_profile_(V2)')?['body/userType'], 'Guest'), true, false)",
+                                                "item/admin_userisserviceprinciple": false
+                                              },
+                                              "authentication": {
+                                                "type": "Raw",
+                                                "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "runAfter": {
+                                          "Find_Maker": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "else": {
+                                          "actions": {
+                                            "Add_Maker": {
+                                              "runAfter": {},
+                                              "metadata": {
+                                                "operationMetadataId": "f7c445d3-264f-4c93-95e5-9931c2bd10cb"
+                                              },
+                                              "type": "OpenApiConnection",
+                                              "inputs": {
+                                                "host": {
+                                                  "connectionName": "shared_commondataserviceforapps",
+                                                  "operationId": "CreateRecord",
+                                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                                },
+                                                "parameters": {
+                                                  "entityName": "admin_makers",
+                                                  "item/admin_displayname": "@outputs('Get_user_profile_(V2)')?['body/displayName']",
+                                                  "item/admin_accountenabled": "@outputs('Get_user_profile_(V2)')?['body/accountEnabled']",
+                                                  "item/admin_city": "@outputs('Get_user_profile_(V2)')?['body/city']",
+                                                  "item/admin_company": "@outputs('Get_user_profile_(V2)')?['body/companyName']",
+                                                  "item/admin_country": "@outputs('Get_user_profile_(V2)')?['body/country']",
+                                                  "item/admin_datemakermarkedorphan": "@null",
+                                                  "item/admin_department": "@outputs('Get_user_profile_(V2)')?['body/department']",
+                                                  "item/admin_jobtitle": "@outputs('Get_user_profile_(V2)')?['body/jobTitle']",
+                                                  "item/admin_makerid": "@triggerBody()['text']",
+                                                  "item/admin_makerisorphaned": "@variables('isOrphan')",
+                                                  "item/admin_office": "@outputs('Get_user_profile_(V2)')?['body/officeLocation']",
+                                                  "item/admin_preferredlanguage": "@if(equals(outputs('Get_user_profile_(V2)')?['body/preferredLanguage'], null), 'en-US', outputs('Get_user_profile_(V2)')?['body/preferredLanguage'])",
+                                                  "item/admin_recordguidasstring": "@triggerBody()['text']",
+                                                  "item/admin_stateorprovince": "@outputs('Get_user_profile_(V2)')?['body/state']",
+                                                  "item/admin_useremail": "@outputs('Get_user_profile_(V2)')?['body/mail']",
+                                                  "item/admin_userprincipalname": "@outputs('Get_user_profile_(V2)')?['body/userPrincipalName']",
+                                                  "item/admin_userisguest": "@if(equals(outputs('Get_user_profile_(V2)')?['body/userType'], 'Guest'), true, false)",
+                                                  "item/admin_userisserviceprinciple": false
+                                                },
+                                                "authentication": {
+                                                  "type": "Raw",
+                                                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                                }
+                                              }
+                                            },
+                                            "Switch_on_output": {
+                                              "runAfter": {
+                                                "Add_Maker": [
+                                                  "Succeeded",
+                                                  "Failed"
+                                                ]
+                                              },
+                                              "cases": {
+                                                "Case_201_-_Success": {
+                                                  "case": 201,
+                                                  "actions": {
+                                                    "Success_-_NoOp": {
+                                                      "runAfter": {},
+                                                      "metadata": {
+                                                        "operationMetadataId": "b404ead6-dd49-4274-9d47-0d96a26a180c"
+                                                      },
+                                                      "type": "Compose",
+                                                      "inputs": "nothing to do - succeeded"
+                                                    }
+                                                  }
+                                                },
+                                                "Case_412_-_Already_Exists": {
+                                                  "case": 412,
+                                                  "actions": {
+                                                    "Just_Inserted_by_another_run_-_NoOp": {
+                                                      "runAfter": {},
+                                                      "metadata": {
+                                                        "operationMetadataId": "b264376d-7ee8-472e-9c8c-509b5f3a8d1c"
+                                                      },
+                                                      "type": "Compose",
+                                                      "inputs": "catching for race condition. another flow just inserted this user. Nothing to do"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "default": {
+                                                "actions": {
+                                                  "Force_Failure": {
+                                                    "runAfter": {},
+                                                    "metadata": {
+                                                      "operationMetadataId": "8cc201aa-db97-49e3-a0ef-51604f408402"
+                                                    },
+                                                    "type": "Compose",
+                                                    "inputs": "all other cases are real failures so fail"
+                                                  },
+                                                  "ForceFailure": {
+                                                    "runAfter": {
+                                                      "Force_Failure": [
+                                                        "Succeeded"
+                                                      ]
+                                                    },
+                                                    "metadata": {
+                                                      "operationMetadataId": "6ee3a3af-46e4-429f-b0d4-ca8d72645019"
+                                                    },
+                                                    "type": "OpenApiConnection",
+                                                    "inputs": {
+                                                      "host": {
+                                                        "connectionName": "shared_commondataserviceforapps_1",
+                                                        "operationId": "GetItem",
+                                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                                      },
+                                                      "parameters": {
+                                                        "entityName": "admin_makers",
+                                                        "recordId": "ForceFailure"
+                                                      },
+                                                      "authentication": {
+                                                        "type": "Raw",
+                                                        "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "expression": "@outputs('Add_Maker')['statusCode']",
+                                              "metadata": {
+                                                "operationMetadataId": "3fa2e975-5bfe-412b-9c0c-085bb23b9650"
+                                              },
+                                              "type": "Switch"
+                                            }
+                                          }
+                                        },
+                                        "expression": {
+                                          "greater": [
+                                            "@length(outputs('Find_Maker')?['body/value'])",
+                                            0
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "c7c6a77f-e733-41f8-bcdd-a7a033114e49"
+                                        },
+                                        "type": "If"
+                                      },
+                                      "Get_manager_(V2)": {
+                                        "runAfter": {
+                                          "Update_Maker_Array": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "1cc66a64-d7d4-4ada-96b3-691388b79f5d"
+                                        },
+                                        "type": "OpenApiConnection",
+                                        "inputs": {
+                                          "host": {
+                                            "connectionName": "shared_office365users",
+                                            "operationId": "Manager_V2",
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
+                                          },
+                                          "parameters": {
+                                            "id": "@triggerBody()['text']",
+                                            "$select": "id, displayName"
+                                          },
+                                          "authentication": {
+                                            "type": "Raw",
+                                            "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                          }
+                                        }
+                                      },
+                                      "Switch_manager": {
+                                        "runAfter": {
+                                          "Get_manager_(V2)": [
+                                            "Succeeded",
+                                            "Failed"
+                                          ]
+                                        },
+                                        "cases": {
+                                          "200_Success": {
+                                            "case": 200,
+                                            "actions": {
+                                              "Compose_ManagerID": {
+                                                "runAfter": {},
+                                                "metadata": {
+                                                  "operationMetadataId": "44db9b6d-da5e-4dab-9df8-a355143d7fcd"
+                                                },
+                                                "type": "Compose",
+                                                "inputs": "@setProperty(variables('varMakerArray'),'ManagerID',outputs('Get_manager_(V2)')?['body/id'])"
+                                              },
+                                              "Compose_ManagerName": {
+                                                "runAfter": {
+                                                  "Set_ManagerID": [
+                                                    "Succeeded"
+                                                  ]
+                                                },
+                                                "metadata": {
+                                                  "operationMetadataId": "f6b42a89-ae3b-470e-804e-280228aa6686"
+                                                },
+                                                "type": "Compose",
+                                                "inputs": "@setProperty(variables('varMakerArray'),'ManagerName',outputs('Get_manager_(V2)')?['body/displayName'])"
+                                              },
+                                              "Set_ManagerID": {
+                                                "runAfter": {
+                                                  "Compose_ManagerID": [
+                                                    "Succeeded"
+                                                  ]
+                                                },
+                                                "metadata": {
+                                                  "operationMetadataId": "4a8957e4-999c-4fb6-8bf0-811ef6950b5b"
+                                                },
+                                                "type": "SetVariable",
+                                                "inputs": {
+                                                  "name": "varMakerArray",
+                                                  "value": "@outputs('Compose_ManagerID')"
+                                                }
+                                              },
+                                              "Set_ManagerName": {
+                                                "runAfter": {
+                                                  "Compose_ManagerName": [
+                                                    "Succeeded"
+                                                  ]
+                                                },
+                                                "metadata": {
+                                                  "operationMetadataId": "0e8f2bb6-d198-4b61-a931-1c67aa559887"
+                                                },
+                                                "type": "SetVariable",
+                                                "inputs": {
+                                                  "name": "varMakerArray",
+                                                  "value": "@outputs('Compose_ManagerName')"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "default": {
+                                          "actions": {}
+                                        },
+                                        "expression": "@outputs('Get_manager_(V2)')['statusCode']",
+                                        "metadata": {
+                                          "operationMetadataId": "95cbc44c-2d23-4a48-87d9-981ba3590e36"
+                                        },
+                                        "type": "Switch"
+                                      },
+                                      "if_account_disabled_and_that_means_orphan_set_it_as_orphan": {
+                                        "actions": {
+                                          "Set_isOrphan_var_true_-_disabled_user": {
+                                            "runAfter": {},
+                                            "metadata": {
+                                              "operationMetadataId": "8fab47da-3656-4b2e-8980-abcfa7226f86"
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                              "name": "isOrphan",
+                                              "value": "@true"
+                                            }
+                                          }
+                                        },
+                                        "runAfter": {},
+                                        "else": {
+                                          "actions": {
+                                            "Set_isOrphan_var_false_-_disabled_user": {
+                                              "runAfter": {},
+                                              "metadata": {
+                                                "operationMetadataId": "8e7b7612-096c-4d2f-a323-b0386dafdb0c"
+                                              },
+                                              "type": "SetVariable",
+                                              "inputs": {
+                                                "name": "isOrphan",
+                                                "value": "@false"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "expression": {
+                                          "and": [
+                                            {
+                                              "equals": [
+                                                "@parameters('Disabled Users are Orphaned (admin_DisabledUsersareOrphaned)')",
+                                                "@true"
+                                              ]
+                                            },
+                                            {
+                                              "equals": [
+                                                "@outputs('Get_user_profile_(V2)')?['body/accountEnabled']",
+                                                "@false"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "6cbb153d-44e9-4999-a025-87f7c6f09b39"
+                                        },
+                                        "type": "If"
+                                      },
+                                      "Find_Maker": {
+                                        "runAfter": {
+                                          "if_account_disabled_and_that_means_orphan_set_it_as_orphan": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "e0728267-bff1-41a5-a2a4-cfdf7f940fd3"
+                                        },
+                                        "type": "OpenApiConnection",
+                                        "inputs": {
+                                          "host": {
+                                            "connectionName": "shared_commondataserviceforapps",
+                                            "operationId": "ListRecords",
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                          },
+                                          "parameters": {
+                                            "entityName": "admin_makers",
+                                            "$select": "admin_makerid",
+                                            "$filter": "admin_makerid eq @{triggerBody()['text']}"
+                                          },
+                                          "authentication": {
+                                            "type": "Raw",
+                                            "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                          }
+                                        }
+                                      },
+                                      "Update_Maker_Array": {
+                                        "runAfter": {
+                                          "Update_or_Insert_Maker": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "ae85fe09-77f9-4357-8913-af064fb3ba70"
+                                        },
+                                        "type": "SetVariable",
+                                        "inputs": {
+                                          "name": "varMakerArray",
+                                          "value": {
+                                            "isOrphan": "@variables('isOrphan')",
+                                            "isEnabled": "@outputs('Get_user_profile_(V2)')?['body/accountEnabled']",
+                                            "isSystem": false,
+                                            "isServicePrinciple": false,
+                                            "isGuestUser": "@if(equals(outputs('Get_user_profile_(V2)')?['body/userType'], 'Guest'), true, false)",
+                                            "ID": "@triggerBody()['text']",
+                                            "Company": "@outputs('Get_user_profile_(V2)')?['body/companyName']",
+                                            "Department": "@outputs('Get_user_profile_(V2)')?['body/department']",
+                                            "DisplayName": "@outputs('Get_user_profile_(V2)')?['body/displayName']",
+                                            "City": "@outputs('Get_user_profile_(V2)')?['body/city']",
+                                            "State": "@outputs('Get_user_profile_(V2)')?['body/state']",
+                                            "Country": "@outputs('Get_user_profile_(V2)')?['body/country']",
+                                            "preferredLanguage": "@if(equals(outputs('Get_user_profile_(V2)')?['body/preferredLanguage'], null), 'en-US', outputs('Get_user_profile_(V2)')?['body/preferredLanguage'])",
+                                            "Email": "@outputs('Get_user_profile_(V2)')?['body/mail']",
+                                            "UPN": "@outputs('Get_user_profile_(V2)')?['body/userPrincipalName']",
+                                            "hasManager": true,
+                                            "ManagerID": "",
+                                            "ManagerName": "",
+                                            "ForceRecheckOrphan": "@triggerBody()['boolean']"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "404_User_Not_Found": {
+                                    "case": 404,
+                                    "actions": {
+                                      "Look_up_in_AD_for_Service_Principles_New_App": {
+                                        "runAfter": {},
+                                        "metadata": {
+                                          "operationMetadataId": "34d9c5c0-157b-473b-922d-985e884479ab"
+                                        },
+                                        "type": "OpenApiConnection",
+                                        "inputs": {
+                                          "host": {
+                                            "connectionName": "shared_webcontents",
+                                            "operationId": "InvokeHttp",
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_webcontents"
+                                          },
+                                          "parameters": {
+                                            "request/method": "GET",
+                                            "request/url": "@{parameters('Graph URL Environment Variable (admin_GraphURLEnvironmentVariable)')}v1.0/servicePrincipals?$filter=Id eq '@{triggerBody()['text']}'"
+                                          },
+                                          "authentication": {
+                                            "type": "Raw",
+                                            "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                          }
+                                        }
+                                      },
+                                      "Switch_Service_Principle": {
+                                        "runAfter": {
+                                          "Look_up_in_AD_for_Service_Principles_New_App": [
+                                            "Succeeded",
+                                            "Failed"
+                                          ]
+                                        },
+                                        "cases": {
+                                          "200_Success": {
+                                            "case": 200,
+                                            "actions": {
+                                              "if_app_found_set_var_to_true": {
+                                                "actions": {
+                                                  "Set_isApp_to_true": {
+                                                    "runAfter": {},
+                                                    "metadata": {
+                                                      "operationMetadataId": "cf402b50-52d3-4af0-bd68-139557e45a9e"
+                                                    },
+                                                    "type": "SetVariable",
+                                                    "inputs": {
+                                                      "name": "isApp",
+                                                      "value": "@true"
+                                                    }
+                                                  }
+                                                },
+                                                "runAfter": {},
+                                                "expression": {
+                                                  "greater": [
+                                                    "@length(body('Look_up_in_AD_for_Service_Principles_New_App')?['value'])",
+                                                    0
+                                                  ]
+                                                },
+                                                "metadata": {
+                                                  "operationMetadataId": "e78fbb17-a3e1-407f-98ea-2774a5930cba"
+                                                },
+                                                "type": "If"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "default": {
+                                          "actions": {}
+                                        },
+                                        "expression": "@outputs('Look_up_in_AD_for_Service_Principles_New_App')['statusCode']",
+                                        "metadata": {
+                                          "operationMetadataId": "936a0e6c-a2fc-4640-bf61-1285495a12b4"
+                                        },
+                                        "type": "Switch"
+                                      },
+                                      "if_is_app": {
+                                        "actions": {
+                                          "Set_isServicePrinciple_true": {
+                                            "runAfter": {
+                                              "Compose_isServicePrinciple": [
+                                                "Succeeded"
+                                              ]
+                                            },
+                                            "metadata": {
+                                              "operationMetadataId": "abfdf2d3-3ce8-4f87-a5bd-af146f45c4e3"
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                              "name": "varMakerArray",
+                                              "value": "@outputs('Compose_isServicePrinciple')"
+                                            }
+                                          },
+                                          "Compose_isServicePrinciple": {
+                                            "runAfter": {
+                                              "Update_or_Insert_Service_Principle": [
+                                                "Succeeded"
+                                              ]
+                                            },
+                                            "metadata": {
+                                              "operationMetadataId": "7676e134-5bff-421f-a70b-5b85fc93bea0"
+                                            },
+                                            "type": "Compose",
+                                            "inputs": "@setProperty(variables('varMakerArray'),'isServicePrinciple',true)"
+                                          },
+                                          "Update_or_Insert_Service_Principle": {
+                                            "actions": {
+                                              "Update_Service_Principle": {
+                                                "runAfter": {},
+                                                "metadata": {
+                                                  "operationMetadataId": "34a300cc-335c-4288-a719-118d3889f6c1"
+                                                },
+                                                "type": "OpenApiConnection",
+                                                "inputs": {
+                                                  "host": {
+                                                    "connectionName": "shared_commondataserviceforapps",
+                                                    "operationId": "UpdateRecord",
+                                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                                  },
+                                                  "parameters": {
+                                                    "entityName": "admin_makers",
+                                                    "recordId": "@triggerBody()['text']",
+                                                    "item/admin_displayname": "@outputs('App_Registration_Name')",
+                                                    "item/admin_accountenabled": true,
+                                                    "item/admin_datemakermarkedorphan": "@null",
+                                                    "item/admin_makerisorphaned": false,
+                                                    "item/admin_recordguidasstring": "@triggerBody()['text']",
+                                                    "item/admin_userisguest": false,
+                                                    "item/admin_userisserviceprinciple": true
+                                                  },
+                                                  "authentication": {
+                                                    "type": "Raw",
+                                                    "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "runAfter": {
+                                              "App_Registration_Name": [
+                                                "Succeeded"
+                                              ]
+                                            },
+                                            "else": {
+                                              "actions": {
+                                                "Add_Service_Principle": {
+                                                  "runAfter": {},
+                                                  "metadata": {
+                                                    "operationMetadataId": "0fa96a59-2386-40e5-b7ac-9c3254655bff"
+                                                  },
+                                                  "type": "OpenApiConnection",
+                                                  "inputs": {
+                                                    "host": {
+                                                      "connectionName": "shared_commondataserviceforapps",
+                                                      "operationId": "CreateRecord",
+                                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                                    },
+                                                    "parameters": {
+                                                      "entityName": "admin_makers",
+                                                      "item/admin_displayname": "@outputs('App_Registration_Name')",
+                                                      "item/admin_accountenabled": true,
+                                                      "item/admin_datemakermarkedorphan": "@null",
+                                                      "item/admin_makerid": "@triggerBody()['text']",
+                                                      "item/admin_makerisorphaned": false,
+                                                      "item/admin_recordguidasstring": "@triggerBody()['text']",
+                                                      "item/admin_userisguest": false,
+                                                      "item/admin_userisserviceprinciple": true
+                                                    },
+                                                    "authentication": {
+                                                      "type": "Raw",
+                                                      "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                                    }
+                                                  }
+                                                },
+                                                "Switch_on_output_-_Add_Service_Principle": {
+                                                  "runAfter": {
+                                                    "Add_Service_Principle": [
+                                                      "Succeeded",
+                                                      "Failed"
+                                                    ]
+                                                  },
+                                                  "cases": {
+                                                    "Case_201_-_Success": {
+                                                      "case": 201,
+                                                      "actions": {
+                                                        "Success_-_NoOp_-_Inserted_Service_Principle": {
+                                                          "runAfter": {},
+                                                          "metadata": {
+                                                            "operationMetadataId": "25808a5f-4553-4e5c-9a55-175e41fdc4dd"
+                                                          },
+                                                          "type": "Compose",
+                                                          "inputs": "nothing to do - succeeded"
+                                                        }
+                                                      }
+                                                    },
+                                                    "Case_412_-_Already_Exists": {
+                                                      "case": 412,
+                                                      "actions": {
+                                                        "Just_Inserted_by_another_run_-_NoOp_-_Service_Principle": {
+                                                          "runAfter": {},
+                                                          "metadata": {
+                                                            "operationMetadataId": "acec1b36-97c9-46a1-898c-6c063b629c02"
+                                                          },
+                                                          "type": "Compose",
+                                                          "inputs": "catching for race condition. another flow just inserted this user. Nothing to do"
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "default": {
+                                                    "actions": {
+                                                      "Force_Failure_-_Service_Principle": {
+                                                        "runAfter": {},
+                                                        "metadata": {
+                                                          "operationMetadataId": "4c2d402e-4b74-4d6e-ab1c-422e673b8c04"
+                                                        },
+                                                        "type": "Compose",
+                                                        "inputs": "all other cases are real failures so fail"
+                                                      },
+                                                      "ForceFailure_-_Service_Principle": {
+                                                        "runAfter": {
+                                                          "Force_Failure_-_Service_Principle": [
+                                                            "Succeeded"
+                                                          ]
+                                                        },
+                                                        "metadata": {
+                                                          "operationMetadataId": "355b0217-fd70-481d-8468-346a20e789ec"
+                                                        },
+                                                        "type": "OpenApiConnection",
+                                                        "inputs": {
+                                                          "host": {
+                                                            "connectionName": "shared_commondataserviceforapps_1",
+                                                            "operationId": "GetItem",
+                                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                                          },
+                                                          "parameters": {
+                                                            "entityName": "admin_makers",
+                                                            "recordId": "ForceFailure"
+                                                          },
+                                                          "authentication": {
+                                                            "type": "Raw",
+                                                            "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "expression": "@outputs('Add_Service_Principle')['statusCode']",
+                                                  "metadata": {
+                                                    "operationMetadataId": "fc9e00a0-f68b-4d1d-8b44-ba566f471e60"
+                                                  },
+                                                  "type": "Switch"
+                                                }
+                                              }
+                                            },
+                                            "expression": {
+                                              "greater": [
+                                                "@length(outputs('Find_Service_Principle')?['body/value'])",
+                                                0
+                                              ]
+                                            },
+                                            "metadata": {
+                                              "operationMetadataId": "9dfe355d-cf60-4de5-a9cf-d09f6783ce9d"
+                                            },
+                                            "type": "If"
+                                          },
+                                          "App_Registration_Name": {
+                                            "runAfter": {
+                                              "Find_Service_Principle": [
+                                                "Succeeded"
+                                              ]
+                                            },
+                                            "metadata": {
+                                              "operationMetadataId": "672409d1-bd32-4775-8627-acc2609b59a5"
+                                            },
+                                            "type": "Compose",
+                                            "inputs": "@body('Look_up_in_AD_for_Service_Principles_New_App')?['value'][0]?['appDisplayName']"
+                                          },
+                                          "Find_Service_Principle": {
+                                            "runAfter": {},
+                                            "metadata": {
+                                              "operationMetadataId": "628b2fd7-c378-427b-9218-7b6866930567"
+                                            },
+                                            "type": "OpenApiConnection",
+                                            "inputs": {
+                                              "host": {
+                                                "connectionName": "shared_commondataserviceforapps",
+                                                "operationId": "ListRecords",
+                                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                              },
+                                              "parameters": {
+                                                "entityName": "admin_makers",
+                                                "$select": "admin_makerid",
+                                                "$filter": "admin_makerid eq @{triggerBody()['text']}"
+                                              },
+                                              "authentication": {
+                                                "type": "Raw",
+                                                "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "runAfter": {
+                                          "Switch_Service_Principle": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "else": {
+                                          "actions": {
+                                            "SYSTEM_or_Orphan": {
+                                              "actions": {
+                                                "orphan_found": {
+                                                  "runAfter": {},
+                                                  "metadata": {
+                                                    "operationMetadataId": "7ecaffa8-ecbd-45b8-85c6-74a46c9dd067"
+                                                  },
+                                                  "type": "Compose",
+                                                  "inputs": "@setProperty(variables('varMakerArray'),'isOrphan',true)"
+                                                },
+                                                "Set_isOrphan_true": {
+                                                  "runAfter": {
+                                                    "orphan_found": [
+                                                      "Succeeded"
+                                                    ]
+                                                  },
+                                                  "metadata": {
+                                                    "operationMetadataId": "b724a596-bb1b-4e1c-a06e-e05617d288b5"
+                                                  },
+                                                  "type": "SetVariable",
+                                                  "inputs": {
+                                                    "name": "varMakerArray",
+                                                    "value": "@outputs('orphan_found')"
+                                                  }
+                                                }
+                                              },
+                                              "runAfter": {},
+                                              "else": {
+                                                "actions": {
+                                                  "Check_if_System": {
+                                                    "actions": {
+                                                      "another_system_found": {
+                                                        "runAfter": {},
+                                                        "metadata": {
+                                                          "operationMetadataId": "4497ffa3-8cda-486d-96bd-141f04ae7c44"
+                                                        },
+                                                        "type": "Compose",
+                                                        "inputs": "@setProperty(variables('varMakerArray'),'isSystem',true)"
+                                                      },
+                                                      "Set_isSystem_true": {
+                                                        "runAfter": {
+                                                          "another_system_found": [
+                                                            "Succeeded"
+                                                          ]
+                                                        },
+                                                        "metadata": {
+                                                          "operationMetadataId": "191f563b-74ba-4d60-9470-ac29722133ed"
+                                                        },
+                                                        "type": "SetVariable",
+                                                        "inputs": {
+                                                          "name": "varMakerArray",
+                                                          "value": "@outputs('another_system_found')"
+                                                        }
+                                                      }
+                                                    },
+                                                    "runAfter": {},
+                                                    "else": {
+                                                      "actions": {
+                                                        "another_orphan_found": {
+                                                          "runAfter": {},
+                                                          "metadata": {
+                                                            "operationMetadataId": "a69e08ba-5d52-47e9-9aff-0c9a4e78d8ee"
+                                                          },
+                                                          "type": "Compose",
+                                                          "inputs": "@setProperty(variables('varMakerArray'),'isOrphan',true)"
+                                                        },
+                                                        "Set_isOrphan_true_2": {
+                                                          "runAfter": {
+                                                            "another_orphan_found": [
+                                                              "Succeeded"
+                                                            ]
+                                                          },
+                                                          "metadata": {
+                                                            "operationMetadataId": "c3177cdb-86f2-4ccb-b087-e2272cf78dee"
+                                                          },
+                                                          "type": "SetVariable",
+                                                          "inputs": {
+                                                            "name": "varMakerArray",
+                                                            "value": "@outputs('another_orphan_found')"
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "expression": {
+                                                      "equals": [
+                                                        "@triggerBody()['text']",
+                                                        "SYSTEM"
+                                                      ]
+                                                    },
+                                                    "metadata": {
+                                                      "operationMetadataId": "58522b58-53e5-46eb-a8c5-1d8c560b0b39"
+                                                    },
+                                                    "type": "If"
+                                                  }
+                                                }
+                                              },
+                                              "expression": {
+                                                "or": [
+                                                  {
+                                                    "equals": [
+                                                      "@triggerBody()['text']",
+                                                      "@null"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "equals": [
+                                                      "@length(triggerBody()?['text'])",
+                                                      0
+                                                    ]
+                                                  },
+                                                  {
+                                                    "equals": [
+                                                      "@equals(triggerBody()?['text'], '')",
+                                                      "@true"
+                                                    ]
+                                                  }
+                                                ]
+                                              },
+                                              "metadata": {
+                                                "operationMetadataId": "2991c54a-585f-45c6-9de8-34cbf4a97347"
+                                              },
+                                              "type": "If"
+                                            }
+                                          }
+                                        },
+                                        "expression": {
+                                          "equals": [
+                                            "@variables('isApp')",
+                                            "@true"
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "449f83ed-2fff-405d-a8fa-71b841ceae59"
+                                        },
+                                        "type": "If"
+                                      }
+                                    }
+                                  }
+                                },
+                                "default": {
+                                  "actions": {}
+                                },
+                                "expression": "@outputs('Get_user_profile_(V2)')['statusCode']",
+                                "metadata": {
+                                  "operationMetadataId": "3603daf2-9f5b-45ea-a282-191ba9476df6"
+                                },
+                                "type": "Switch"
+                              },
+                              "Get_user_profile_(V2)": {
+                                "runAfter": {},
+                                "metadata": {
+                                  "operationMetadataId": "90bc5e0e-b4b2-40ed-b76c-da0b86b870c6"
+                                },
+                                "type": "OpenApiConnection",
+                                "inputs": {
+                                  "host": {
+                                    "connectionName": "shared_office365users",
+                                    "operationId": "UserProfile_V2",
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
+                                  },
+                                  "parameters": {
+                                    "id": "@triggerBody()['text']",
+                                    "$select": "city,country,department,jobTitle,officeLocation,statusCode,userPrincipalName, displayName, id, companyName, preferredLanguage, mail, accountenabled, state, usertype"
+                                  },
+                                  "authentication": {
+                                    "type": "Raw",
+                                    "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "expression": {
+                            "and": [
+                              {
+                                "greater": [
+                                  "@length(outputs('See_if_maker_exists_and_updated_already_today')?['body/value'])",
+                                  0
+                                ]
+                              },
+                              {
+                                "equals": [
+                                  "@triggerBody()['boolean']",
+                                  "@false"
+                                ]
+                              }
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "2903bfe4-1d2f-4b85-b6fb-9854dc44adc7"
+                          },
+                          "type": "If"
+                        },
+                        "See_if_maker_exists_and_updated_already_today": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "ef37f898-6b74-420c-99da-d051929f38fa"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps",
+                              "operationId": "ListRecords",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_makers",
+                              "$select": "admin_makerisorphaned, admin_userisserviceprinciple, admin_useremail, admin_company, admin_department, admin_displayname, admin_city, admin_stateorprovince, admin_country, admin_preferredlanguage, admin_makerid, admin_userprincipalname, admin_managerid, admin_accountenabled, admin_managerdisplayname, admin_userisguest",
+                              "$filter": "admin_makerid eq @{triggerBody()['text']} and modifiedon gt @{addDays(utcNow(), -1)}"
+                            },
+                            "authentication": {
+                              "type": "Raw",
+                              "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "expression": {
+                      "or": [
+                        {
+                          "equals": [
+                            "@triggerBody()['text']",
+                            "@null"
+                          ]
+                        },
+                        {
+                          "equals": [
+                            "@equals(triggerBody()['text'], '')",
+                            "@true"
+                          ]
+                        },
+                        {
+                          "equals": [
+                            "@length(triggerBody()['text'])",
+                            0
+                          ]
+                        }
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "ef22b01a-c038-423b-a0f4-3505bcf54224"
+                    },
+                    "type": "If"
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@triggerBody()['text']",
+                  "SYSTEM"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "7df280ac-7e74-4a21-bb62-50dfd657ed2a"
+              },
+              "type": "If"
+            },
+            "Respond_to_a_PowerApp_or_flow": {
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "526efde3-fecd-47c0-a2e2-94f042d55fcf"
+              },
+              "type": "Response",
+              "kind": "PowerApp",
+              "inputs": {
+                "statusCode": 200,
+                "body": {
+                  "userisorphan": "@body('Parse_JSON')?['isOrphan']",
+                  "userissystem": "@body('Parse_JSON')?['isSystem']",
+                  "userisserviceprinciple": "@body('Parse_JSON')?['isServicePrinciple']",
+                  "usercompany": "@{body('Parse_JSON')?['Company']}",
+                  "userdepartment": "@{body('Parse_JSON')?['Department']}",
+                  "userdisplayname": "@{body('Parse_JSON')?['DisplayName']}",
+                  "usercity": "@{body('Parse_JSON')?['City']}",
+                  "usercountry": "@{body('Parse_JSON')?['Country']}",
+                  "userpreferredlanguage": "@{body('Parse_JSON')?['preferredLanguage']}",
+                  "userid": "@body('Parse_JSON')?['ID']",
+                  "useremail": "@{body('Parse_JSON')?['Email']}",
+                  "usermanagerid": "@{body('Parse_JSON')?['ManagerID']}",
+                  "usermanagername": "@{body('Parse_JSON')?['ManagerName']}",
+                  "userisenabled": "@body('Parse_JSON')?['isEnabled']",
+                  "userupn": "@{body('Parse_JSON')?['UPN']}",
+                  "userstate": "@{body('Parse_JSON')?['State']}",
+                  "userisguest": "@{body('Parse_JSON')?['isGuestUser']}"
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userisorphan": {
+                      "title": "userIsOrPhan",
+                      "x-ms-dynamically-added": true,
+                      "type": "boolean"
+                    },
+                    "userissystem": {
+                      "title": "userIsSystem",
+                      "x-ms-dynamically-added": true,
+                      "type": "boolean"
+                    },
+                    "userisserviceprinciple": {
+                      "title": "userIsServicePrinciple",
+                      "x-ms-dynamically-added": true,
+                      "type": "boolean"
+                    },
+                    "usercompany": {
+                      "title": "userCompany",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userdepartment": {
+                      "title": "userDepartment",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userdisplayname": {
+                      "title": "userDisplayName",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "usercity": {
+                      "title": "userCity",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "usercountry": {
+                      "title": "userCountry",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userpreferredlanguage": {
+                      "title": "userPreferredLanguage",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userid": {
+                      "title": "userID",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "useremail": {
+                      "title": "userEmail",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "usermanagerid": {
+                      "title": "userManagerID",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "usermanagername": {
+                      "title": "userManagerName",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userisenabled": {
+                      "title": "userIsEnabled",
+                      "x-ms-dynamically-added": true,
+                      "type": "boolean"
+                    },
+                    "userupn": {
+                      "title": "userUPN",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userstate": {
+                      "title": "userState",
+                      "x-ms-dynamically-added": true,
+                      "type": "string"
+                    },
+                    "userisguest": {
+                      "title": "userIsGuest",
+                      "x-ms-dynamically-added": true,
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            },
+            "Parse_JSON": {
+              "runAfter": {
+                "If_System": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "93e0659c-fb5f-47bc-b9ed-af2f53f0f374"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@variables('varMakerArray')",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isOrphan": {
+                      "type": "boolean"
+                    },
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "isSystem": {
+                      "type": "boolean"
+                    },
+                    "isServicePrinciple": {
+                      "type": "boolean"
+                    },
+                    "isGuestUser": {
+                      "type": "boolean"
+                    },
+                    "ID": {
+                      "type": "string"
+                    },
+                    "Company": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "Department": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "DisplayName": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "City": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "State": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "Country": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "preferredLanguage": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "Email": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "UPN": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "hasManager": {
+                      "type": "boolean"
+                    },
+                    "ManagerID": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "ManagerName": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "ForceRecheckOrphan": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_isApp": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "1922c61a-8c20-4c2a-b6a3-d3f37a7f1f71"
+          },
+          "type": "Scope"
+        },
+        "Error_Handling": {
+          "actions": {
+            "Create_a_new_record_-_Sync_Flow_Errors": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_syncflowerrorses",
+                  "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                  "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                },
+                "authentication": {
+                  "type": "Raw",
+                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                },
+                "retryPolicy": {
+                  "type": "exponential",
+                  "count": 10,
+                  "interval": "PT10S"
+                }
+              }
+            },
+            "Terminate_2": {
+              "runAfter": {
+                "Update_Last_Run_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "500",
+                  "message": "Get Environments Failed"
+                }
+              }
+            },
+            "Get_ID_Fail": {
+              "runAfter": {
+                "Create_a_new_record_-_Sync_Flow_Errors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": {
+                  "type": "Raw",
+                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                }
+              }
+            },
+            "Update_Last_Run_Fail": {
+              "runAfter": {
+                "Get_ID_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": false
+                },
+                "authentication": {
+                  "type": "Raw",
+                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Maker_Check_Scope": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+          },
+          "type": "Scope"
+        },
+        "Update_last_run_as_pass": {
+          "actions": {
+            "Update_Last_Run_Successful": {
+              "runAfter": {
+                "Get_ID_Pass": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": true
+                },
+                "authentication": {
+                  "type": "Raw",
+                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                }
+              }
+            },
+            "Get_ID_Pass": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": {
+                  "type": "Raw",
+                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                }
+              }
+            },
+            "Catch_-_not_ready_to_take_last_run_date": {
+              "runAfter": {
+                "Update_Last_Run_Successful": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+              },
+              "type": "Compose",
+              "inputs": "Catch - not ready to take last run date"
+            }
+          },
+          "runAfter": {
+            "Error_Handling": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+          },
+          "type": "Scope"
+        },
+        "Initialize_Maker_Object": {
+          "runAfter": {
+            "early_short_circuit": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2e3f87ca-2d74-4935-85ca-bcde30edfb14"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varMakerArray",
+                "type": "object",
+                "value": {
+                  "isOrphan": false,
+                  "isEnabled": true,
+                  "isSystem": false,
+                  "isServicePrinciple": false,
+                  "isGuestUser": false,
+                  "ID": "@triggerBody()['text']",
+                  "Company": "",
+                  "Department": "",
+                  "DisplayName": "",
+                  "City": "",
+                  "State": "",
+                  "Country": "",
+                  "preferredLanguage": "en-US",
+                  "Email": "",
+                  "UPN": "",
+                  "hasManager": true,
+                  "ManagerID": "",
+                  "ManagerName": "",
+                  "ForceRecheckOrphan": "@triggerBody()['boolean']"
+                }
+              }
+            ]
+          }
+        },
+        "Initialize_isApp": {
+          "runAfter": {
+            "Initialize_isOrphan": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b3a22be1-146d-4a93-b34a-3396a9bacba3"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "isApp",
+                "type": "boolean",
+                "value": "@false"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

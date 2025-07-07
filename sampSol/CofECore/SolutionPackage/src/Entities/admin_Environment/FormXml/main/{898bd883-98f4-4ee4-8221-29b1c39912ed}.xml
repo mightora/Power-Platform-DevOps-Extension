@@ -1,0 +1,1163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{898bd883-98f4-4ee4-8221-29b1c39912ed}</formid>
+    <IntroducedVersion>0.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="false" maxWidth="1920" headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}" IsUserDefined="1" name="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}" locklevel="0" expanded="true" showlabel="true">
+          <labels>
+            <label description="Overview" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}_section_5" id="c64a5661-2561-4462-b631-a7be0cd1c398" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Environment Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{4a557430-943b-408f-b8cb-32dc913b224e}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentname" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentname" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2784dd29-a1dd-dbed-3738-13c5a402d246}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment Maker" languagecode="1033" />
+                        </labels>
+                        <control id="header_admin_maker" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="admin_maker" disabled="true" uniqueid="{a1e1a8bc-2120-1b4d-752e-95589de38263}">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                            <DisableQuickFind>false</DisableQuickFind>
+                            <DisableViewPicker>false</DisableViewPicker>
+                            <DefaultViewId>{32CB5052-A761-447D-B592-5641A097A171}</DefaultViewId>
+                            <AllowFilterOff>false</AllowFilterOff>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1bd5f6e9-f89a-4a55-a817-90be6955e3d6}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment Description" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentpurposetext" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentpurposetext" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1a360a78-6786-415a-8cb8-00568dc7c4ad}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Environment Region" languagecode="1033" />
+                        </labels>
+                        <control id="admin_region" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_region" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ed5bfa7e-e007-4139-a752-efa0ecc07297}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Environment Sku" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentsku" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentsku" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e42e22b9-6d4f-4e0e-a55b-3fb775d2ebd3}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Environment CDS Instance URL" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentcdsinstanceurl" classid="{71716B6C-711E-476C-8AB8-5D11542BFB47}" datafieldname="admin_environmentcdsinstanceurl" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6631b4a9-32a1-48f3-b4cd-c3b6ce262318}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Environment Maker" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentmakerdisplayname" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentmakerdisplayname" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b826ffc0-6b56-4a7e-86dd-9efc055f6dd7}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Organization ID" languagecode="1033" />
+                        </labels>
+                        <control id="admin_organizationid" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_organizationid" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{709ebb07-1d74-4ee2-8ab9-32458964a65b}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Security Group ID" languagecode="1033" />
+                        </labels>
+                        <control id="admin_securitygroupid" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_securitygroupid" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c1d15441-3ab8-4a55-a2fb-bd52a51f17af}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Security Group Name" languagecode="1033" />
+                        </labels>
+                        <control id="admin_securitygroupname" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_securitygroupname" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}_section_5" id="da06a906-4b26-40d9-b3d6-ad6001c3a8fd" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Additional Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{7a0339ab-6936-425d-8480-b43fe8a578ce}" locklevel="0">
+                        <labels>
+                          <label description="Business Area" languagecode="1033" />
+                        </labels>
+                        <control id="admin_businessarea" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="admin_businessarea" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ab97a424-6ceb-4ea1-ba3e-52601f081c4f}" locklevel="0">
+                        <labels>
+                          <label description="Environment Owner" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentowner" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="admin_environmentowner" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7132e0e2-7ed1-4351-a1a1-e6c4ce3e8962}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment Purpose" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentpurpose" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_environmentpurpose" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{08a247ff-4dcd-41e4-bfbd-014bbc75b243}" showlabel="true" locklevel="0" visible="false">
+                        <labels>
+                          <label description="Display Name" languagecode="1033" />
+                        </labels>
+                        <control id="admin_displayname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="admin_displayname" uniqueid="{19a1b0c6-6e6c-9b2b-b438-644530b0c59c}" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{bb28c7f3-0b77-4023-885d-ff79f01b6175}" showlabel="true" locklevel="1" visible="false">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" uniqueid="{50b13885-4078-30d0-07bb-0682773d22e0}" disabled="false">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}_section_5" id="7cc339d0-7478-4aaf-933d-b4f646b376e6" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Environment State" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{626f520a-91b9-4d6d-8438-7642ad6f5f68}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment State" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentstate" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentstate" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3dcdf86f-97ef-424a-aee4-ae1d287b9fa6}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment Runtime State" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentruntimestate" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentruntimestate" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b38681a6-293b-4d27-90ad-5d50d93a3edf}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Governance Protection Level" languagecode="1033" />
+                        </labels>
+                        <control id="admin_governanceprotectionlevel" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_governanceprotectionlevel" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8e215e7b-a6cb-4d4a-af02-d41b62bbf451}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Administration Mode" languagecode="1033" />
+                        </labels>
+                        <control id="admin_administrationmode" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_administrationmode" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{91820909-b5ab-4441-b57e-f8b3697a1d2a}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Background Operations Enabled" languagecode="1033" />
+                        </labels>
+                        <control id="admin_backgroundoperationsenabled" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_backgroundoperationsenabled" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}_section_5" id="c26b12fd-aa49-449e-8cd0-569bc20a87da" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Environment Changes" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{84bf5870-1629-4ef4-9f8f-cd89c7ed9b23}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment Created On" languagecode="1033" />
+                        </labels>
+                        <control id="header_admin_environmentcreatedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="admin_environmentcreatedon" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{21d92291-ec3e-480f-b471-ad77517c85f9}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Last Modified On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentmodifiedon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_environmentmodifiedon" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2324034b-721f-46cd-953c-e9fb9291d737}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Has the environment been deleted?" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentdeleted" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_environmentdeleted" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cff4c131-8d9a-405b-9e66-6490d95fab35}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Deleted On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentdeletedon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_environmentdeletedon" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_2" id="{1312ce35-5cdc-a951-0a10-825757603a13}" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Governance" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="false" id="{71660f14-379b-419e-ad30-fd92d025f263}" IsUserDefined="0" height="auto" columns="1" name="MAKER REQUIREMENTS">
+                  <labels>
+                    <label description="MAKER REQUIREMENTS" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0e705920-1780-4d86-a0fc-ba67d10312a7}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Date Asked for Business Justification" languagecode="1033" />
+                        </labels>
+                        <control id="admin_businessjustificationdate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_businessjustificationdate" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b8d7518d-b7db-47a4-ac40-740e1e4a3ea3}" locklevel="0">
+                        <labels>
+                          <label description="Maker Provided - Business Impact" languagecode="1033" />
+                        </labels>
+                        <control id="admin_makerrequirementbusinessimpact" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_makerrequirementbusinessimpact" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8b8cc8fc-2186-4f3a-abc7-7a1f23bc8741}" locklevel="0">
+                        <labels>
+                          <label description="Maker Provided - Business Justification" languagecode="1033" />
+                        </labels>
+                        <control id="admin_makerrequirementbusinessjustification" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_makerrequirementbusinessjustification" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="{8bec5d45-f0de-4f9d-967d-bae8a3dd2962}_section_4" id="2dca29d5-3868-4031-aed8-44b70518cabc" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="WATCHED PROPERTIES" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{564a657b-e89a-438a-b317-b1e40b6a1ada}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="PCF enabled" languagecode="1033" />
+                        </labels>
+                        <control id="admin_pcfenabled" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_pcfenabled" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7e8a34f9-f9c5-481c-b316-9331171db967}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Maker Copilot enabled" languagecode="1033" />
+                        </labels>
+                        <control id="admin_makercopilotenabled" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_makercopilotenabled" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{029385de-a91a-4503-b88e-7cd9e5b3779f}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment is Orphaned" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentisorphaned" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_environmentisorphaned" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{312478cf-5b3b-4294-9b6e-8bd8da1e0fa3}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Environment External Connection Count" languagecode="1033" />
+                        </labels>
+                        <control id="admin_environmentexternalconnectioncount" classid="{C6D124CA-7EDA-4A60-AEA9-7FB8D318B68F}" datafieldname="admin_environmentexternalconnectioncount" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0c4c49d8-0d18-2ae4-9c2b-07d96235d53d}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Has DLP Policy" languagecode="1033" />
+                        </labels>
+                        <control id="admin_hasdlppolicy" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="admin_hasdlppolicy" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1959d01b-d915-b735-433b-6084199b2219}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="DLP Policies" languagecode="1033" />
+                        </labels>
+                        <control id="admin_dlppolicies" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="admin_dlppolicies" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="_section_48" id="4da79783-c942-406b-b85d-777611e3865f" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="ADMIN REVIEW" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0dff8e31-e865-4770-8a3b-5d3dde6e55fb}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Admin - Microsoft Teams Environment Status" languagecode="1033" />
+                        </labels>
+                        <control id="admin_adminmicrosoftteamsenvironmentstatus" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_adminmicrosoftteamsenvironmentstatus" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0b972a01-d6a6-4a99-967f-1b86d4a897c2}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Admin - Review Teams Environment Status On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_adminreviewon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_adminreviewon" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{abe5f1e2-8064-4943-8d4a-59995d9b070d}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Admin - Status Reason" languagecode="1033" />
+                        </labels>
+                        <control id="admin_adminreason" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_adminreason" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell locklevel="0" id="{1a0bd892-5229-4ff4-b0fc-824d3745137d}" rowspan="15" colspan="1">
+                        <labels>
+                          <label description="Note Text" languagecode="1033" />
+                        </labels>
+                        <control id="notescontrol" classid="{06375649-C143-495E-A496-C962E5B4488E}" disabled="false" />
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_5" id="dea43dfb-2d5b-4ba9-8e6c-e6f8441e0064" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Capacity and Add-ons" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="true" showbar="true" IsUserDefined="0" id="{29bde98b-e7a0-4908-a14a-49790ccde6b7}" name="{29bde98b-e7a0-4908-a14a-49790ccde6b7}" columns="1" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left" height="auto">
+                  <labels>
+                    <label description="Capacity" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{08a247ff-4dcd-41e4-bfbd-014bbc75b243}" showlabel="true" locklevel="0" visible="false">
+                        <labels>
+                          <label description="Display Name" languagecode="1033" />
+                        </labels>
+                        <control id="admin_displayname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="admin_displayname" uniqueid="{19a1b0c6-6e6c-9b2b-b438-644530b0c59c}" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{bb28c7f3-0b77-4023-885d-ff79f01b6175}" showlabel="true" locklevel="1" visible="false">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" uniqueid="{50b13885-4078-30d0-07bb-0682773d22e0}" disabled="false">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell locklevel="0" id="{8f890bab-954b-4ed8-831f-9e46c0a7be04}" rowspan="4" colspan="1" auto="true" showlabel="false">
+                        <labels>
+                          <label description="Capacity" languagecode="1033" />
+                        </labels>
+                        <control id="Subgrid_1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" indicationOfSubgrid="true" uniqueid="{B339949E-2C38-C5DE-DD18-DE00662EAAE6}">
+                          <parameters>
+                            <TargetEntityType>admin_environmentcapacity</TargetEntityType>
+                            <ViewId>{0206FE31-9325-4CDE-BA6B-B188E27E0D4F}</ViewId>
+                            <ViewIds>{0206FE31-9325-4CDE-BA6B-B188E27E0D4F}</ViewIds>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <RelationshipName>admin_EnvironmentCapacity_Environment_adm</RelationshipName>
+                            <AutoExpand>Auto</AutoExpand>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                            <IsUserView>false</IsUserView>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>All</ChartGridMode>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>true</EnableChartPicker>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row height="auto" />
+                    <row>
+                      <cell locklevel="0" id="{9985dc68-476f-4e42-b295-76bd52498813}" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Add-Ons" languagecode="1033" />
+                        </labels>
+                        <control id="Subgrid_2" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <TargetEntityType>bulkdeletefailure</TargetEntityType>
+                            <ViewId>{9F90A044-9E78-484F-BC2A-CCB292837870}</ViewId>
+                            <ViewIds>{9F90A044-9E78-484F-BC2A-CCB292837870}</ViewIds>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <RelationshipName>admin_environment_BulkDeleteFailures</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_general_section_addons" showlabel="true" showbar="true" locklevel="0" id="{37a15029-023e-12d6-31cb-16ab22632acb}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" height="auto">
+                  <labels>
+                    <label description="Add-Ons" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{e3912012-eda3-4d9f-8d46-e998995b2c87}" rowspan="4" colspan="1" auto="true" showlabel="false">
+                        <labels>
+                          <label description="Add Ons" languagecode="1033" />
+                        </labels>
+                        <control id="subgrid_addons" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" indicationOfSubgrid="true" uniqueid="{D6ED665B-976B-879B-1B40-3EB3200799DD}">
+                          <parameters>
+                            <TargetEntityType>admin_environmentaddons</TargetEntityType>
+                            <ViewId>{F77E44CA-6E5C-ED11-9561-00224808108D}</ViewId>
+                            <ViewIds>{9F90A044-9E78-484F-BC2A-CCB292837870},{F77E44CA-6E5C-ED11-9561-00224808108D}</ViewIds>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <RelationshipName>admin_EnvironmentAddons_Environment_admin</RelationshipName>
+                            <RecordsPerPage>10</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                            <IsUserView>false</IsUserView>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <AutoExpand>Auto</AutoExpand>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId>{63248F13-865C-ED11-9561-00224805C003}</VisualizationId>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row height="auto" />
+                  </rows>
+                </section>
+                <section name="tab_5_section_4" id="63cb7d74-1ade-4d6f-9f74-4ab261ced5a4" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Power Virtual Agent Add-Ons" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{92cabfd8-ee13-4a77-a472-6a2692b30cc5}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1686230945566" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_13" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_environmentaddons</TargetEntityType>
+                            <ViewId>{753862C4-FF05-EE11-8F6E-0022480813FF}</ViewId>
+                            <ViewIds>{9F90A044-9E78-484F-BC2A-CCB292837870},{82E3D9EC-845C-ED11-9561-00224805CBE4},{753862C4-FF05-EE11-8F6E-0022480813FF}</ViewIds>
+                            <RelationshipName>admin_EnvironmentAddons_Environment_admin</RelationshipName>
+                            <VisualizationId>{63248F13-865C-ED11-9561-00224805C003}</VisualizationId>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_6" id="fa2b8948-f378-4522-9440-d30e033195c7" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Creation Request" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab_6_section_1" id="0f2a5880-6087-49d9-a743-24c5b4a307ed" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Environment Creation Request" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{9374e108-8bed-4473-8686-7aff77c62688}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1666205670270" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_4" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>coe_environmentcreationrequest</TargetEntityType>
+                            <ViewId>{0BA3408A-26F0-4785-9BE9-B469F1054728}</ViewId>
+                            <ViewIds>{0BA3408A-26F0-4785-9BE9-B469F1054728}</ViewIds>
+                            <RelationshipName>coe_EnvironmentCreationRequest_Environmen</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_4" id="46ae282f-76ac-41d1-8586-7a2f7c641838" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Settings" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab_4_section_1" id="8f49e074-281f-4925-bbc1-9077a029b430" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Configuration" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{57092ff1-e2c7-4f85-a6a3-cc31829bb695}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Excuse From Inventory" languagecode="1033" />
+                        </labels>
+                        <control id="admin_excusefrominventory" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_excusefrominventory" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{34fd187d-56bb-41b9-a048-cdc3a1c73da0}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Excuse From Inactivity Flows" languagecode="1033" />
+                        </labels>
+                        <control id="admin_excusefromarchivalflows" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_excusefromarchivalflows" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e7dd7449-8663-420e-b78d-87d4995e6a10}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Excuse From Compliance Flow" languagecode="1033" />
+                        </labels>
+                        <control id="admin_excusefromcomplianceflow" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_excusefromcomplianceflow" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9f00395a-b274-4ea0-85f4-8054304a1ae9}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Excuse From App Quarantine Flow" languagecode="1033" />
+                        </labels>
+                        <control id="admin_excusefromappquarantineflow" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_excusefromappquarantineflow" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{027be978-ed7a-40d3-bd0e-2e73a61b1e52}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Excuse From Empty Environment Cleanup" languagecode="1033" />
+                        </labels>
+                        <control id="admin_excusefromemptyenvironmentcleanup" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_excusefromemptyenvironmentcleanup" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_7" id="2c9f54e9-53de-4d54-8f11-847cad222750" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Resources" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_7_section_1" id="ba20ec5a-035e-4b73-aae3-83cb3660c528" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Apps" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{627115b6-86d4-4128-941d-8d6307d02865}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669718933428" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_5" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>20</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_app</TargetEntityType>
+                            <ViewId>{C454B997-4940-436B-B2DB-31F344DDC4BF}</ViewId>
+                            <ViewIds>{C454B997-4940-436B-B2DB-31F344DDC4BF}</ViewIds>
+                            <RelationshipName>admin_rel_AppEnvironment</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="tab_7_section_7" id="c0e50c8a-645a-4a1f-800f-d1caa95fbb1d" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="PVA Bots" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{6b36a8f6-1065-4514-a939-3dec15d9791f}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669719156903" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_10" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_pva</TargetEntityType>
+                            <ViewId>{762C25FC-901F-4B6A-AF4F-3DCD755F0630}</ViewId>
+                            <ViewIds>{762C25FC-901F-4B6A-AF4F-3DCD755F0630}</ViewIds>
+                            <RelationshipName>admin_rel_PVAEnvironment</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="tab_7_section_6" id="8f05df85-d8c8-427c-b3a8-655952558ff7" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="AI Builder models" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{b36e1382-fe73-43d5-8d86-7f7de1b71acf}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669719134567" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_9" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_aibuildermodel</TargetEntityType>
+                            <ViewId>{5DC88D5A-B283-4513-97A1-2684FEB5A243}</ViewId>
+                            <ViewIds>{5DC88D5A-B283-4513-97A1-2684FEB5A243}</ViewIds>
+                            <RelationshipName>admin_admin_aibuildermodel_AiEnvironment_admin_</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="tab_7_section_8" id="340be495-94eb-40cf-9dee-76c191e718b9" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Business Process Flows" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{8c271158-6b1b-464b-9e87-fb04303decf6}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669719206294" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_11" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_businessprocessflows</TargetEntityType>
+                            <ViewId>{A63188F9-18BB-4A53-8F72-200AC4181EE2}</ViewId>
+                            <ViewIds>{A63188F9-18BB-4A53-8F72-200AC4181EE2}</ViewIds>
+                            <RelationshipName>admin_admin_businessprocessflows_BusinessProces</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_7_section_2" id="198ece65-f42c-4100-a0dd-2956799406f3" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Cloud Flows" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{348b9344-031b-47a9-95c0-81e3aa098863}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669718977919" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_6" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>20</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_flow</TargetEntityType>
+                            <ViewId>{3B6D0CB9-B36D-4AC9-A5C4-3FF2FDD92C89}</ViewId>
+                            <ViewIds>{3B6D0CB9-B36D-4AC9-A5C4-3FF2FDD92C89}</ViewIds>
+                            <RelationshipName>admin_Flow_FlowEnvironment_admin_Environm</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="tab_7_section_5" id="42547363-e3af-4cb8-99d0-7090d00e7828" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Desktop Flows" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{b94d0a2d-b4e7-44c2-81ea-b00ae307361c}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669719102935" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_8" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_rpa</TargetEntityType>
+                            <ViewId>{0CD9CE03-77A7-4866-97AE-E26A45BFF4E1}</ViewId>
+                            <ViewIds>{0CD9CE03-77A7-4866-97AE-E26A45BFF4E1}</ViewIds>
+                            <RelationshipName>admin_RPA_DesktopflowEnvironment_admin_En</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="tab_7_section_4" id="56992726-f33e-43d8-bf84-051f07c5b842" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Pages" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{c1f01048-ea6b-476e-9fff-11351188cccf}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669719080112" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_7" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_portal</TargetEntityType>
+                            <ViewId>{C63B99EF-865E-481A-9DE9-E070FFF4ACB0}</ViewId>
+                            <ViewIds>{C63B99EF-865E-481A-9DE9-E070FFF4ACB0}</ViewIds>
+                            <RelationshipName>admin_PortalEnvironment</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="tab_7_section_9" id="336e923b-ba09-4e6a-a492-fc10f2bd7c61" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Solutions" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{3b3c9ef2-0e94-4ffb-a847-b20bdc4a620b}" rowspan="4" colspan="1" auto="false" showlabel="false">
+                        <labels>
+                          <label description="New SG control 1669719241880" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Subgrid_new_12" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_solution</TargetEntityType>
+                            <ViewId>{7D1AA8B3-7F19-446C-B5F4-82B8CE3A9C48}</ViewId>
+                            <ViewIds>{7D1AA8B3-7F19-446C-B5F4-82B8CE3A9C48}</ViewIds>
+                            <RelationshipName>admin_admin_solution_SolutionEnvironment_admin_</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{b7b765e7-d60e-4e12-9c23-e28173eaa9d9}" columns="111">
+        <rows>
+          <row>
+            <cell id="{95aeb097-173b-413a-90b0-d73b09420a5f}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{bc23520c-d7e6-4e9e-aff4-2e7ed6cd456d}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{0a12150f-69fd-4943-9dff-1378b16251ba}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <Navigation>
+        <NavBar />
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <controlDescriptions>
+        <controlDescription forControl="{B339949E-2C38-C5DE-DD18-DE00662EAAE6}">
+          <customControl id="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+            <parameters />
+          </customControl>
+          <customControl formFactor="0" name="Microsoft.PowerApps.PowerAppsOneGrid">
+            <parameters>
+              <data-set name="Items">
+                <ViewId>{7EA45CAD-438B-EB11-A812-000D3A1F6308}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>admin_EnvironmentCapacity_Environment_adm</RelationshipName>
+                <TargetEntityType>admin_environmentcapacity</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{0206FE31-9325-4CDE-BA6B-B188E27E0D4F},{7EA45CAD-438B-EB11-A812-000D3A1F6308}</FilteredViewIds>
+              </data-set>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <EnableRangeSelection static="true" type="Enum">yes</EnableRangeSelection>
+              <EnableJumpBar static="true" type="Enum">no</EnableJumpBar>
+              <EnablePagination static="true" type="Enum">yes</EnablePagination>
+              <EnableStatusColumn static="true" type="Enum">yes</EnableStatusColumn>
+              <EnableDropdownColor static="true" type="Enum">no</EnableDropdownColor>
+              <EnableTypeIcons static="true" type="Enum">no</EnableTypeIcons>
+              <NavigationTypesAllowed static="true" type="Enum">all</NavigationTypesAllowed>
+              <ReflowBehavior static="true" type="Enum">Reflow</ReflowBehavior>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="Microsoft.PowerApps.PowerAppsOneGrid">
+            <parameters>
+              <data-set name="Items">
+                <ViewId>{7EA45CAD-438B-EB11-A812-000D3A1F6308}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>admin_EnvironmentCapacity_Environment_adm</RelationshipName>
+                <TargetEntityType>admin_environmentcapacity</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{0206FE31-9325-4CDE-BA6B-B188E27E0D4F},{7EA45CAD-438B-EB11-A812-000D3A1F6308}</FilteredViewIds>
+              </data-set>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <EnableRangeSelection static="true" type="Enum">yes</EnableRangeSelection>
+              <EnableJumpBar static="true" type="Enum">no</EnableJumpBar>
+              <EnablePagination static="true" type="Enum">yes</EnablePagination>
+              <EnableStatusColumn static="true" type="Enum">yes</EnableStatusColumn>
+              <EnableDropdownColor static="true" type="Enum">no</EnableDropdownColor>
+              <EnableTypeIcons static="true" type="Enum">no</EnableTypeIcons>
+              <NavigationTypesAllowed static="true" type="Enum">all</NavigationTypesAllowed>
+              <ReflowBehavior static="true" type="Enum">Reflow</ReflowBehavior>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="Microsoft.PowerApps.PowerAppsOneGrid">
+            <parameters>
+              <data-set name="Items">
+                <ViewId>{7EA45CAD-438B-EB11-A812-000D3A1F6308}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>admin_EnvironmentCapacity_Environment_adm</RelationshipName>
+                <TargetEntityType>admin_environmentcapacity</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{0206FE31-9325-4CDE-BA6B-B188E27E0D4F},{7EA45CAD-438B-EB11-A812-000D3A1F6308}</FilteredViewIds>
+              </data-set>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <EnableRangeSelection static="true" type="Enum">yes</EnableRangeSelection>
+              <EnableJumpBar static="true" type="Enum">no</EnableJumpBar>
+              <EnablePagination static="true" type="Enum">yes</EnablePagination>
+              <EnableStatusColumn static="true" type="Enum">yes</EnableStatusColumn>
+              <EnableDropdownColor static="true" type="Enum">no</EnableDropdownColor>
+              <EnableTypeIcons static="true" type="Enum">no</EnableTypeIcons>
+              <NavigationTypesAllowed static="true" type="Enum">all</NavigationTypesAllowed>
+              <ReflowBehavior static="true" type="Enum">Reflow</ReflowBehavior>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{D6ED665B-976B-879B-1B40-3EB3200799DD}">
+          <customControl id="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+            <parameters />
+          </customControl>
+          <customControl formFactor="0" name="Microsoft.PowerApps.PowerAppsOneGrid">
+            <parameters>
+              <data-set name="Items">
+                <ViewId>{F77E44CA-6E5C-ED11-9561-00224808108D}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>admin_EnvironmentAddons_Environment_admin</RelationshipName>
+                <TargetEntityType>admin_environmentaddons</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{9F90A044-9E78-484F-BC2A-CCB292837870},{F77E44CA-6E5C-ED11-9561-00224808108D}</FilteredViewIds>
+              </data-set>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <EnableRangeSelection static="true" type="Enum">yes</EnableRangeSelection>
+              <EnableJumpBar static="true" type="Enum">no</EnableJumpBar>
+              <EnablePagination static="true" type="Enum">yes</EnablePagination>
+              <EnableStatusColumn static="true" type="Enum">yes</EnableStatusColumn>
+              <EnableDropdownColor static="true" type="Enum">no</EnableDropdownColor>
+              <EnableTypeIcons static="true" type="Enum">no</EnableTypeIcons>
+              <NavigationTypesAllowed static="true" type="Enum">all</NavigationTypesAllowed>
+              <ReflowBehavior static="true" type="Enum">Reflow</ReflowBehavior>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="Microsoft.PowerApps.PowerAppsOneGrid">
+            <parameters>
+              <data-set name="Items">
+                <ViewId>{F77E44CA-6E5C-ED11-9561-00224808108D}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>admin_EnvironmentAddons_Environment_admin</RelationshipName>
+                <TargetEntityType>admin_environmentaddons</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{9F90A044-9E78-484F-BC2A-CCB292837870},{F77E44CA-6E5C-ED11-9561-00224808108D}</FilteredViewIds>
+              </data-set>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <EnableRangeSelection static="true" type="Enum">yes</EnableRangeSelection>
+              <EnableJumpBar static="true" type="Enum">no</EnableJumpBar>
+              <EnablePagination static="true" type="Enum">yes</EnablePagination>
+              <EnableStatusColumn static="true" type="Enum">yes</EnableStatusColumn>
+              <EnableDropdownColor static="true" type="Enum">no</EnableDropdownColor>
+              <EnableTypeIcons static="true" type="Enum">no</EnableTypeIcons>
+              <NavigationTypesAllowed static="true" type="Enum">all</NavigationTypesAllowed>
+              <ReflowBehavior static="true" type="Enum">Reflow</ReflowBehavior>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="Microsoft.PowerApps.PowerAppsOneGrid">
+            <parameters>
+              <data-set name="Items">
+                <ViewId>{F77E44CA-6E5C-ED11-9561-00224808108D}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>admin_EnvironmentAddons_Environment_admin</RelationshipName>
+                <TargetEntityType>admin_environmentaddons</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{9F90A044-9E78-484F-BC2A-CCB292837870},{F77E44CA-6E5C-ED11-9561-00224808108D}</FilteredViewIds>
+              </data-set>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <EnableRangeSelection static="true" type="Enum">yes</EnableRangeSelection>
+              <EnableJumpBar static="true" type="Enum">no</EnableJumpBar>
+              <EnablePagination static="true" type="Enum">yes</EnablePagination>
+              <EnableStatusColumn static="true" type="Enum">yes</EnableStatusColumn>
+              <EnableDropdownColor static="true" type="Enum">no</EnableDropdownColor>
+              <EnableTypeIcons static="true" type="Enum">no</EnableTypeIcons>
+              <NavigationTypesAllowed static="true" type="Enum">all</NavigationTypesAllowed>
+              <ReflowBehavior static="true" type="Enum">Reflow</ReflowBehavior>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+      <footer id="{e592ff0e-ee6e-4157-9f62-92c4934e829b}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{696c8d21-dbd1-4478-85e3-571753e664f2}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{19dd7aa8-9b32-4e44-996a-db95ecc2a7ba}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{cbd75774-6ff6-477d-90ec-7edfff3a3704}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Main Environment Form" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

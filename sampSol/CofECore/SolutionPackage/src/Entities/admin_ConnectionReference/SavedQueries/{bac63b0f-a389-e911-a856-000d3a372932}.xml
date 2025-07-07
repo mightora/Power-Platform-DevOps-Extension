@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{bac63b0f-a389-e911-a856-000d3a372932}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="admin_displayname" select="1" icon="1" preview="1">
+        <row name="result" id="admin_connectionreferenceid">
+          <cell name="a_56b990227885e911a84d000d3a3627b3.admin_flowenvironment" width="316" />
+          <cell name="a_56b990227885e911a84d000d3a3627b3.admin_displayname" disableSorting="1" imageproviderfunctionname="" imageproviderwebresource="$webresource:" width="200" />
+          <cell name="admin_flow_connectionreferencesource" width="233" />
+          <cell name="a_56b990227885e911a84d000d3a3627b3.admin_flowcreator" disableSorting="1" width="100" />
+          <cell name="a_4af0ec3ce00b47c2bf4a00ba1da0fd3e.admin_flowdeleted" width="286" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="true">
+        <entity name="admin_connectionreference">
+          <attribute name="admin_connectionreferenceid" />
+          <filter type="and">
+            <condition attribute="admin_flow" operator="not-null" />
+          </filter>
+          <link-entity name="admin_flow" to="admin_flow" from="admin_flowid" link-type="outer" alias="a_56b990227885e911a84d000d3a3627b3" visible="false">
+            <attribute name="admin_flowcreator" />
+            <attribute name="admin_displayname" />
+            <attribute name="admin_flowenvironment" />
+          </link-entity>
+          <attribute name="admin_flow_connectionreferencesource" />
+          <link-entity alias="a_4af0ec3ce00b47c2bf4a00ba1da0fd3e" name="admin_flow" to="admin_flow" from="admin_flowid" link-type="outer" visible="false">
+            <attribute name="admin_flowdeleted" />
+          </link-entity>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Related Flows" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

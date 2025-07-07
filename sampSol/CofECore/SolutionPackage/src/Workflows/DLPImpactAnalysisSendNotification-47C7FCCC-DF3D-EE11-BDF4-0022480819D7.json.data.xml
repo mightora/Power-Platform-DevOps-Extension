@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{47c7fccc-df3d-ee11-bdf4-0022480819d7}" Name="DLP Impact Analysis &gt; Send Notification" Description="Sends teams notification to user about an app or flow which violates a draft DLP policy." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <JsonFileName>/Workflows/DLPImpactAnalysisSendNotification-47C7FCCC-DF3D-EE11-BDF4-0022480819D7.json</JsonFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>5</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <RunAs>1</RunAs>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>4.13.3</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <BillingContext>[{"id":"admin_DLPImpactAnalysis","type":"UnifiedApp","metadata":{"displayName":"DLP Impact Analysis"}}]</BillingContext>
+  <PrimaryEntity>none</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="DLP Impact Analysis &gt; Send Notification" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="Sends teams notification to user about an app or flow which violates a draft DLP policy." />
+  </Descriptions>
+</Workflow>

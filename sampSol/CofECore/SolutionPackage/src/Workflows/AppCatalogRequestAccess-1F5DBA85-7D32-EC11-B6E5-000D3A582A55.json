@@ -1,0 +1,547 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_teams_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreTeams"
+        },
+        "api": {
+          "name": "shared_teams"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_sharedcommondataserviceforapps_98924"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "ProductionEnvironment (admin_ProductionEnvironment)": {
+          "defaultValue": true,
+          "type": "Bool",
+          "metadata": {
+            "schemaName": "admin_ProductionEnvironment",
+            "description": "Inventory - Yes by default. Set to No if you are creating a dev type envt. This will allow some flows to set target users to the admin instead of resource owners"
+          }
+        },
+        "Individual Admin (admin_ApprovalAdmin)": {
+          "defaultValue": "AdeleV@powercattools.onmicrosoft.com",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_ApprovalAdmin",
+            "description": "Inventory - REQUIRED. An individual admin's email. Some actions (approvals / team chats) cannot accept a group/DL. So this env variable is for those instances in the kit. "
+          }
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "2af5fdaa-76a6-4036-910b-2e7e51edb879"
+          },
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "EnvtName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "AppID",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
+                  "title": "AppOwnerEmail",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_3": {
+                  "title": "RequestorName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_4": {
+                  "title": "AppDisplayName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_5": {
+                  "title": "RequestorEmail",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_6": {
+                  "title": "RequestorID",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2",
+                "text_3",
+                "text_4",
+                "text_5",
+                "text_6"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Request_Access": {
+          "actions": {
+            "Post_a_choice_of_options_as_the_Flow_bot_to_a_user": {
+              "runAfter": {
+                "SendResponseTo": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "e219b567-20f9-483c-b04c-c14493d17744"
+              },
+              "type": "OpenApiConnectionWebhook",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_teams_1",
+                  "operationId": "SubscribeUserMessageWithOptions",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                },
+                "parameters": {
+                  "UserMessageWithOptionsSubscriptionRequest/body/options": [
+                    "Grant Access",
+                    "Reject"
+                  ],
+                  "UserMessageWithOptionsSubscriptionRequest/body/recipient/to": "@{outputs('SendRequestTo')};",
+                  "UserMessageWithOptionsSubscriptionRequest/body/messageBody": " @{outputs('RequestorName')} has requested access to @{outputs('AppName')}. If you select Grant Access, they will be granted read-only permissions to this app. If you select Reject, they will be notified via Teams. ",
+                  "UserMessageWithOptionsSubscriptionRequest/body/messageTitle": "Power App access request"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Condition": {
+              "actions": {
+                "Add_Viewer": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "f43e19da-e395-4c53-8b6b-52b014f9b6d4"
+                  },
+                  "type": "Workflow",
+                  "inputs": {
+                    "host": {
+                      "workflowReferenceName": "41263d72-4dea-eb11-bacb-000d3a5786fb"
+                    },
+                    "body": {
+                      "text": "@outputs('RequestorID')",
+                      "text_1": "@outputs('AppID')",
+                      "text_2": "@outputs('EnvtLogicalName')",
+                      "text_3": "addviewer"
+                    }
+                  }
+                },
+                "Post_message_in_a_chat_or_channel_-_granted": {
+                  "runAfter": {
+                    "Add_Viewer": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "42474b66-c114-46d7-9901-e765daa3e831"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_teams_1",
+                      "operationId": "PostMessageToConversation",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                    },
+                    "parameters": {
+                      "poster": "Flow bot",
+                      "location": "Chat with Flow bot",
+                      "body/recipient": "@{outputs('SendResponseTo')};",
+                      "body/messageBody": "<p>Your access request to @{outputs('AppName')} has been approved by the app owner.</p>"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Post_a_choice_of_options_as_the_Flow_bot_to_a_user": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Post_message_in_a_chat_or_channel_-_denied": {
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "42474b66-c114-46d7-9901-e765daa3e831"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_teams_1",
+                        "operationId": "PostMessageToConversation",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                      },
+                      "parameters": {
+                        "poster": "Flow bot",
+                        "location": "Chat with Flow bot",
+                        "body/recipient": "@{outputs('SendResponseTo')};",
+                        "body/messageBody": "<p>Your access request to @{outputs('AppName')} has been rejected by the app owner.</p>"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('Post_a_choice_of_options_as_the_Flow_bot_to_a_user')?['body/selectedOption']",
+                  "Grant Access"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "e82a04a4-2081-4408-805a-29d75da4ceef"
+              },
+              "type": "If"
+            },
+            "EnvtLogicalName": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "87ff91cc-32de-42cb-bbde-eda84f7a2e97"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text']"
+            },
+            "AppID": {
+              "runAfter": {
+                "EnvtLogicalName": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "8a2c2e9e-af4f-4a4c-b129-69e370e38567"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text_1']"
+            },
+            "RequestorEmail": {
+              "runAfter": {
+                "AppOwnerEmail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f7de9b95-2e98-47ee-a131-8066d6c23f42"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text_5']"
+            },
+            "AppOwnerEmail": {
+              "runAfter": {
+                "AppName": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "02c13575-62f6-46fd-ab8c-20bd49d4bf7a"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text_2']"
+            },
+            "AppName": {
+              "runAfter": {
+                "AppID": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "daec04e0-354e-457e-82f7-d9d7d27be474"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text_4']"
+            },
+            "RequestorName": {
+              "runAfter": {
+                "RequestorEmail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "0037b6a5-55c9-4287-ab9f-b9f65a0d891a"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text_3']"
+            },
+            "SendRequestTo": {
+              "runAfter": {
+                "RequestorID": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "45090d54-2ad8-4434-b771-e5515930a68f"
+              },
+              "type": "Compose",
+              "inputs": "@if(equals(parameters('ProductionEnvironment (admin_ProductionEnvironment)'), false), parameters('Individual Admin (admin_ApprovalAdmin)'), outputs('AppOwnerEmail'))",
+              "description": "Takes isProdEnvt into acccount"
+            },
+            "SendResponseTo": {
+              "runAfter": {
+                "SendRequestTo": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "7a26375f-4d95-4b5c-a029-52a7b4297fc0"
+              },
+              "type": "Compose",
+              "inputs": "@if(equals(parameters('ProductionEnvironment (admin_ProductionEnvironment)'), false), parameters('Individual Admin (admin_ApprovalAdmin)'), outputs('RequestorEmail'))",
+              "description": "Takes isProdEnvt into acccount"
+            },
+            "RequestorID": {
+              "runAfter": {
+                "RequestorName": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "02263255-63a1-45b8-919d-6eed3764c6ff"
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()['text_6']"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "707fc3e2-92f3-40eb-94ee-7dae1bd94dfa"
+          },
+          "type": "Scope"
+        },
+        "Error_Handling": {
+          "actions": {
+            "Create_a_new_record_-_Sync_Flow_Errors": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_syncflowerrorses",
+                  "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                  "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "exponential",
+                  "count": 10,
+                  "interval": "PT10S"
+                }
+              }
+            },
+            "Terminate": {
+              "runAfter": {
+                "Update_Last_Run_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "500",
+                  "message": "Get Environments Failed"
+                }
+              }
+            },
+            "Get_ID_Fail": {
+              "runAfter": {
+                "Create_a_new_record_-_Sync_Flow_Errors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Update_Last_Run_Fail": {
+              "runAfter": {
+                "Get_ID_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": false
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Request_Access": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+          },
+          "type": "Scope"
+        },
+        "Update_last_run_as_pass": {
+          "actions": {
+            "Update_Last_Run_Successful": {
+              "runAfter": {
+                "Get_ID_Pass": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_ID_Pass": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Catch_-_not_ready_to_take_last_run_date": {
+              "runAfter": {
+                "Update_Last_Run_Successful": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+              },
+              "type": "Compose",
+              "inputs": "Catch - not ready to take last run date"
+            }
+          },
+          "runAfter": {
+            "Error_Handling": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+          },
+          "type": "Scope"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

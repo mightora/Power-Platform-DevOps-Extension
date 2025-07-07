@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Role id="{0173e729-2b89-e911-a856-000d3a372932}" name="Power Platform User SR" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsCustomizable>1</IsCustomizable>
+  <IsAutoAssigned>0</IsAutoAssigned>
+  <RolePrivileges>
+    <RolePrivilege name="prvAppendadmin_App" level="Global" />
+    <RolePrivilege name="prvAppendadmin_AppCatalogFeedback" level="Global" />
+    <RolePrivilege name="prvAppendNote" level="Global" />
+    <RolePrivilege name="prvAppendToadmin_App" level="Global" />
+    <RolePrivilege name="prvAppendToadmin_AppCatalogFeedback" level="Global" />
+    <RolePrivilege name="prvAppendToNote" level="Global" />
+    <RolePrivilege name="prvCreateadmin_AppCatalogFeedback" level="Global" />
+    <RolePrivilege name="prvCreateNote" level="Global" />
+    <RolePrivilege name="prvCreateSharePointData" level="Global" />
+    <RolePrivilege name="prvDeleteNote" level="Global" />
+    <RolePrivilege name="prvReadadmin_App" level="Global" />
+    <RolePrivilege name="prvReadadmin_AppCatalogFeedback" level="Global" />
+    <RolePrivilege name="prvReadadmin_ConnectionReference" level="Global" />
+    <RolePrivilege name="prvReadadmin_Connector" level="Global" />
+    <RolePrivilege name="prvReadadmin_Environment" level="Global" />
+    <RolePrivilege name="prvReadadmin_Flow" level="Global" />
+    <RolePrivilege name="prvReadadmin_FlowActionDetail" level="Global" />
+    <RolePrivilege name="prvReadadmin_Maker" level="Global" />
+    <RolePrivilege name="prvReadadmin_portal" level="Global" />
+    <RolePrivilege name="prvReadadmin_PowerPlatformUser" level="Global" />
+    <RolePrivilege name="prvReadadmin_PowerPlatformUserRole" level="Global" />
+    <RolePrivilege name="prvReadadmin_PVA" level="Global" />
+    <RolePrivilege name="prvReadadmin_PVAComponent" level="Global" />
+    <RolePrivilege name="prvReadadmin_PVAComponentFlowLookup" level="Global" />
+    <RolePrivilege name="prvReadadmin_RPA" level="Global" />
+    <RolePrivilege name="prvReadadmin_RPASessions" level="Global" />
+    <RolePrivilege name="prvReadAppModule" level="Global" />
+    <RolePrivilege name="prvReadAsyncOperation" level="Global" />
+    <RolePrivilege name="prvReadEnvironmentVariableDefinition" level="Global" />
+    <RolePrivilege name="prvReadNote" level="Global" />
+    <RolePrivilege name="prvReadQuery" level="Global" />
+    <RolePrivilege name="prvReadRelationship" level="Global" />
+    <RolePrivilege name="prvReadSdkMessage" level="Global" />
+    <RolePrivilege name="prvReadSdkMessageProcessingStep" level="Global" />
+    <RolePrivilege name="prvReadSdkMessageProcessingStepImage" level="Global" />
+    <RolePrivilege name="prvReadSharePointData" level="Global" />
+    <RolePrivilege name="prvReadSharePointDocument" level="Global" />
+    <RolePrivilege name="prvReadUser" level="Global" />
+    <RolePrivilege name="prvReadWebResource" level="Global" />
+    <RolePrivilege name="prvWriteadmin_AppCatalogFeedback" level="Global" />
+    <RolePrivilege name="prvWriteNote" level="Global" />
+    <RolePrivilege name="prvWriteSharePointData" level="Global" />
+  </RolePrivileges>
+</Role>

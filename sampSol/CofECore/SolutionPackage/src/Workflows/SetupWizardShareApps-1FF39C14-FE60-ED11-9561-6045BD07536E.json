@@ -1,0 +1,1897 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_commondataserviceforapps_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverseEnvRequest"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365groups_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreO365Groups"
+        },
+        "api": {
+          "name": "shared_office365groups"
+        }
+      },
+      "shared_office365users_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreO365Users"
+        },
+        "api": {
+          "name": "shared_office365users"
+        }
+      },
+      "shared_powerappsforadmins": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECorePowerAppsAdmin2"
+        },
+        "api": {
+          "name": "shared_powerappsforadmins"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "99f42b2c-e7ca-4075-bca9-e28da9323964"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "admin_setupwizardstatemetadata",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filterexpression": "admin_name eq 'ShareApps'"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Initialize_UserGroup": {
+          "runAfter": {
+            "Initialize_varResult": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f1122c63-7951-414b-93ec-177ef53eba7d"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "UserGroup",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Initialize_MakerGroup": {
+          "runAfter": {
+            "Initialize_UserGroup": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f1122c63-7951-414b-93ec-177ef53eba7d"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "MakerGroup",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Initialize_AdminGroup": {
+          "runAfter": {
+            "Initialize_MakerGroup": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f1122c63-7951-414b-93ec-177ef53eba7d"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "AdminGroup",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Share_Apps_Scope": {
+          "actions": {
+            "Compose": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "b8df527d-e506-44d7-811d-6b302992948a"
+              },
+              "type": "Compose",
+              "inputs": "@workflow()"
+            },
+            "Parse_JSON": {
+              "runAfter": {
+                "Compose": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "b7b88928-438c-4700-9b8c-7a32e3b444c9"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@outputs('Compose')",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": "string"
+                    },
+                    "tags": {
+                      "type": "object",
+                      "properties": {
+                        "flowDisplayName": {
+                          "type": "string"
+                        },
+                        "environmentName": {
+                          "type": "string"
+                        },
+                        "logicAppName": {
+                          "type": "string"
+                        },
+                        "environmentWorkflowId": {
+                          "type": "string"
+                        },
+                        "xrmWorkflowId": {
+                          "type": "string"
+                        },
+                        "environmentFlowSuspensionReason": {
+                          "type": "string"
+                        },
+                        "sharingType": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "run": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "List_CoE_apps": {
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "cc7aff40-a0e0-4baf-96ee-f16ecb4c0b6b"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_objectname, admin_objectguid, admin_persona,admin_objecttype",
+                  "$filter": "(admin_objecttype eq 'CanvasApp' or admin_objecttype eq 'ModelDrivenApp') and  admin_coesolutionarea eq 'Inventory'"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "List_Security_Roles": {
+              "runAfter": {
+                "List_CoE_apps": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "0393c0f5-7a12-4c0d-bf6f-c8eb6981242c"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "roles",
+                  "$select": "roleid,name",
+                  "$filter": "startswith(name, 'Power Platform')"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Power_Platform_Admin_SR": {
+              "runAfter": {
+                "List_Security_Roles": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "8462dd5f-eb30-4ab4-b6e7-fce9c0c7d2e9"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('List_Security_Roles')?['body/value']",
+                "where": "@contains(item()?['name'], 'Admin')"
+              }
+            },
+            "Power_Platform_Maker_SR": {
+              "runAfter": {
+                "Power_Platform_Admin_SR": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "8462dd5f-eb30-4ab4-b6e7-fce9c0c7d2e9"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('List_Security_Roles')?['body/value']",
+                "where": "@contains(item()?['name'], 'Maker')"
+              }
+            },
+            "Power_Platform_User_SR": {
+              "runAfter": {
+                "Power_Platform_Maker_SR": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "8462dd5f-eb30-4ab4-b6e7-fce9c0c7d2e9"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('List_Security_Roles')?['body/value']",
+                "where": "@contains(item()?['name'], 'User')"
+              }
+            },
+            "Get_Power_Platform_Admin_SR": {
+              "runAfter": {
+                "Power_Platform_User_SR": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "3a7f5506-873c-4c4d-ba35-872820a062a7"
+              },
+              "type": "Compose",
+              "inputs": "@first(body('Power_Platform_Admin_SR'))['roleid']"
+            },
+            "Get_Power_Platform_Maker_SR": {
+              "runAfter": {
+                "Get_Power_Platform_Admin_SR": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "3a7f5506-873c-4c4d-ba35-872820a062a7"
+              },
+              "type": "Compose",
+              "inputs": "@first(body('Power_Platform_Maker_SR'))['roleid']"
+            },
+            "Get_Power_Platform_User_SR": {
+              "runAfter": {
+                "Get_Power_Platform_Maker_SR": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "3a7f5506-873c-4c4d-ba35-872820a062a7"
+              },
+              "type": "Compose",
+              "inputs": "@first(body('Power_Platform_User_SR'))['roleid']"
+            },
+            "Set_env_var_PowerPlatformUserGroupID": {
+              "actions": {
+                "ListDefns-PowerPlatformUserGroupID": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "0a30d923-3fe0-4639-b018-5f6e28649700"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "environmentvariabledefinitions",
+                      "$select": "environmentvariabledefinitionid, defaultvalue",
+                      "$filter": "schemaname eq 'admin_PowerPlatformUserGroupID'"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Get_ID_from_PowerPlatformUserGroupID": {
+                  "runAfter": {
+                    "ListDefns-PowerPlatformUserGroupID": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "66e769a9-1dc4-4897-b0b7-649c739313af"
+                  },
+                  "type": "Compose",
+                  "inputs": "@first(body('ListDefns-PowerPlatformUserGroupID')?['value'])?['environmentvariabledefinitionid']"
+                },
+                "ListCurrents-PowerPlatformUserGroupID": {
+                  "runAfter": {
+                    "Get_ID_from_PowerPlatformUserGroupID": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "cbdafc3d-be44-42d4-a80f-3829efa13e30"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "environmentvariablevalues",
+                      "$select": "value",
+                      "$filter": "_environmentvariabledefinitionid_value eq @{outputs('Get_ID_from_PowerPlatformUserGroupID')}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "PowerPlatformUserGroupID_-_if_no_Current,_use_Default": {
+                  "actions": {
+                    "Set_PowerPlatformUserGroupID_-_CurrentValue": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "e7d2844b-e2d2-4529-9664-0b285daa5136"
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "UserGroup",
+                        "value": "@{first(body('ListCurrents-PowerPlatformUserGroupID')?['value'])?['Value']}"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "ListCurrents-PowerPlatformUserGroupID": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_PowerPlatformUserGroupID_-_DefaultValue": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "3d2c3be5-f534-49ef-bf0e-750a24142151"
+                        },
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "UserGroup",
+                          "value": "@{first(body('ListDefns-PowerPlatformUserGroupID')?['value'])?['defaultvalue']}"
+                        }
+                      }
+                    }
+                  },
+                  "expression": {
+                    "greaterOrEquals": [
+                      "@length(body('ListCurrents-PowerPlatformUserGroupID')?['value'])",
+                      1
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c14f3c80-5a83-4269-bf3a-5cdd55969d7f"
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {
+                "Get_User_Security_Role_odata": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e3992ea-03c8-4c1e-9648-cd4499485d8d"
+              },
+              "type": "Scope",
+              "description": "must use old technique for fetching as env var is optional"
+            },
+            "Set_env_var_PowerPlatformMakeSecurityGroup": {
+              "actions": {
+                "ListDefns-PowerPlatformMakeSecurityGroup": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "0a30d923-3fe0-4639-b018-5f6e28649700"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "environmentvariabledefinitions",
+                      "$select": "environmentvariabledefinitionid, defaultvalue",
+                      "$filter": "schemaname eq 'admin_PowerPlatformMakeSecurityGroup'"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Get_ID_from_PowerPlatformMakeSecurityGroup": {
+                  "runAfter": {
+                    "ListDefns-PowerPlatformMakeSecurityGroup": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "66e769a9-1dc4-4897-b0b7-649c739313af"
+                  },
+                  "type": "Compose",
+                  "inputs": "@first(body('ListDefns-PowerPlatformMakeSecurityGroup')?['value'])?['environmentvariabledefinitionid']"
+                },
+                "ListCurrents-PowerPlatformMakeSecurityGroup": {
+                  "runAfter": {
+                    "Get_ID_from_PowerPlatformMakeSecurityGroup": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "cbdafc3d-be44-42d4-a80f-3829efa13e30"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "environmentvariablevalues",
+                      "$select": "value",
+                      "$filter": "_environmentvariabledefinitionid_value eq @{outputs('Get_ID_from_PowerPlatformMakeSecurityGroup')}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "PowerPlatformMakeSecurityGroup_-_if_no_Current,_use_Default": {
+                  "actions": {
+                    "Set_PowerPlatformMakeSecurityGroup_-_CurrentValue": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "e7d2844b-e2d2-4529-9664-0b285daa5136"
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "MakerGroup",
+                        "value": "@{first(body('ListCurrents-PowerPlatformMakeSecurityGroup')?['value'])?['Value']}"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "ListCurrents-PowerPlatformMakeSecurityGroup": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_PowerPlatformMakeSecurityGroup_-_DefaultValue": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "3d2c3be5-f534-49ef-bf0e-750a24142151"
+                        },
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "MakerGroup",
+                          "value": "@{first(body('ListDefns-PowerPlatformMakeSecurityGroup')?['value'])?['defaultvalue']}"
+                        }
+                      }
+                    }
+                  },
+                  "expression": {
+                    "greaterOrEquals": [
+                      "@length(body('ListCurrents-PowerPlatformMakeSecurityGroup')?['value'])",
+                      1
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c14f3c80-5a83-4269-bf3a-5cdd55969d7f"
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {
+                "Set_env_var_PowerPlatformUserGroupID": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e3992ea-03c8-4c1e-9648-cd4499485d8d"
+              },
+              "type": "Scope",
+              "description": "must use old technique for fetching as env var is optional"
+            },
+            "Set_env_var_AdminMail": {
+              "actions": {
+                "ListDefns-AdminMail": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "0a30d923-3fe0-4639-b018-5f6e28649700"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "environmentvariabledefinitions",
+                      "$select": "environmentvariabledefinitionid, defaultvalue",
+                      "$filter": "schemaname eq 'admin_AdminMail'"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Get_ID_from_AdminMail": {
+                  "runAfter": {
+                    "ListDefns-AdminMail": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "66e769a9-1dc4-4897-b0b7-649c739313af"
+                  },
+                  "type": "Compose",
+                  "inputs": "@first(body('ListDefns-AdminMail')?['value'])?['environmentvariabledefinitionid']"
+                },
+                "ListCurrents-AdminMail": {
+                  "runAfter": {
+                    "Get_ID_from_AdminMail": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "cbdafc3d-be44-42d4-a80f-3829efa13e30"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "environmentvariablevalues",
+                      "$select": "value",
+                      "$filter": "_environmentvariabledefinitionid_value eq @{outputs('Get_ID_from_AdminMail')}"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "AdminMail_-_if_no_Current,_use_Default": {
+                  "actions": {
+                    "Set_AdminMail_-_CurrentValue": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "e7d2844b-e2d2-4529-9664-0b285daa5136"
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "AdminGroup",
+                        "value": "@{first(body('ListCurrents-AdminMail')?['value'])?['Value']}"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "ListCurrents-AdminMail": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_AdminMail_-_DefaultValue": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "3d2c3be5-f534-49ef-bf0e-750a24142151"
+                        },
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "AdminGroup",
+                          "value": "@{first(body('ListDefns-AdminMail')?['value'])?['defaultvalue']}"
+                        }
+                      }
+                    }
+                  },
+                  "expression": {
+                    "greaterOrEquals": [
+                      "@length(body('ListCurrents-AdminMail')?['value'])",
+                      1
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c14f3c80-5a83-4269-bf3a-5cdd55969d7f"
+                  },
+                  "type": "If"
+                },
+                "AdminMail_-_if_not_null,_get_id_from_mail": {
+                  "actions": {
+                    "AdminMail_-_Get_Group_for_ID": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "6515e515-b74a-45a1-bc04-1f676f75d2cb"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_office365groups_1",
+                          "operationId": "ListGroups",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365groups"
+                        },
+                        "parameters": {
+                          "$filter": "mail eq '@{variables('AdminGroup')}'"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "AdminMail_-_If_group_found": {
+                      "actions": {
+                        "AdminMail_-_Set_to_Group_ID": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "c97e3e6b-dc46-4597-a0f4-6b6764b69e1c"
+                          },
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "AdminGroup",
+                            "value": "@{first(outputs('AdminMail_-_Get_Group_for_ID')?['body/value'])?['id']}"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "AdminMail_-_Get_Group_for_ID": [
+                          "Succeeded"
+                        ]
+                      },
+                      "else": {
+                        "actions": {
+                          "AdminMail_-_Get_User_for_ID": {
+                            "runAfter": {},
+                            "metadata": {
+                              "operationMetadataId": "346e0212-a73c-4d51-884a-b0eaf697f184"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_office365users_1",
+                                "operationId": "UserProfile_V2",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
+                              },
+                              "parameters": {
+                                "id": "@variables('AdminGroup')"
+                              },
+                              "authentication": "@parameters('$authentication')"
+                            }
+                          },
+                          "AdminMail_-_If_user_found": {
+                            "actions": {
+                              "AdminMail_-_Set_to_User_ID": {
+                                "runAfter": {},
+                                "metadata": {
+                                  "operationMetadataId": "58ccfe9d-b6d8-4685-80ac-8d59268812eb"
+                                },
+                                "type": "SetVariable",
+                                "inputs": {
+                                  "name": "AdminGroup",
+                                  "value": "@outputs('AdminMail_-_Get_User_for_ID')?['body/id']"
+                                }
+                              }
+                            },
+                            "runAfter": {
+                              "AdminMail_-_Neither_User_Nor_Group": [
+                                "Skipped"
+                              ]
+                            },
+                            "else": {
+                              "actions": {
+                                "AdminMail_-_Set_to_null": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "39dc21ce-2f7f-4ed7-8d85-bd80d2e72d06"
+                                  },
+                                  "type": "SetVariable",
+                                  "inputs": {
+                                    "name": "AdminGroup",
+                                    "value": "@{null}"
+                                  }
+                                }
+                              }
+                            },
+                            "expression": {
+                              "greater": [
+                                "@length(outputs('AdminMail_-_Get_User_for_ID')?['body/id'])",
+                                0
+                              ]
+                            },
+                            "metadata": {
+                              "operationMetadataId": "199177b4-5ae7-4f07-bc9a-f1f9c1c61f93"
+                            },
+                            "type": "If"
+                          },
+                          "AdminMail_-_Neither_User_Nor_Group": {
+                            "runAfter": {
+                              "AdminMail_-_Get_User_for_ID": [
+                                "Failed"
+                              ]
+                            },
+                            "metadata": {
+                              "operationMetadataId": "60f2bd39-32a2-4948-8afa-8f563e792817"
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "AdminGroup",
+                              "value": "@{null}"
+                            }
+                          }
+                        }
+                      },
+                      "expression": {
+                        "greater": [
+                          "@length(outputs('AdminMail_-_Get_Group_for_ID')?['body/value'])",
+                          0
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "50c925e1-d509-417b-bfc2-2de2eea25010"
+                      },
+                      "type": "If"
+                    }
+                  },
+                  "runAfter": {
+                    "AdminMail_-_if_no_Current,_use_Default": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "greater": [
+                      "@length(variables('AdminGroup'))",
+                      0
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "0ea31220-add5-4e01-bfce-ebc12ab00c51"
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {
+                "Set_env_var_PowerPlatformMakeSecurityGroup": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e3992ea-03c8-4c1e-9648-cd4499485d8d"
+              },
+              "type": "Scope",
+              "description": "must use old technique for fetching as env var is optional"
+            },
+            "Apply_to_each": {
+              "foreach": "@outputs('List_CoE_apps')?['body/value']",
+              "actions": {
+                "Switch_persona": {
+                  "runAfter": {},
+                  "cases": {
+                    "Admin_persona": {
+                      "case": "Admin",
+                      "actions": {
+                        "If_Admin_Group_Exists_-_Share_Admin_apps_with_Admin_Group": {
+                          "actions": {
+                            "Add_Admin_Group_to_Admin_Security_Role": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "00b1bd90-dc57-45fd-9c0b-e5e06fe769a0"
+                              },
+                              "type": "Workflow",
+                              "inputs": {
+                                "host": {
+                                  "workflowReferenceName": "1edb4715-b85b-ed11-9561-0022480819d7"
+                                },
+                                "body": {
+                                  "text": "@variables('AdminGroup')",
+                                  "text_1": "@outputs('Get_Power_Platform_Admin_SR')",
+                                  "boolean": true,
+                                  "boolean_1": false
+                                }
+                              }
+                            },
+                            "Check_App_Type_(Admin_apps)": {
+                              "actions": {
+                                "Add_Admin_SR_to_Model_Driven_App": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "f91e021d-2d21-4425-824e-26d251f597f8"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps_1",
+                                      "operationId": "AssociateEntities",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "appmodules",
+                                      "recordId": "@items('Apply_to_each')?['admin_objectguid']",
+                                      "associationEntityRelationship": "appmoduleroles_association",
+                                      "item/@odata.id": "@outputs('Get_Admin_Security_Role_odata')?['body/@odata.id']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "Add_Admin_Group_to_Admin_Security_Role": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "else": {
+                                "actions": {
+                                  "Share_Admin_apps_with_Admin_Group": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "5585d036-7050-48d5-89d1-d052c1d19772"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_powerappsforadmins",
+                                        "operationId": "Edit-AdminAppRoleAssignment",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                      },
+                                      "parameters": {
+                                        "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                        "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                        "api-version": "2016-11-01",
+                                        "body/put": [
+                                          {
+                                            "properties/roleName": "CanView",
+                                            "properties/principal/id": "@variables('AdminGroup')",
+                                            "properties/principal/type": "user",
+                                            "properties/principal/tenantId": "@null"
+                                          }
+                                        ]
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  },
+                                  "Switch_on_result_-_Share_Admin_apps_with_Admin_Group": {
+                                    "runAfter": {
+                                      "Share_Admin_apps_with_Admin_Group": [
+                                        "Succeeded",
+                                        "Failed"
+                                      ]
+                                    },
+                                    "cases": {
+                                      "Success": {
+                                        "case": 200,
+                                        "actions": {
+                                          "SUCCESS_-_Share_Admin_apps_with_Admin_Group": {
+                                            "runAfter": {},
+                                            "metadata": {
+                                              "operationMetadataId": "ec2590ea-04c6-47f0-ada7-a7232469891e"
+                                            },
+                                            "type": "Compose",
+                                            "inputs": "SUCCESS - Share Admin apps with Admin Group"
+                                          }
+                                        }
+                                      },
+                                      "CannotModifyPermissionsOfCreator": {
+                                        "case": 400,
+                                        "actions": {
+                                          "catch_failure_400_": {
+                                            "runAfter": {},
+                                            "metadata": {
+                                              "operationMetadataId": "e152e1d4-bccf-4033-919a-d849f7b04257"
+                                            },
+                                            "type": "Compose",
+                                            "inputs": "FAIL - @{outputs('Share_Admin_apps_with_Admin_Group')?['body/error/code']}"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "default": {
+                                      "actions": {
+                                        "Throw_failure": {
+                                          "runAfter": {},
+                                          "metadata": {
+                                            "operationMetadataId": "a457bc01-e580-4724-aceb-ea234ce7692b"
+                                          },
+                                          "type": "Compose",
+                                          "inputs": "@outputs('Share_Admin_apps_with_Admin_Group')?['body/error/code']"
+                                        },
+                                        "Set_varResult_to_fail": {
+                                          "runAfter": {
+                                            "Throw_failure": [
+                                              "Succeeded"
+                                            ]
+                                          },
+                                          "metadata": {
+                                            "operationMetadataId": "482965d1-953d-4d30-b02f-51b2cc35dba0"
+                                          },
+                                          "type": "SetVariable",
+                                          "inputs": {
+                                            "name": "varResult",
+                                            "value": "fail"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "expression": "@outputs('Share_Admin_apps_with_Admin_Group')['statusCode']",
+                                    "metadata": {
+                                      "operationMetadataId": "388fe2bb-4e74-4a13-8a48-56b0998c6260"
+                                    },
+                                    "type": "Switch"
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "equals": [
+                                  "@items('Apply_to_each')?['admin_objecttype']",
+                                  "ModelDrivenApp"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "1c12f947-321f-4278-afe6-8992750438a0"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {},
+                          "expression": {
+                            "greater": [
+                              "@length(variables('AdminGroup'))",
+                              0
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "b86e59ba-bf77-49ad-903f-9818da402a52"
+                          },
+                          "type": "If"
+                        }
+                      }
+                    },
+                    "Maker_persona": {
+                      "case": "Maker",
+                      "actions": {
+                        "If_Admin_Group_Exists_-_Share_Maker_apps_with_Admin_Group": {
+                          "actions": {
+                            "Check_App_Type_(Maker_apps)": {
+                              "actions": {
+                                "Add_Admin_SR_to_Model_Driven_App_2": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "bdc9b420-9094-4884-ab9e-3279343c33f6"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps_1",
+                                      "operationId": "AssociateEntities",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "appmodules",
+                                      "recordId": "@items('Apply_to_each')?['admin_objectguid']",
+                                      "associationEntityRelationship": "appmoduleroles_association",
+                                      "item/@odata.id": "@outputs('Get_Admin_Security_Role_odata')?['body/@odata.id']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {},
+                              "else": {
+                                "actions": {
+                                  "Share_Maker_apps_with_Admin_Group": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "6a2b7b8d-4b0b-4466-8c98-c63114c7571b"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_powerappsforadmins",
+                                        "operationId": "Edit-AdminAppRoleAssignment",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                      },
+                                      "parameters": {
+                                        "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                        "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                        "api-version": "2016-11-01",
+                                        "body/put": [
+                                          {
+                                            "properties/roleName": "CanView",
+                                            "properties/principal/id": "@variables('AdminGroup')",
+                                            "properties/principal/type": "user",
+                                            "properties/principal/tenantId": "@null"
+                                          }
+                                        ]
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "equals": [
+                                  "@items('Apply_to_each')?['admin_objecttype']",
+                                  "ModelDrivenApp"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "a4f6ff4b-c8db-4738-bf14-fbd6abb8a393"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {
+                            "If_Maker_Group_Exists_-_Share_Maker_apps_with_Maker_Group": [
+                              "Succeeded"
+                            ]
+                          },
+                          "expression": {
+                            "greater": [
+                              "@length(variables('AdminGroup'))",
+                              0
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "e3fddf3c-7d7c-4fed-bbc6-cca5bb61ce46"
+                          },
+                          "type": "If"
+                        },
+                        "If_Maker_Group_Exists_-_Share_Maker_apps_with_Maker_Group": {
+                          "actions": {
+                            "Add_Maker_Group_to_Maker_Security_Role": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "1a7929dc-80f3-4ff1-ad61-9bb17c3b08a5"
+                              },
+                              "type": "Workflow",
+                              "inputs": {
+                                "host": {
+                                  "workflowReferenceName": "1edb4715-b85b-ed11-9561-0022480819d7"
+                                },
+                                "body": {
+                                  "text": "@variables('MakerGroup')",
+                                  "text_1": "@outputs('Get_Power_Platform_Maker_SR')",
+                                  "boolean": true,
+                                  "boolean_1": false
+                                }
+                              }
+                            },
+                            "Check_App_Types_(Maker)": {
+                              "actions": {
+                                "Add_Maker_SR_to_Model_Driven_App": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "8a0fa250-90c2-443b-9fa7-c2d6d07bc41e"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps_1",
+                                      "operationId": "AssociateEntities",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "appmodules",
+                                      "recordId": "@items('Apply_to_each')?['admin_objectguid']",
+                                      "associationEntityRelationship": "appmoduleroles_association",
+                                      "item/@odata.id": "@outputs('Get_Maker_Security_Role_odata')?['body/@odata.id']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "Add_Maker_Group_to_Maker_Security_Role": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "else": {
+                                "actions": {
+                                  "Share_Maker_apps_with_Maker_Group": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "82faf007-66c3-4342-bbb3-56dc57ca8259"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_powerappsforadmins",
+                                        "operationId": "Edit-AdminAppRoleAssignment",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                      },
+                                      "parameters": {
+                                        "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                        "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                        "api-version": "2016-11-01",
+                                        "body/put": [
+                                          {
+                                            "properties/roleName": "CanView",
+                                            "properties/principal/id": "@variables('MakerGroup')",
+                                            "properties/principal/type": "user",
+                                            "properties/principal/tenantId": "@null"
+                                          }
+                                        ]
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "equals": [
+                                  "@items('Apply_to_each')?['admin_objecttype']",
+                                  "ModelDrivenApp"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b9a65a1f-dbc2-4074-92f5-5b8261b220c1"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {},
+                          "expression": {
+                            "greater": [
+                              "@length(variables('MakerGroup'))",
+                              0
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "56947524-f3d0-4965-bf2c-7a6fc812083e"
+                          },
+                          "type": "If"
+                        }
+                      }
+                    },
+                    "User_persona": {
+                      "case": "User",
+                      "actions": {
+                        "If_User_Group_Exists_-_Share_User_apps_with_User_Group": {
+                          "actions": {
+                            "Add_User_Group_to_User_Security_Role": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "ad29cd32-30f2-48e0-bc28-f6b07d3ae249"
+                              },
+                              "type": "Workflow",
+                              "inputs": {
+                                "host": {
+                                  "workflowReferenceName": "1edb4715-b85b-ed11-9561-0022480819d7"
+                                },
+                                "body": {
+                                  "text": "@variables('UserGroup')",
+                                  "text_1": "@outputs('Get_Power_Platform_User_SR')",
+                                  "boolean": true,
+                                  "boolean_1": false
+                                }
+                              }
+                            },
+                            "Check_App_Type_(User_apps)": {
+                              "actions": {
+                                "Add_User_SR_to_User_Model_Driven_App": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "7c128808-2ba4-4c7d-a505-acefe52d6b1e"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps_1",
+                                      "operationId": "AssociateEntities",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "appmodules",
+                                      "recordId": "@items('Apply_to_each')?['admin_objectguid']",
+                                      "associationEntityRelationship": "appmoduleroles_association",
+                                      "item/@odata.id": "@outputs('Get_User_Security_Role_odata')?['body/@odata.id']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "Add_User_Group_to_User_Security_Role": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "else": {
+                                "actions": {
+                                  "Share_User_apps_with_User_Group": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "9d42e950-81fb-42f3-9d10-6279de5b27e3"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_powerappsforadmins",
+                                        "operationId": "Edit-AdminAppRoleAssignment",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                      },
+                                      "parameters": {
+                                        "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                        "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                        "api-version": "2016-11-01",
+                                        "body/put": [
+                                          {
+                                            "properties/roleName": "CanView",
+                                            "properties/principal/id": "@variables('UserGroup')",
+                                            "properties/principal/type": "user",
+                                            "properties/principal/tenantId": "@null"
+                                          }
+                                        ]
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "equals": [
+                                  "@items('Apply_to_each')?['admin_objecttype']",
+                                  "ModelDrivenApp"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "294eaf48-92ef-46c3-8607-fa7106a99402"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {},
+                          "expression": {
+                            "greater": [
+                              "@length(variables('UserGroup'))",
+                              0
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "e096c26b-0a9e-48aa-9ff8-f3a196395354"
+                          },
+                          "type": "If"
+                        },
+                        "If_Maker_Group_Exists_-_Share_User_apps_with_Maker_Group": {
+                          "actions": {
+                            "Check_App_Type_(User_apps_for_Maker_group)": {
+                              "actions": {
+                                "Add_Maker_SR_to_User_Model_Driven_App": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "7327021d-f3f9-4848-8814-d1c3b17d8d13"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps_1",
+                                      "operationId": "AssociateEntities",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "appmodules",
+                                      "recordId": "@items('Apply_to_each')?['admin_objectguid']",
+                                      "associationEntityRelationship": "appmoduleroles_association",
+                                      "item/@odata.id": "@outputs('Get_Maker_Security_Role_odata')?['body/@odata.id']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {},
+                              "else": {
+                                "actions": {
+                                  "Share_User_apps_with_Maker_Group": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "4a356933-36f0-483c-928a-9185cab00ff2"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_powerappsforadmins",
+                                        "operationId": "Edit-AdminAppRoleAssignment",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                      },
+                                      "parameters": {
+                                        "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                        "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                        "api-version": "2016-11-01",
+                                        "body/put": [
+                                          {
+                                            "properties/roleName": "CanView",
+                                            "properties/principal/id": "@variables('MakerGroup')",
+                                            "properties/principal/type": "user",
+                                            "properties/principal/tenantId": "@null"
+                                          }
+                                        ]
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "equals": [
+                                  "@items('Apply_to_each')?['admin_objecttype']",
+                                  "ModelDrivenApp"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "0f421f66-0cf4-4818-91f4-bd7f948ffb35"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {
+                            "If_User_Group_Exists_-_Share_User_apps_with_User_Group": [
+                              "Succeeded"
+                            ]
+                          },
+                          "expression": {
+                            "greater": [
+                              "@length(variables('MakerGroup'))",
+                              0
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "90deb9d6-8ce9-40ed-ab3a-8220c6a94554"
+                          },
+                          "type": "If"
+                        },
+                        "If_Admin_Group_Exists_-_Share_User_apps_with_Admin_Group": {
+                          "actions": {
+                            "Share_User_apps_with_Admin_Group": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "dbb01213-bbc3-4558-bd5c-57fda91c9109"
+                              },
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "connectionName": "shared_powerappsforadmins",
+                                  "operationId": "Edit-AdminAppRoleAssignment",
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                },
+                                "parameters": {
+                                  "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                  "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                  "api-version": "2016-11-01",
+                                  "body/put": [
+                                    {
+                                      "properties/roleName": "CanView",
+                                      "properties/principal/id": "@variables('AdminGroup')",
+                                      "properties/principal/type": "user",
+                                      "properties/principal/tenantId": "@null"
+                                    }
+                                  ]
+                                },
+                                "authentication": "@parameters('$authentication')"
+                              }
+                            },
+                            "Check_App_Type_(User_apps_for_Maker_group)_2": {
+                              "actions": {
+                                "Add_Admin_SR_to_User_Model_Driven_App": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "617e8764-c1bb-4e43-a9fc-5aaaa6cd3ebf"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps_1",
+                                      "operationId": "AssociateEntities",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "appmodules",
+                                      "recordId": "@items('Apply_to_each')?['admin_objectguid']",
+                                      "associationEntityRelationship": "appmoduleroles_association",
+                                      "item/@odata.id": "@outputs('Get_Admin_Security_Role_odata')?['body/@odata.id']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "Share_User_apps_with_Admin_Group": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "else": {
+                                "actions": {
+                                  "Share_User_apps_with_Maker_Group_2": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "4a356933-36f0-483c-928a-9185cab00ff2"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_powerappsforadmins",
+                                        "operationId": "Edit-AdminAppRoleAssignment",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                                      },
+                                      "parameters": {
+                                        "environment": "@body('Parse_JSON')?['tags']?['environmentName']",
+                                        "app": "@items('Apply_to_each')?['admin_objectguid']",
+                                        "api-version": "2016-11-01",
+                                        "body/put": [
+                                          {
+                                            "properties/roleName": "CanView",
+                                            "properties/principal/id": "@variables('MakerGroup')",
+                                            "properties/principal/type": "user",
+                                            "properties/principal/tenantId": "@null"
+                                          }
+                                        ]
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "equals": [
+                                  "@items('Apply_to_each')?['admin_objecttype']",
+                                  "ModelDrivenApp"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b78151ea-1128-49ac-bcb0-6881c366ee30"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {
+                            "If_Maker_Group_Exists_-_Share_User_apps_with_Maker_Group": [
+                              "Succeeded"
+                            ]
+                          },
+                          "expression": {
+                            "greater": [
+                              "@length(variables('AdminGroup'))",
+                              0
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "1ca7feba-4a68-467a-bab6-574376e0d67c"
+                          },
+                          "type": "If"
+                        }
+                      }
+                    }
+                  },
+                  "default": {
+                    "actions": {}
+                  },
+                  "expression": "@items('Apply_to_each')?['admin_persona']",
+                  "metadata": {
+                    "operationMetadataId": "bdfc33d2-fbe9-410a-88d1-13364da467f3"
+                  },
+                  "type": "Switch"
+                }
+              },
+              "runAfter": {
+                "Set_env_var_AdminMail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1cc07f5c-9a40-49ae-8ebb-ca97877b20a6"
+              },
+              "type": "Foreach"
+            },
+            "Get_Admin_Security_Role_odata": {
+              "runAfter": {
+                "Get_Power_Platform_User_SR": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "addd3178-9acc-4a10-ab98-9e015d2fa5b7"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "roles",
+                  "recordId": "@outputs('Get_Power_Platform_Admin_SR')",
+                  "$select": "roleid"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_Maker_Security_Role_odata": {
+              "runAfter": {
+                "Get_Admin_Security_Role_odata": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "0b081ed9-078b-40e5-94a4-99c2b6b4cc19"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "roles",
+                  "recordId": "@outputs('Get_Power_Platform_Maker_SR')",
+                  "$select": "roleid"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_User_Security_Role_odata": {
+              "runAfter": {
+                "Get_Maker_Security_Role_odata": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "e8cd17be-f2cb-4ce3-84c2-26f6522d4b86"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "roles",
+                  "recordId": "@outputs('Get_Power_Platform_User_SR')",
+                  "$select": "roleid"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_AdminGroup": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "72de7d4b-b577-4ec1-b32b-16251e691c9b"
+          },
+          "type": "Scope"
+        },
+        "Initialize_varResult": {
+          "runAfter": {
+            "Compose_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2bfb5c3b-b504-427c-b886-34d72c35bc61"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varResult",
+                "type": "string",
+                "value": "pass"
+              }
+            ]
+          }
+        },
+        "Set_varResult_fail_-_scope_catch": {
+          "runAfter": {
+            "Share_Apps_Scope": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "3abbec4f-d987-4749-89a0-d3c1d0c3e512"
+          },
+          "type": "SetVariable",
+          "inputs": {
+            "name": "varResult",
+            "value": "fail"
+          }
+        },
+        "if_flow_passed_or_failed": {
+          "actions": {
+            "Update_last_run_as_pass": {
+              "actions": {
+                "Update_Last_Run_Successful": {
+                  "runAfter": {
+                    "Get_ID_Pass": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "admin_coesolutionmetadatas",
+                      "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                      "item/admin_lastrun": "@utcNow()",
+                      "item/admin_lastrunpassed": true
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Get_ID_Pass": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "admin_coesolutionmetadatas",
+                      "$select": "admin_coesolutionmetadataid",
+                      "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                      "$top": 1
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Catch_-_not_ready_to_take_last_run_date": {
+                  "runAfter": {
+                    "Update_Last_Run_Successful": [
+                      "Failed"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+                  },
+                  "type": "Compose",
+                  "inputs": "Catch - not ready to take last run date"
+                }
+              },
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+              },
+              "type": "Scope"
+            }
+          },
+          "runAfter": {
+            "Set_varResult_fail_-_scope_catch": [
+              "Succeeded",
+              "Skipped"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Error_Handling": {
+                "actions": {
+                  "Create_a_new_record_-_Sync_Flow_Errors": {
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "CreateRecord",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "admin_syncflowerrorses",
+                        "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                        "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                      },
+                      "authentication": "@parameters('$authentication')",
+                      "retryPolicy": {
+                        "type": "exponential",
+                        "count": 10,
+                        "interval": "PT10S"
+                      }
+                    }
+                  },
+                  "Terminate": {
+                    "runAfter": {
+                      "Update_Last_Run_Fail": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+                    },
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Failed",
+                      "runError": {
+                        "code": "500",
+                        "message": "Get Environments Failed"
+                      }
+                    }
+                  },
+                  "Get_ID_Fail": {
+                    "runAfter": {
+                      "Create_a_new_record_-_Sync_Flow_Errors": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "ListRecords",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "admin_coesolutionmetadatas",
+                        "$select": "admin_coesolutionmetadataid",
+                        "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                        "$top": 1
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  },
+                  "Update_Last_Run_Fail": {
+                    "runAfter": {
+                      "Get_ID_Fail": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                      },
+                      "parameters": {
+                        "entityName": "admin_coesolutionmetadatas",
+                        "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                        "item/admin_lastrun": "@utcNow()",
+                        "item/admin_lastrunpassed": false
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  }
+                },
+                "runAfter": {},
+                "metadata": {
+                  "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+                },
+                "type": "Scope"
+              }
+            }
+          },
+          "expression": {
+            "equals": [
+              "@variables('varResult')",
+              "pass"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "358bbb38-def8-4843-9d92-4ea489574644"
+          },
+          "type": "If"
+        },
+        "Compose_2": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "d5c71c93-7c0c-4063-846b-2d7c1ebbba2b"
+          },
+          "type": "Compose",
+          "inputs": "@workflow()"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

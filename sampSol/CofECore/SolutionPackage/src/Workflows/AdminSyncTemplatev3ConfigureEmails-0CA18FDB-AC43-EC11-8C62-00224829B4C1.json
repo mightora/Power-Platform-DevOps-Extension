@@ -1,0 +1,1662 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_sharedcommondataserviceforapps_98924"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_commondataserviceforapps_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverseEnvRequest"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "b1c352e3-a31d-45bd-b5ca-2ac3115b4565"
+          },
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "boolean": {
+                  "title": "ConfigureAll",
+                  "type": "boolean",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please select yes or no",
+                  "x-ms-content-hint": "BOOLEAN"
+                },
+                "boolean_1": {
+                  "title": "ResetSubject",
+                  "type": "boolean",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please select yes or no",
+                  "x-ms-content-hint": "BOOLEAN"
+                },
+                "boolean_2": {
+                  "title": "ResetBody",
+                  "type": "boolean",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please select yes or no",
+                  "x-ms-content-hint": "BOOLEAN"
+                },
+                "text": {
+                  "title": "ResetThisMail",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "boolean"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "CoE_Mails": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "a5277620-f725-42a9-91e6-53a4473372ee"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "MailsArray",
+                "type": "array",
+                "value": [
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Maker Manager",
+                    "FlowName": "Request Orphaned Objects Reassigned (Child)",
+                    "ActionName": "Send list to manager",
+                    "Subject": "Note from your Power Platform Admin: Your former employees objects",
+                    "Body": "<p>Thank you for looking through these orphaned objects from your former employees. Please prepare a plan for each, to see if you would like to take ownership, assign to another person, or delete.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "8532d7fe-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Maker Manager",
+                    "FlowName": "Request Orphaned Objects Reassigned (Child)",
+                    "ActionName": "Send list to manager - failed or timed out",
+                    "Subject": "Note from your Power Platform Admin: Orphaned Objects to Clean",
+                    "Body": "<p>Former employees of yours have left the company with Power Platform objects left behind. These require reassignment or deletion in order to keep our tenant tidy of objects. We have attempted to communicate these with you via a flow chat bot, and it seems that you either did not respond to these communications, or you have the chatbot disabled.</p><p>Note also that if these objects are important to your team, not having a current owner could lead to them breaking later due to expired connections or tenant changes that will not have an owner to notify.</p><p>Please prepare a plan for each of these, to see if you would like to take ownership, assign to another person, or delete.</p><p>If you do not see the chat in teams from the Flow Bot, then you will not be able to perform these actions. As a result, please ensure you have <a href=\"http://powerautomate.microsoft.com/en-us/blog/microsoft-flow-in-microsoft-teams/\">turned on flow integration</a> and that you have not <a href=\"http://powerautomate.microsoft.com/en-us/blog/microsoft-flow-in-microsoft-teams/\">muted or hidden the bot</a>.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "8732d7fe-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Request Orphaned Objects Reassigned (Child)",
+                    "ActionName": "Send list to admin - failed or timed out",
+                    "Subject": "CoE Starter Kit - Orphaned Objects: Manager did not respond",
+                    "Body": "<p>The request to this manager failed or timed out.</p><p>If timed out, consider reaching out to them to ensure they understand the importance of this work.</p><p>If failed it may be due to them having the chatbot muted and you will need to work with them to resolve.</p><p>Please look at the run to see what occurred, and the list of objects, to determine how best to proceed.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "e2902a05-6186-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Request Orphaned Objects Reassigned (Parent)",
+                    "ActionName": "Send admin email of orphans they will need to resolve",
+                    "Subject": "CoE Starter Kit - Orphaned Objects: objects without managers",
+                    "Body": "<p>Hello, there are Power Platform objects in your tenant who's owner has left the company and so they are orphaned.</p><p>We have sent these to the former manager for those that are known, but there are a set for whom we do not have a manager on file.</p><p>Please clean these up via the Power Platform Admin View app from your CoE Starter Kit.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "629e7c0d-6186-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Request Orphaned Objects Reassigned (Parent)",
+                    "ActionName": "Send list of ignoring managers to admin",
+                    "Subject": "CoE Starter Kit - Orphaned Objects: managers who ignored requests to clean",
+                    "Body": "<p>Hello, there are Power Platform objects in your tenant whose owner has left the company and so they are orphaned.</p><p>We have sent these to the former manager for those that are known, but these managers did not respond to the request to clean.</p><p>If you see them persistency ignoring the request, you may need to reach out in some other manner.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "0cf57f14-6186-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Maker Manager",
+                    "FlowName": "Request Orphaned Objects Reassigned (Child)",
+                    "ActionName": "Send email list of failures - assign all",
+                    "Subject": "Note from your Power Platform Admin: Failed to assign ownership of orphaned objects",
+                    "Body": "<p>Thank you for looking through these orphaned objects from your former employees.</p><p>Unfortunately, not all of them could be assigned out. Please see the following apps and flows that could not be assigned out.&nbsp;</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "62c55684-8988-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Maker Manager",
+                    "FlowName": "Request Orphaned Objects Reassigned (Child)",
+                    "ActionName": "Send email list of failures - delete all",
+                    "Subject": "Note from your Power Platform Admin: Failed to delete orphaned objects",
+                    "Body": "<p>Thank you for looking through these orphaned objects from your former employees.</p><p>Unfortunately, not all of them could be deleted. Please see the following apps and flows that could not be deleted.&nbsp;</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "76957efe-8988-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Cleanup Orphans",
+                    "TargetAudiance": "Maker Manager",
+                    "FlowName": "Request Orphaned Objects Reassigned (Child)",
+                    "ActionName": "Send email list of failures - take ownership",
+                    "Subject": "Note from your Power Platform Admin: Failed to take ownership of orphaned objects",
+                    "Body": "<p>Thank you for looking through these orphaned objects from your former employees.</p><p>Unfortunately, not all of them could be assigned to you. Please see the following apps and flows that could not be assigned.&nbsp;</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "a1c3db41-8a88-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Compliance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Compliance Details Request eMail (Flows)",
+                    "ActionName": "Send Audit Mail to Owner Flows",
+                    "Subject": "Note from your Power Platform Admin: Submit compliance details for your flow",
+                    "Body": "<p>Your admin needs details about your flow.</p><p>You own a flow that is missing compliance details, which means it needs to be audited by an administrator per our support policy.<br />Please complete the business justification details in the Developer Compliance Center app to document the intended use.</p><p><u><strong>How to become compliant</strong></u></p><ol><li>Follow the link below</li><li>Add a description to your flow.</li><li>Provide a business justification.</li><li>Iterate the solution's dependencies.</li><li>Select the business impact.</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "7a8e9d30-26bb-ec11-983f-000d3a55c6fa"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Compliance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Compliance Details Request eMail (Custom Connectors)",
+                    "ActionName": "Send Audit Mail to Owner Custom Connector",
+                    "Subject": "Note from your Power Platform Admin: Submit compliance details for your custom connector",
+                    "Body": "<p>Your admin needs details about your custom connector.</p><p>You own a custom connector that is missing compliance details, which means it needs to be audited by an administrator per our support policy.<br />Please complete the business justification details in the Developer Compliance Center app to document the intended use.</p><p><strong><u>How to become compliant</u></strong></p><ol><li>Follow the link below</li><li>Add a description to your custom connector.</li><li>Provide a business justification.</li><li>Iterate the solution's dependencies.</li><li>Provide details on the solution's access managment.</li><li>Provide details on the custom connector's conditions of use.</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "33ecdd7b-26bb-ec11-983f-000d3a55c6fa"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Compliance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Compliance Details Request eMail (Desktop Flows)",
+                    "ActionName": "Send Audit Mail to Owner Desktop Flows",
+                    "Subject": "Note from your Power Platform Admin: Submit compliance details for your desktop flow",
+                    "Body": "<p>Your admin needs details about your desktop flow.</p><p>You own a desktop flow that is missing compliance details, which means it needs to be audited by an administrator per our support policy.<br />Please complete the business justification details in the Developer Compliance Center app to document the intended use.</p><p><u><strong>How to become compliant</strong></u></p><ol><li>Follow the link below</li><li>Add a description to your desktop flow.</li><li>Provide a business justification.</li><li>Iterate the solution's dependencies.</li><li>Select the business impact.</li><li>Select the data classification.</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "43fbe78e-26bb-ec11-983f-000d3a55c6fa"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Compliance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Compliance detail request v3",
+                    "ActionName": "Send Republish Mail to Owner Apps",
+                    "Subject": "Note from your Power Platform Admin: Keep your app updated to stay compliant",
+                    "Body": "<p>Keep your app updated to stay compliant.</p><p>You own an app that's currently shared or used broadly but which has not been published recently. It is best practice to test and republish such apps regularly in order to ensure they stay up to date with product changes.<br />Please test and republish the app. You can use the Developer Compliance Center app to view all required work.</p><p><strong>How to become compliant</strong></p><ol><li>Follow the link below</li><li>View all apps that require work</li><li>Test and republish this app</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "4169820e-ca41-ec11-8c62-00224829b4c1"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Compliance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Compliance Details Request eMail (Apps)",
+                    "ActionName": "Send Audit Mail to Owner Apps",
+                    "Subject": "Note from your Power Platform Admin: Submit compliance details for your app",
+                    "Body": "<p>Your admin needs details about your broadly shared app.</p><p>You own an app that's currently shared or used broadly and missing compliance details, which means it needs to be audited by an administrator per our support policy.<br />Please complete the business justification details in the Developer Compliance Center app to document the intended use.</p><p><u><strong>How to become compliant</strong></u></p><ol><li>Follow the link below</li><li>Add a description to your app.</li><li>Provide a business justification.</li><li>Iterate the solution's dependencies.</li><li>Provide details on the solution's access managment.</li><li>Select the business impact.</li><li>Select the data classification.</li><li>Provide a Mitigation plan in the form of an attachment.</li><li>Update the 'Mitigation plan provided' toggle to 'Yes'.</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "b5bb8e1c-8741-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Compliance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Compliance Details Request eMail (Chatbots)",
+                    "ActionName": "Send Audit Mail to Owner Bots",
+                    "Subject": "Note from your Power Platform Admin: Submit compliance details for your chatbot",
+                    "Body": "<p>You own a chatbot that's frequently used and which missing compliance details, which means it needs to be audited by an administrator per our support policy.<br />Please complete the business justification details in the Developer Compliance Center app to document the intended use.</p><p><u><strong>How to become compliant</strong></u></p><ol><li>Follow the link below</li><li>Add a description.</li><li>Provide a business justification.</li><li>Iterate the solution's dependencies.</li><li>Provide details on the solution's access managment.</li><li>Select the business impact.</li><li>Provide a Mitigation plan in the form of an attachment.</li><li>Update the 'Mitigation plan provided' toggle to 'Yes'.</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "87853f93-cd41-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Dataverse for Teams Governance",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Microsoft Teams Admin  | Weekly Clean Up of Microsoft Teams environments",
+                    "ActionName": "Summary mail to Admins",
+                    "Subject": "CoE Starter Kit - D4T: Microsoft Teams Environment Creation and Deletion review",
+                    "Body": "<p>Here is the activity has occurred for Microsoft Teams environments in the past 7 days.</p><p>Please use the Power Platform Admin View app to review in detail.&nbsp;</p><p>Deleted environments can be restored for 7 days via the products <a href=\"http://admin.powerplatform.microsoft.com/environments/deleted\">Power Platform Admin Center</a></p><p> </p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "a02604e4-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Dataverse for Teams Governance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Microsoft Teams Admin | Ask for Business Justification when Microsoft Teams environment is created",
+                    "ActionName": "Send an email to the Teams Owner",
+                    "Subject": "Note from your Power Platform Admin: Welcome to your Microsoft Teams Environment: ",
+                    "Body": "<p>Welcome to your Microsoft Teams Environment!</p><p><br />Microsoft Dataverse for Teams is an exciting capability that integrates Teams with the Power Platform. Using Dataverse for Teams, anyone can make and deploy apps, flows, and chatbots directly within Teams with Power Apps, Power Automate, and Power Virtual Agents. These apps, flows, and bots are then available to use by anyone in the team.</p><p>When a team owner adds the capability to their team, Dataverse for Teams creates a new Power Platform environment with a lightweight Dataverse database and links it to the team.<br /><strong>Note: ​As this is a limited capability, please be mindful of others. Create just the environments that you need to support your business process​ and if you no longer need the environment, delete it!</strong></p><p>If the environment you just created is permanent, here are the rules:</p><ul><li>A business justification for a production scenario must be provided</li><li>An admin must approve the request</li><li>The default Data Loss Prevention policy will be applied</li></ul><p><br />Environments will be deleted if any of the following conditions is true:</p><ul><li>No business justification has been provided within a week of creating the environment.</li><li>The environment is unused after 90 days.</li><li>An excessive number of environments are created by the same person</li></ul>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "29b507eb-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Dataverse for Teams Governance",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Microsoft Teams Admin | Ask for Business Justification when Microsoft Teams environment is created",
+                    "ActionName": "Send admin mail - justification provided",
+                    "Subject": "CoE Starter Kit - D4T: Justification Provided for a Microsoft Teams Environment: ",
+                    "Body": "<p>New Microsoft Teams Environment Justification Added!</p><p>Please view and approve or reject it as shown here: <a href=\"http://docs.microsoft.com/power-platform/guidance/coe/teams-governance#business-justification-process\">Business justification process</a></p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "0d395bf3-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Dataverse for Teams Governance",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Microsoft Teams Admin | Send Reminder Mail",
+                    "ActionName": "Remind maker to provide justification",
+                    "Subject": "Note from your Power Platform Admin: Provide Business Justification for your Dataverse for Teams Envt: ",
+                    "Body": "<p>Your admin has requested you provide business justification for your Dataverse for Teams environment.</p><p><br />If you do not do this, your Dataverse for Teams environment will likely be deleted in a few days.<br />To provide this justification, go to your teams' chat and look for the conversation with the flow bot.<br />If you do not see the teams chat, then ensure you have <a href=\"http://powerautomate.microsoft.com/en-us/blog/microsoft-flow-in-microsoft-teams/\">turned on flow integration</a> and that you have not <a href=\"http://powerautomate.microsoft.com/en-us/blog/microsoft-flow-in-microsoft-teams/\">muted or hidden the bot</a></p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "10395bf3-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Env Request | Notify requestor when rejected",
+                    "ActionName": "Request was rejected",
+                    "Subject": "Note from your Power Platform Admin: Your Environment Creation Request was rejected",
+                    "Body": "<p>The request to create an environment was rejected. See below for more information about this decision.</p><p>You can view all your requests and make a new one in the Environment Request app.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "1cc436d4-ff42-ec11-8c62-00224829b4c1"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Env Request | Notify admin when new request submitted",
+                    "ActionName": "Send email a new request is ready for admin review",
+                    "Subject": "CoE Starter Kit - Environment Request: New Power Platform Environment Creation Request",
+                    "Body": "<h2>A new Environment Creation Request was submitted.</h2><p>View request details and find the best DLP Policy configuration to accommodate the requested connectors with the Environment Request Admin App.</p><p><br /><u><strong>Instructions</strong></u></p><ol><li>Go to the Environment Request Admin App</li><li>Find and select the request</li><li>Use the app to see how adding the new environment to DLP Policies will impact the requested connectors. Any modifications made in the app will be processed when the environment is created.</li></ol><p><u><strong>Details</strong></u><br /> </p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "3e576736-0c43-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Env Request | Create approved environment",
+                    "ActionName": "Send email Environment is live",
+                    "Subject": "Note from your Power Platform Admin: Your new Power Platform Environment is Live",
+                    "Body": "<h2>Your new Power Platform Environment has been created.</h2><p>Your request to create the new Power Platform environment has been approved. You are now the adminstrator of the environment.</p><p>Access your environment in the maker portal here:</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "79030d17-1e43-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Env Request | Create approved environment",
+                    "ActionName": "Environment provisioning failed",
+                    "Subject": "CoE Starter Kit - Environment Request: There was an issue processing an Environment Creation Request",
+                    "Body": "<h2>Notice: There was a problem provisioning the Environment.</h2><p>The approved Environment Creation Request was not completed, and the record has been closed. Please evaluate the error message and review the issue in the flow run history, then re-submit the request.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "bea55af1-2343-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Env Request | Cleanup environments",
+                    "ActionName": "Send email deleted environment",
+                    "Subject": "Note from your Power Platform Admin: Your Power Platform Environment has been deleted",
+                    "Body": "<h2>Your Environment has been cleaned up.</h2><p>The Environment below has been deleted. The database can be restored by your admin for up to 7 days.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "aa142173-2643-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Env Request | Cleanup environments",
+                    "ActionName": "Send email deletion failed",
+                    "Subject": "CoE Starter Kit - Environment Request: Power Platform Environment cleanup failed ",
+                    "Body": "<h2>There was a problem cleaning up an environment.</h2><p>There was an issue deleting an environment that was created by an Environment Creation Request. Please confirm if the environment still exists and mange it further (e.g., delete the environment manually) in the Power Platform Admin Center (https://admin.powerplatform.microsoft.com).<br /> </p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "ab142173-2643-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Env Request | Cleanup Environments",
+                    "ActionName": "Send email Environment not found",
+                    "Subject": "Note from your Power Platform Admin: Closing the Environment Creation Request record. [No Action Required]",
+                    "Body": "<h2>Notice: Closing the Environment Creation Request record.</h2><p>An environment provisioned from an Environment Creation Request ticket that was scheduled to be cleaned up, but was not found.</p><p>This is a notification that the ticket is being closed. No further action is needed.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "ad142173-2643-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Environment Request",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Env Request | Cleanup Environments",
+                    "ActionName": "Send email upcoming deletion warning",
+                    "Subject": "Note from your Power Platform Admin: Warning - Your Power Platform Environment will be deleted soon",
+                    "Body": "<p>Your Power Platform Environment will be cleaned up soon. Please save all work in the environment to source control or storage external to the environment before it is deleted. Once the environment has been deleted, the admin can restore it for up to 7 days.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "ae142173-2643-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker Manager",
+                    "FlowName": "Admin | Email Managers Ignored Inactivity notifications Approvals",
+                    "ActionName": "Stale Objects Sent to Managers",
+                    "Subject": "Note from your Power Platform Admin: Your employees have stale Power Platform objects",
+                    "Body": "<p>In an attempt to keep our tenant clean, we ask people to confirm that objects that appear no longer useful can be removed from the tenant.<br />You have employees who have not responded to these inquiries, listed below.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "a7bfd0b1-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Inactivity notifications v2 (Check Approval)",
+                    "ActionName": "Inactivity Request Rejected",
+                    "Subject": "CoE Starter Kit - Inactivity Notifications: Delete Power Apps has been rejected for ",
+                    "Body": "<p>The following object went through the Inactivity Notification processes and was rejected by the owner for the reason listed.<br />If the reason seems like a persistent one you can excuse it from going through the processes again in the future using the&nbsp;App and Flow Inactivity Notifications Clean Up View app.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "7665d2b8-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Inactivity notifications v2 (Start Approval for Apps)",
+                    "ActionName": "Backup reminder",
+                    "Subject": "Note from your Power Platform Admin: Reminder to back up your app:",
+                    "Body": "<p>As a reminder, you approved removal of this app from the tenant, and it will therefore be deleted soon.</p><p><u><strong>PLEASE NOTE:</strong></u></p><ul><li>If you want to retain a copy of this app for later restore in the event that you change your mind, please do so now.</li><li>If you are receiving this mail past the estimated auto-delete date, it could be because we cannot delete programmatically, please delete manually.</li></ul><p>Thank you for using the Power Platform!</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "7965d2b8-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Inactivity notifications v2 (Start Approval for Apps)",
+                    "ActionName": "Cant do approval",
+                    "Subject": "CoE Starter Kit - Inactivity Notifications: This app owner cannot perform approval",
+                    "Body": "<p>The following object was attempted to go through the Inactivity Notification processes but the creation of the approval failed.<br />Please see&nbsp;<a href=\"http://learn.microsoft.com/troubleshoot/power-platform/power-automate/common-errors-creating-and-assigning-flow-approvals\">Common errors creating and assigning flow approvals</a> to troubleshoot why this can occur</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "c18f45c1-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Inactivity notifications v2 (Start Approval for Apps)",
+                    "ActionName": "Create an approval",
+                    "Subject": "Note from your Power Platform Admin: This app appears to be unused; can we delete?",
+                    "Body": "### You own an app that has not been modified or launched recently.\n\nWe want to make sure it is still useful, as if it is not then we would like to remove it to keep our Power Platform tenant tidy.\n\nPlease confirm this app is no longer being used and can be deleted by approving this task; or provide a business justification if you reject.\n\n** PLEASE NOTE: **\n\n- If you select approve, and want a copy as a backup, please create one manually as your app will be deleted from the tenant soon.\n- If you select approve, and do NOT want a copy as a backup, consider deleting manually to avoid receiving a reminder to backup.\n- If you select reject, consider performing a re-save, in order to avoid receving this email again in another month.\n\nTo clean up all outstanding requests about old apps and flows: ",
+                    "CommunicationType": "Approval",
+                    "MailGUID": "5b94e3c7-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Inactivity notifications v2 (Start Approval for Flows)",
+                    "ActionName": "Backup reminder",
+                    "Subject": "Note from your Power Platform Admin: Reminder to back up your flow:",
+                    "Body": "<p>As a reminder, you approved removal of this flow from the tenant, and it will therefore be deleted soon.</p><p><u><strong>PLEASE NOTE:</strong></u></p><ul><li>If you want to retain a copy of this flow for later restore in the event that you change your mind, please do so now.</li><li>If you are receiving this mail past the estimated auto-delete date, it could be because we cannot delete programmatically, please delete manually.</li></ul><p>Thank you for using the Power Platform!</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "fbc4c3d0-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Inactivity notifications v2 (Start Approval for Flows)",
+                    "ActionName": "Cant do approval",
+                    "Subject": "CoE Starter Kit - Inactivity Notifications: This flow owner cannot perform approval for ",
+                    "Body": "<p>The following object was attempted to go through the Inactivity Notification processes but the creation of the approval failed.<br />Please see&nbsp;<a href=\"http://learn.microsoft.com/troubleshoot/power-platform/power-automate/common-errors-creating-and-assigning-flow-approvals\">Common errors creating and assigning flow approvals</a> to troubleshoot why this can occur.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "fdc4c3d0-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Inactivity notifications v2 (Start Approval for Flows)",
+                    "ActionName": "Create an approval",
+                    "Subject": "Note from your Power Platform Admin: This flow appears to be unused; can we delete?",
+                    "Body": "### You own a flow that has not been modified recently.\n\nWe want to make sure it is still useful, as if it is not then we would like to remove it to keep our Power Platform tenant tidy.\n\nPlease confirm this flow is no longer being used and can be deleted by approving this task; or provide a business justification if you reject.\n\n** PLEASE NOTE: **\n\n- If you select approve, and want a copy as a backup, please create one manually as your flow will be deleted from the tenant soon.\n- If you select approve, and do NOT want a copy as a backup, consider deleting manually to avoid receiving a reminder to backup.\n- If you select reject, consider performing a re-save, in order to avoid receving this email again in another month.\n\nTo clean up all outstanding requests about old apps and flows: ",
+                    "CommunicationType": "Approval",
+                    "MailGUID": "fe4d14da-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Inventory",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "DLP Editor>Parse impacted resources into CSV",
+                    "ActionName": "Send Impacted Objects",
+                    "Subject": "CoE Starter Kit - DLP Impact Analysis: a list of impacted apps and flows is attached",
+                    "Body": "<p>Hello,<br /><br />please find attached the exported apps and flows identified by the DLP Editor for offline analysis.<br /><br />Thank you</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "b0f83a79-fc63-ec11-8f8f-000d3a13d289"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Inventory",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Sync Template v3 (Sync Flow Errors)",
+                    "ActionName": "Send Sync Flows to Admin",
+                    "Subject": "Admin | Sync Flow Errors",
+                    "Body": "<p>Some of the Sync Flows in the CoE Starter Kit have failed. See below and navigate to the Flow Instance URL to find out more details:</p><p><strong>Failures</strong></p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "432db868-c53d-ec11-8c63-00224829720b"
+                  },
+                  {
+                    "Solution": "Nurture",
+                    "SolutionArea": "Nurture",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Training In A Day | Reminder 3 days prior event",
+                    "ActionName": "Send reminder of upcoming training",
+                    "Subject": "Power Platform Event - Your upcoming training: ",
+                    "Body": "<p><strong><span style=\"font-size:18px\">Don't forget your Power Platform event is coming up on.</span></strong></p><p>If you can no longer make it, please cancel your attendance using the \"Nurture Apps - Maker\" app.</p><p><strong>What you can expect on the day:</strong><br />This is a beginner level lab for you to get hands on experience with Microsoft Business Application Platform technologies – PowerApps, Microsoft Flow and Microsoft Forms. The labs include step-by-step instructions for someone new to these technologies to build a solution in less than a day.</p><p><br />Questions?&nbsp;</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "0c2d5026-7d8b-ed11-81ac-0022480819d7"
+                  },
+                  {
+                    "Solution": "Nurture",
+                    "SolutionArea": "Nurture",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Training In A Day | Registration Confirmation",
+                    "ActionName": "Send Confirmation",
+                    "Subject": "Power Platform Event - Confirmation of Event Registration ",
+                    "Body": "<p><strong><span style=\"font-size:18px\">We're pleased to confirm your&nbsp;</span></strong><span style=\"font-size:18px\"><strong>registration.</strong></span></p><p>If you can no longer make it, please cancel your attendance using the Nurture&nbsp;<br />Apps - Maker app.</p><p><strong>What you can expect on the day:</strong><br />This is a beginner level lab for you to get hands on experience with Microsoft Business Application Platform technologies – Power Apps, Power Automate, Power BI or Power Virtual Agents. The labs include step-by-step instructions for someone new to these technologies to build a solution in less than a day.</p><p><u>Event details:</u></p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "d9a6265e-7f8b-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Nurture",
+                    "SolutionArea": "Nurture",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Training In A Day | Feedback Reminder",
+                    "ActionName": "Send feedback reminder: ",
+                    "Subject": "Power Platform Event - Feedback request: ",
+                    "Body": "<p>Thank you for attending the event today. We hope you enjoyed the event and are looking forward to seeing what you will create with the Power Platform Tools.</p><p>We'd love to hear from you, please fill out our feedback survey to let us know what you thought of the day.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "c1bb7e5e-808b-ed11-81ac-0022480819d7"
+                  },
+                  {
+                    "Solution": "Nurture",
+                    "SolutionArea": "Nurture",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Newsletter with Product Updates",
+                    "ActionName": "Send newsletter to admin",
+                    "Subject": "CoE Starter Kit - Internal Power Platform Newsletter",
+                    "Body": "<p><strong><span style=\"font-size:18px\">Power Platform Product updates, news and announcements for the week.&nbsp;</span></strong></p><p>News since&nbsp;</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "f2f0a3bb-808b-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Nurture",
+                    "SolutionArea": "Nurture",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Training In A Day | Final Attendees for Event Owner",
+                    "ActionName": "Send mail to Event Owner",
+                    "Subject": "Power Platform Event - Final attendees for your training event:",
+                    "Body": "<p>Thank you for leading an upcoming Power Platform Training event!</p><p>Here's the final details and attendee list for your event:</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "2a2b01b4-ce8d-ed11-81ac-0022480819d7"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Other Core Components",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Welcome Email v3",
+                    "ActionName": "Send Welcome Mail",
+                    "Subject": "Note from your Power Platform Admin: Welcome to Power Platform",
+                    "Body": "<p><strong>Welcome to Microsoft Power Platform!</strong></p><p>Congratulations on creating your first Power Platform resource! Our vision is to empower everyone in our organization to achieve more, and there is no better technology to achieve this goal than Microsoft Power Platform. The idea is simple - put technology in the hands of subject matter experts and make everyone part of our digital transformation journey. In other words, the platform handles the complexities for you: no subscriptions, hosting, or coding required. Just bring your ideas.</p><p>To start your journey, check out our Power Platform wiki to understand how Power Platform works in our organization. Next, get familiar with all Power Platform technologies to decide on the right one for your idea:</p><p><strong>Power Apps</strong>&nbsp;- Easily create an app within minutes that you can share with your colleagues. Build it once and use it everywhere, whether in the browser, a SharePoint site, the mobile app, in Teams, or in Bing search. The best thing is that no coding skills are required.</p><p><strong>Power Automate flows</strong>&nbsp;- Quickly create workflows that automate your productivity tasks. For example, you could create a flow that sends out an approval request to a manager anytime a request form is submitted in SharePoint or you could build a flow that sends you a daily reminder mail of your pending tasks in Outlook. Use the intuitive UI to create your flow step-by-step, with no coding required.</p><p><strong>Power Virtual Agents Chatbots</strong> - Interact with your customers and users by creating a chatbot. You'll be able to quickly create chat topics that respond to user requests and respond intelligently. Your bots can even call Power Automate flows to do things like pull data from a list or database, or take actions like create a ticket. Bots can be embedded in websites, SharePoint sites, or even a Teams Channel.</p><p><strong>Power Pages</strong>&nbsp;- With a Power Pages website, you can quickly create web sites for internal or external audiences. These portals can use Dataverse or Dynamics 365 data on the backend with an intuitive UI on the frontend.</p><p>Learn how to build everything right with <a href=\"https://docs.microsoft.com/learn/browse/?products=power-platform\">Power Platform learning paths</a>.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "253a3c62-8c80-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Other Core Components",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Capacity Alerts",
+                    "ActionName": "Send Over Capacity Envts to Admin",
+                    "Subject": "CoE Starter Kit - Capacity alerts",
+                    "Body": "<p>The following environments are over their approved capacity:</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "fc8a4d58-7d41-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Other Core Components",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Capacity Alerts",
+                    "ActionName": "Send Near Capacity Envts to Admin",
+                    "Subject": "CoE Starter Kit - Near Capacity alerts",
+                    "Body": "<p>The following environments are at 80% of their approved capacity:</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "028b4d58-7d41-ec11-8c62-00224829bf00"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Quarantine",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Set app quarantine status",
+                    "ActionName": "Send an email - release",
+                    "Subject": "Note from your Power Platform Admin: Your app has been released from quarantine!",
+                    "Body": "<p>Your app has been released from quarantined.</p><p>Your app compliance status has been reviewed, and the app has now been released from quarantine. Users who you've shared your app with can now launch the app again.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "ff4d14da-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Quarantine",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Set app quarantine status",
+                    "ActionName": "Send an email - quarantine",
+                    "Subject": "Note from your Power Platform Admin: Your app has been quarantined! ",
+                    "Body": "<p><span style=\"font-size:18px\"><strong>Your app has been quarantined.</strong></span></p><p>You own an app that's currently not compliant and has been quarantined. This means that your admin needs further details to ensure your app is compliant. <strong><em>Whilst the app is quarantined, users who you've shared your app with can no longer open it.</em></strong><br />Please complete the business justification details in the Developer Compliance Center app to document the intended use and your admin will perform a risk assessment to relese the app from quarantine. Note that completing the below information will not automatically release the app form quarantine.</p><p><u><strong>How to become compliant</strong></u></p><ol><li>Follow the link below</li><li>Add a description to your app.</li><li>Provide a business justification.</li><li>Iterate the solution's dependencies.</li><li>Provide details on the solution's access managment.</li><li>Select the business impact.</li><li>Select the data classification.</li><li>Provide a Mitigation plan in the form of an attachment.</li><li>Update the 'Mitigation plan provided' toggle to 'Yes'.</li></ol>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "9f2604e4-6086-ed11-81ac-0022480813ff"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Inactivity notifications v2 (Clean Up and Delete)",
+                    "ActionName": "Tell user they will need to manually app delete",
+                    "Subject": "App could not be deleted for you: ",
+                    "Body": "<p>You have approved deletion of an app as it is no longer useful.&nbsp;</p><p>However it cannot be deleted for you automatically and will need to be cleaned up and deleted manually.<br />This can happen for a variety of reasons including it being part of a solution or having dependencies.</p><p>Here is the error message received from an attempt to delete automatically.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "a77bedd7-6e2a-ee11-bdf4-0022480815b8"
+                  },
+                  {
+                    "Solution": "Governance",
+                    "SolutionArea": "Inactivity Processes",
+                    "TargetAudiance": "Maker",
+                    "FlowName": "Admin | Inactivity notifications v2 (Clean Up and Delete)",
+                    "ActionName": "Tell user they will need to manually delete",
+                    "Subject": "Flow could not be deleted for you: ",
+                    "Body": "<p>You have approved deletion of this flow as it is no longer useful.&nbsp;</p><p>However it cannot be deleted for you automatically and will need to be cleaned up and deleted manually.<br />This can happen for a variety of reasons including it being part of a solution or having dependencies.</p><p>Here is the error message received from an attempt to delete automatically.</p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "18aa110c-752a-ee11-bdf4-002248096574"
+                  },
+                  {
+                    "Solution": "Core",
+                    "SolutionArea": "Inventory",
+                    "TargetAudiance": "Admin",
+                    "FlowName": "Admin | Gather Tenant SRs",
+                    "ActionName": "Send New SRs to Admin",
+                    "Subject": "New SRs added to Tenant",
+                    "Body": "<p>New Security Roles have been added to the Tenant.</p><p>By default these will not be gathered into Environment Security Role Permissions table. Please review and mark to be tracked if you desire they be in that table.&nbsp;</p><p><u><strong>New SRs</strong></u></p>",
+                    "CommunicationType": "Mail",
+                    "MailGUID": "0f312eee-47cf-ee11-9079-000d3a341b0e"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "Initialize_singleMailUpdatePassed_to_true": {
+          "runAfter": {
+            "CoE_Mails": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "cb1dffbb-7952-46b3-9458-7a93286d94aa"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "singleMailUpdatePassed",
+                "type": "boolean",
+                "value": "@true"
+              }
+            ]
+          }
+        },
+        "Error_Handling": {
+          "actions": {
+            "Create_a_new_record_-_Sync_Flow_Errors": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_syncflowerrorses",
+                  "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                  "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "exponential",
+                  "count": 10,
+                  "interval": "PT10S"
+                }
+              }
+            },
+            "Terminate": {
+              "runAfter": {
+                "Update_Last_Run_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "500",
+                  "message": "Get Environments Failed"
+                }
+              }
+            },
+            "Get_ID_Fail": {
+              "runAfter": {
+                "Create_a_new_record_-_Sync_Flow_Errors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Update_Last_Run_Fail": {
+              "runAfter": {
+                "Get_ID_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": false
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Configure_All_or_One_Email": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+          },
+          "type": "Scope"
+        },
+        "Update_last_run_as_pass": {
+          "actions": {
+            "Update_Last_Run_Successful": {
+              "runAfter": {
+                "Get_ID_Pass": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_ID_Pass": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Catch_-_not_ready_to_take_last_run_date": {
+              "runAfter": {
+                "Update_Last_Run_Successful": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+              },
+              "type": "Compose",
+              "inputs": "Catch - not ready to take last run date"
+            }
+          },
+          "runAfter": {
+            "Error_Handling": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+          },
+          "type": "Scope"
+        },
+        "Configure_All_or_One_Email": {
+          "actions": {
+            "fake_all_solutions_installed": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "afd43ef0-8e69-477e-b9f3-8f7149b99aaf"
+              },
+              "type": "Compose",
+              "inputs": "@false",
+              "description": "Used for testing when we want to load all mails into the table, even if they are for solutions not installed"
+            },
+            "Parse_JSON": {
+              "runAfter": {
+                "fake_all_solutions_installed": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "502381a2-a4af-45c0-b1eb-eda6863ba31c"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@variables('MailsArray')",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Solution": {
+                        "type": "string"
+                      },
+                      "SolutionArea": {
+                        "type": "string"
+                      },
+                      "TargetAudiance": {
+                        "type": "string"
+                      },
+                      "FlowName": {
+                        "type": "string"
+                      },
+                      "ActionName": {
+                        "type": "string"
+                      },
+                      "Subject": {
+                        "type": "string"
+                      },
+                      "Body": {
+                        "type": "string"
+                      },
+                      "CommunicationType": {
+                        "type": "string"
+                      },
+                      "MailGUID": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "Solution",
+                      "SolutionArea",
+                      "TargetAudiance",
+                      "FlowName",
+                      "ActionName",
+                      "Subject",
+                      "Body",
+                      "CommunicationType",
+                      "MailGUID"
+                    ]
+                  }
+                }
+              }
+            },
+            "see_if_all_or_one_mail": {
+              "actions": {
+                "CleanUp_Deleted_Mails": {
+                  "actions": {
+                    "Get_past_time": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "5e5b793d-d60f-4f03-9161-96b46297fdb2"
+                      },
+                      "type": "Expression",
+                      "kind": "GetPastTime",
+                      "inputs": {
+                        "interval": 1,
+                        "timeUnit": "Day"
+                      }
+                    },
+                    "List_mails_not_updated_recently": {
+                      "runAfter": {
+                        "Get_past_time": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "ef620217-5779-4b8a-a27b-006091f7f366"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps_1",
+                          "operationId": "ListRecords",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "admin_customizedemails",
+                          "$select": "admin_customizedemailid",
+                          "$filter": "modifiedon lt @{body('Get_past_time')} and admin_language eq 'en-US'"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "Delete_mails_not_updated_recently": {
+                      "foreach": "@outputs('List_mails_not_updated_recently')?['body/value']",
+                      "actions": {
+                        "Delete_mail_not_updated_recently": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "0d6e0d23-7a7f-49a9-934c-a605154756bd"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "DeleteRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_customizedemails",
+                              "recordId": "@items('Delete_mails_not_updated_recently')?['admin_customizedemailid']"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "List_mails_not_updated_recently": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "ee8f7b19-bc29-4fc2-8f40-bbd5b3f1553f"
+                      },
+                      "type": "Foreach"
+                    }
+                  },
+                  "runAfter": {
+                    "Update_Mails": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "fdc94d88-0890-4ddf-8d6f-aed3209f0f32"
+                  },
+                  "type": "Scope"
+                },
+                "Update_Mails": {
+                  "actions": {
+                    "Apply_to_each_Mail": {
+                      "foreach": "@body('Parse_JSON')",
+                      "actions": {
+                        "if_soln_installed": {
+                          "actions": {
+                            "add": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "507212be-6480-45f5-9d8c-81b4f590b9a6"
+                              },
+                              "type": "Compose",
+                              "inputs": "add"
+                            },
+                            "See_if_mail_already_exists": {
+                              "runAfter": {
+                                "add": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "f8c11e20-a4ab-4551-9384-e10685ced6c5"
+                              },
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "connectionName": "shared_commondataserviceforapps",
+                                  "operationId": "ListRecords",
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                },
+                                "parameters": {
+                                  "entityName": "admin_customizedemails",
+                                  "$select": "admin_customizedemailid, admin_defaultbody, admin_defaultsubject, admin_body, admin_subject",
+                                  "$filter": "admin_customizedemailid eq @{items('Apply_to_each_Mail')['MailGUID']}",
+                                  "$top": 1
+                                },
+                                "authentication": "@parameters('$authentication')"
+                              }
+                            },
+                            "Add_or_Update_Mail": {
+                              "actions": {
+                                "Update_a_row": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "9b49759e-1d18-4076-ab15-0ea28d7eba8c"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps",
+                                      "operationId": "UpdateRecord",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "admin_customizedemails",
+                                      "recordId": "@items('Apply_to_each_Mail')['MailGUID']",
+                                      "item/admin_actionname": "@items('Apply_to_each_Mail')['ActionName']",
+                                      "item/admin_basedon": "@items('Apply_to_each_Mail')['MailGUID']",
+                                      "item/admin_body": "@if(equals(first(outputs('See_if_mail_already_exists')?['body/value'])?['admin_defaultbody'], true), items('Apply_to_each_Mail')['Body'], first(outputs('See_if_mail_already_exists')?['body/value'])?['admin_body'])",
+                                      "item/admin_communicationtype": "@items('Apply_to_each_Mail')['CommunicationType']",
+                                      "item/admin_flowname": "@items('Apply_to_each_Mail')['FlowName']",
+                                      "item/admin_language": "en-US",
+                                      "item/admin_name": "@{items('Apply_to_each_Mail')['FlowName']} -- @{items('Apply_to_each_Mail')['ActionName']} -- en-US",
+                                      "item/admin_solution": "@items('Apply_to_each_Mail')['Solution']",
+                                      "item/admin_solutionarea": "@items('Apply_to_each_Mail')['SolutionArea']",
+                                      "item/admin_subject": "@if(equals(first(outputs('See_if_mail_already_exists')?['body/value'])?['admin_defaultsubject'], true), items('Apply_to_each_Mail')['Subject'], first(outputs('See_if_mail_already_exists')?['body/value'])?['admin_subject'])",
+                                      "item/admin_targetaudiance": "@items('Apply_to_each_Mail')['TargetAudiance']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "See_if_mail_already_exists": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "else": {
+                                "actions": {
+                                  "Add_a_new_row": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                      "operationMetadataId": "b01af6f3-5316-451a-b878-f957d2f7df5f"
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "connectionName": "shared_commondataserviceforapps",
+                                        "operationId": "CreateRecord",
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                      },
+                                      "parameters": {
+                                        "entityName": "admin_customizedemails",
+                                        "item/admin_actionname": "@items('Apply_to_each_Mail')['ActionName']",
+                                        "item/admin_basedon": "@items('Apply_to_each_Mail')['MailGUID']",
+                                        "item/admin_body": "@items('Apply_to_each_Mail')['Body']",
+                                        "item/admin_communicationtype": "@items('Apply_to_each_Mail')['CommunicationType']",
+                                        "item/admin_customizedemailid": "@items('Apply_to_each_Mail')['MailGUID']",
+                                        "item/admin_defaultbody": true,
+                                        "item/admin_defaultsubject": true,
+                                        "item/admin_flowname": "@items('Apply_to_each_Mail')['FlowName']",
+                                        "item/admin_language": "en-US",
+                                        "item/admin_name": "@{items('Apply_to_each_Mail')['FlowName']} -- @{items('Apply_to_each_Mail')['ActionName']} -- en-US",
+                                        "item/admin_solution": "@items('Apply_to_each_Mail')['Solution']",
+                                        "item/admin_solutionarea": "@items('Apply_to_each_Mail')['SolutionArea']",
+                                        "item/admin_subject": "@items('Apply_to_each_Mail')['Subject']",
+                                        "item/admin_targetaudiance": "@items('Apply_to_each_Mail')['TargetAudiance']"
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                }
+                              },
+                              "expression": {
+                                "greater": [
+                                  "@length(outputs('See_if_mail_already_exists')?['body/value'])",
+                                  0
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b9fb8abb-7091-49a6-bc6a-bbf1ad518638"
+                              },
+                              "type": "If"
+                            }
+                          },
+                          "runAfter": {},
+                          "else": {
+                            "actions": {
+                              "Solution_Not_Installed": {
+                                "runAfter": {},
+                                "metadata": {
+                                  "operationMetadataId": "3943e565-6a37-46bd-92c7-d46a9881a80f"
+                                },
+                                "type": "Compose",
+                                "inputs": "Solution Not Installed"
+                              }
+                            }
+                          },
+                          "expression": {
+                            "or": [
+                              {
+                                "and": [
+                                  {
+                                    "equals": [
+                                      "@items('Apply_to_each_Mail')['Solution']",
+                                      "Core"
+                                    ]
+                                  },
+                                  {
+                                    "equals": [
+                                      "@outputs('hasCore')",
+                                      "@true"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "and": [
+                                  {
+                                    "equals": [
+                                      "@items('Apply_to_each_Mail')['Solution']",
+                                      "Governance"
+                                    ]
+                                  },
+                                  {
+                                    "equals": [
+                                      "@outputs('hasGov')",
+                                      "@true"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "and": [
+                                  {
+                                    "equals": [
+                                      "@items('Apply_to_each_Mail')['Solution']",
+                                      "Innovation Backlog"
+                                    ]
+                                  },
+                                  {
+                                    "equals": [
+                                      "@outputs('hasIB')",
+                                      "@true"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "and": [
+                                  {
+                                    "equals": [
+                                      "@items('Apply_to_each_Mail')['Solution']",
+                                      "Nurture"
+                                    ]
+                                  },
+                                  {
+                                    "equals": [
+                                      "@outputs('hasNurture')",
+                                      "@true"
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "and": [
+                                  {
+                                    "equals": [
+                                      "@items('Apply_to_each_Mail')['Solution']",
+                                      "test soln"
+                                    ]
+                                  },
+                                  {
+                                    "equals": [
+                                      "@outputs('hasTest')",
+                                      "@true"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "2ef2fdc9-1bcf-41fd-ac4b-2ccb12963f6a"
+                          },
+                          "type": "If"
+                        }
+                      },
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "d499c1e1-721b-472d-ae8c-4ddb98e864af"
+                      },
+                      "type": "Foreach"
+                    }
+                  },
+                  "runAfter": {
+                    "Get_Installed_Solutions": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "5cdb7b2f-cbf7-4e57-963f-d9edca4a6f1c"
+                  },
+                  "type": "Scope"
+                },
+                "Respond_to_a_PowerApp_or_flow_-_long_run": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "6483826d-f57e-46f3-a08e-c31a63a971a3"
+                  },
+                  "type": "Response",
+                  "kind": "PowerApp",
+                  "inputs": {
+                    "statusCode": 200,
+                    "body": {
+                      "return": "pass"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "return": {
+                          "title": "return",
+                          "x-ms-dynamically-added": true,
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "Get_Installed_Solutions": {
+                  "actions": {
+                    "List_rows": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "b7bc495d-b645-4a36-b7e5-6decc83b2f8d"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_commondataserviceforapps",
+                          "operationId": "ListRecords",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                        },
+                        "parameters": {
+                          "entityName": "solutions",
+                          "$select": "solutionid, friendlyname, ismanaged",
+                          "$filter": "solutionid ne null"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "Filter_to_Core": {
+                      "runAfter": {
+                        "List_rows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "30405e7f-1c33-4bdd-aa16-196e35f7da9b"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@outputs('List_rows')?['body/value']",
+                        "where": "@equals(item()?['friendlyname'], 'Center of Excellence - Core Components')"
+                      }
+                    },
+                    "hasCore": {
+                      "runAfter": {
+                        "Filter_to_Core": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "cd005add-5ea4-46ad-b9b6-cd25f02b5ed4"
+                      },
+                      "type": "Compose",
+                      "inputs": "@if(equals(first(body('Filter_to_Core'))?['solutionid'], null), false, true)"
+                    },
+                    "Filter_to_Gov": {
+                      "runAfter": {
+                        "List_rows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "609e0554-a2f7-43c9-b2fd-4a402a62c93f"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@outputs('List_rows')?['body/value']",
+                        "where": "@equals(item()?['friendlyname'], 'Center of Excellence - Governance Components')"
+                      }
+                    },
+                    "Filter_to_IB": {
+                      "runAfter": {
+                        "List_rows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "971cf629-7ad7-4662-9faf-e58e60373b1f"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@outputs('List_rows')?['body/value']",
+                        "where": "@equals(item()?['friendlyname'], 'Center of Excellence - Innovation Backlog')"
+                      }
+                    },
+                    "Filter_to_Nurture": {
+                      "runAfter": {
+                        "List_rows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "09b4d7df-3b7b-42d0-9b98-87bdc98ba327"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@outputs('List_rows')?['body/value']",
+                        "where": "@equals(item()?['friendlyname'], 'Center of Excellence - Nurture Components')"
+                      }
+                    },
+                    "Filter_to_Test_Soln": {
+                      "runAfter": {
+                        "List_rows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "8091be92-16ec-4c38-8701-c161e5247d15"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@outputs('List_rows')?['body/value']",
+                        "where": "@equals(item()?['friendlyname'], 'testing solution flow stuff')"
+                      }
+                    },
+                    "hasGov": {
+                      "runAfter": {
+                        "Filter_to_Gov": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "884fc197-36f0-4dbc-b671-8bba6d45ecb4"
+                      },
+                      "type": "Compose",
+                      "inputs": "@if(and(equals(first(body('Filter_to_Gov'))?['solutionid'], null), equals(outputs('fake_all_solutions_installed'), false)), false, true)"
+                    },
+                    "hasIB": {
+                      "runAfter": {
+                        "Filter_to_IB": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "7ea6cbdb-b12f-4dd7-81d3-02e3f7fa47eb"
+                      },
+                      "type": "Compose",
+                      "inputs": "@if(and(equals(first(body('Filter_to_IB'))?['solutionid'], null), equals(outputs('fake_all_solutions_installed'), false)), false, true)"
+                    },
+                    "hasNurture": {
+                      "runAfter": {
+                        "Filter_to_Nurture": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "dfc2563d-ffc8-4b85-aa0b-b1d1fcbf3bef"
+                      },
+                      "type": "Compose",
+                      "inputs": "@if(and(equals(first(body('Filter_to_Nurture'))?['solutionid'], null), equals(outputs('fake_all_solutions_installed'), false)), false, true)"
+                    },
+                    "hasTest": {
+                      "runAfter": {
+                        "Filter_to_Test_Soln": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "31cd1478-b03a-4ab0-bd86-0626a796ed25"
+                      },
+                      "type": "Compose",
+                      "inputs": "@if(and(equals(first(body('Filter_to_Test_Soln'))?['solutionid'], null), equals(outputs('fake_all_solutions_installed'), false)), false, true)"
+                    }
+                  },
+                  "runAfter": {
+                    "Respond_to_a_PowerApp_or_flow_-_long_run": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "95ba0149-7e30-47a1-93c2-79f6bba463cf"
+                  },
+                  "type": "Scope"
+                }
+              },
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Respond_to_a_PowerApp_or_flow": {
+                    "runAfter": {
+                      "Set_singleMailUpdatePassed_to_false": [
+                        "Succeeded",
+                        "Skipped"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "6483826d-f57e-46f3-a08e-c31a63a971a3"
+                    },
+                    "type": "Response",
+                    "kind": "PowerApp",
+                    "inputs": {
+                      "statusCode": 200,
+                      "body": {
+                        "return": "@{if(equals(variables('singleMailUpdatePassed'), true), 'pass', 'fail')}"
+                      },
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "return": {
+                            "title": "return",
+                            "x-ms-dynamically-added": true,
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "reset_this_mail": {
+                    "actions": {
+                      "Filter_to_this_mail": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "d4cc58fb-53a8-46a2-b0bd-b6b8ffde51d3"
+                        },
+                        "type": "Query",
+                        "inputs": {
+                          "from": "@body('Parse_JSON')",
+                          "where": "@equals(item()['MailGUID'], triggerBody()?['text'])"
+                        }
+                      },
+                      "Reset_this_mail_to_default": {
+                        "foreach": "@body('Filter_to_this_mail')",
+                        "actions": {
+                          "Get_mail_to_reset": {
+                            "runAfter": {},
+                            "metadata": {
+                              "operationMetadataId": "f8c11e20-a4ab-4551-9384-e10685ced6c5"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps",
+                                "operationId": "ListRecords",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "admin_customizedemails",
+                                "$select": "admin_customizedemailid, admin_defaultbody, admin_defaultsubject, admin_body, admin_subject",
+                                "$filter": "admin_customizedemailid eq @{triggerBody()?['text']}",
+                                "$top": 1
+                              },
+                              "authentication": "@parameters('$authentication')"
+                            }
+                          },
+                          "Reset_Subject_and_or_Body": {
+                            "actions": {
+                              "Update_subject_or_body": {
+                                "runAfter": {},
+                                "metadata": {
+                                  "operationMetadataId": "9b49759e-1d18-4076-ab15-0ea28d7eba8c"
+                                },
+                                "type": "OpenApiConnection",
+                                "inputs": {
+                                  "host": {
+                                    "connectionName": "shared_commondataserviceforapps",
+                                    "operationId": "UpdateRecord",
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                  },
+                                  "parameters": {
+                                    "entityName": "admin_customizedemails",
+                                    "recordId": "@items('Reset_this_mail_to_default')?['MailGUID']",
+                                    "item/admin_actionname": "@items('Reset_this_mail_to_default')?['ActionName']",
+                                    "item/admin_basedon": "@items('Reset_this_mail_to_default')?['MailGUID']",
+                                    "item/admin_body": "@if(equals(triggerBody()?['boolean_2'], true), items('Reset_this_mail_to_default')?['Body'], first(outputs('Get_mail_to_reset')?['body/value'])?['admin_body'])",
+                                    "item/admin_communicationtype": "@items('Reset_this_mail_to_default')?['CommunicationType']",
+                                    "item/admin_defaultbody": "@if(equals(triggerBody()?['boolean_2'], true), true, false)",
+                                    "item/admin_defaultsubject": "@if(equals(triggerBody()?['boolean_1'], true), true, false)",
+                                    "item/admin_flowname": "@items('Reset_this_mail_to_default')?['FlowName']",
+                                    "item/admin_language": "en-US",
+                                    "item/admin_name": "@{items('Reset_this_mail_to_default')?['FlowName']} -- @{items('Reset_this_mail_to_default')?['ActionName']} -- en-US",
+                                    "item/admin_solution": "@items('Reset_this_mail_to_default')?['Solution']",
+                                    "item/admin_solutionarea": "@items('Reset_this_mail_to_default')?['SolutionArea']",
+                                    "item/admin_subject": "@if(equals(triggerBody()?['boolean_1'], true), items('Reset_this_mail_to_default')?['Subject'], first(outputs('Get_mail_to_reset')?['body/value'])?['admin_subject'])",
+                                    "item/admin_targetaudiance": "@items('Reset_this_mail_to_default')?['TargetAudiance']"
+                                  },
+                                  "authentication": "@parameters('$authentication')"
+                                }
+                              }
+                            },
+                            "runAfter": {
+                              "Get_mail_to_reset": [
+                                "Succeeded"
+                              ]
+                            },
+                            "else": {
+                              "actions": {
+                                "something_went_wrong_add_it_instead": {
+                                  "runAfter": {},
+                                  "metadata": {
+                                    "operationMetadataId": "b01af6f3-5316-451a-b878-f957d2f7df5f"
+                                  },
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "host": {
+                                      "connectionName": "shared_commondataserviceforapps",
+                                      "operationId": "CreateRecord",
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                    },
+                                    "parameters": {
+                                      "entityName": "admin_customizedemails",
+                                      "item/admin_actionname": "@items('Reset_this_mail_to_default')?['ActionName']",
+                                      "item/admin_basedon": "@items('Reset_this_mail_to_default')?['MailGUID']",
+                                      "item/admin_body": "@items('Reset_this_mail_to_default')?['Body']",
+                                      "item/admin_communicationtype": "@items('Reset_this_mail_to_default')?['CommunicationType']",
+                                      "item/admin_customizedemailid": "@items('Reset_this_mail_to_default')?['MailGUID']",
+                                      "item/admin_defaultbody": true,
+                                      "item/admin_defaultsubject": true,
+                                      "item/admin_flowname": "@items('Reset_this_mail_to_default')?['FlowName']",
+                                      "item/admin_language": "en-US",
+                                      "item/admin_name": "@{items('Reset_this_mail_to_default')?['FlowName']} -- @{items('Reset_this_mail_to_default')?['ActionName']} -- en-US",
+                                      "item/admin_solution": "@items('Reset_this_mail_to_default')?['Solution']",
+                                      "item/admin_solutionarea": "@items('Reset_this_mail_to_default')?['SolutionArea']",
+                                      "item/admin_subject": "@items('Reset_this_mail_to_default')?['Subject']",
+                                      "item/admin_targetaudiance": "@items('Reset_this_mail_to_default')?['TargetAudiance']"
+                                    },
+                                    "authentication": "@parameters('$authentication')"
+                                  }
+                                }
+                              }
+                            },
+                            "expression": {
+                              "greater": [
+                                "@length(outputs('Get_mail_to_reset')?['body/value'])",
+                                0
+                              ]
+                            },
+                            "metadata": {
+                              "operationMetadataId": "b9fb8abb-7091-49a6-bc6a-bbf1ad518638"
+                            },
+                            "type": "If"
+                          }
+                        },
+                        "runAfter": {
+                          "Filter_to_this_mail": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "e1fc13aa-e3b4-4ca5-b92f-d4537ba25b9c"
+                        },
+                        "type": "Foreach"
+                      }
+                    },
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "d1cbc0ee-d814-4054-80c8-72066229f2c1"
+                    },
+                    "type": "Scope"
+                  },
+                  "Set_singleMailUpdatePassed_to_false": {
+                    "runAfter": {
+                      "reset_this_mail": [
+                        "Failed"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "6c983d19-179b-482a-895c-b13587359040"
+                    },
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "singleMailUpdatePassed",
+                      "value": "@false"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@triggerBody()['boolean']",
+                  "@true"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f219d7b3-78bf-4de3-8037-906e4a60d718"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Initialize_singleMailUpdatePassed_to_true": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f40be2f3-7689-449a-ac9b-11493b42b432"
+          },
+          "type": "Scope"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

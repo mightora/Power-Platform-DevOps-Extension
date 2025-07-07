@@ -1,0 +1,1921 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_commondataserviceforapps_3": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "FullInventory (admin_FullInventory)": {
+          "defaultValue": true,
+          "type": "Bool",
+          "metadata": {
+            "schemaName": "admin_FullInventory",
+            "description": "Inventory - Determines if you want to only update objects that have changed, or all objects. Defaults to No. Switching to Yes will cause the flows to inventory every single app/flow/etc in the tenant and make the flows long running "
+          }
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        },
+        "CoE System User ID (admin_CoESystemUserID)": {
+          "defaultValue": "6f018471-30d7-ef11-8ee9-000d3a328366",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_CoESystemUserID",
+            "description": "in the maker table we store a user for system with an id. Storing here so that it can be referenced without having to look it up all the time."
+          }
+        },
+        "DelayObjectInventory (admin_DelayObjectInventory)": {
+          "defaultValue": false,
+          "type": "Bool",
+          "metadata": {
+            "schemaName": "admin_DelayObjectInventory",
+            "description": "Inventory - If Yes, will run a delay step to assist with the Dataverse throttling. Things like solutions, apps, flows, will have delays in the individual envt runs. Default No."
+          }
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added_or_modified": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "parameters": {
+              "subscriptionRequest/message": 4,
+              "subscriptionRequest/entityname": "admin_environment",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/name": "cead57c0-a080-ee11-8179-000d3a341fff"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "26ca7bc4-b502-4e71-82e1-5b3e3c124d33"
+          }
+        }
+      },
+      "actions": {
+        "Check_if_Portal_can_be_retrieved_for_this_environment": {
+          "type": "If",
+          "expression": {
+            "or": [
+              {
+                "equals": [
+                  "@triggerOutputs()?['body/admin_environmentdeleted']",
+                  "@true"
+                ]
+              },
+              {
+                "equals": [
+                  "@triggerOutputs()?['body/admin_hascds']",
+                  "@false"
+                ]
+              },
+              {
+                "equals": [
+                  "@triggerOutputs()?['body/admin_excusefrominventory']",
+                  "@true"
+                ]
+              },
+              {
+                "not": {
+                  "equals": [
+                    "@triggerOutputs()?['body/admin_environmentruntimestate']",
+                    "Enabled"
+                  ]
+                }
+              }
+            ]
+          },
+          "actions": {
+            "Terminate,_inquiry_not_supported": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              },
+              "metadata": {
+                "operationMetadataId": "303cf191-ec29-40ed-b90b-d73833e269c0"
+              }
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "9b6688e4-c25b-4e40-9deb-fcf181094357"
+          }
+        },
+        "Initialize_portalsToInvenotry": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "portalsToInvenotry",
+                "type": "array"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_variable_AdvancedFormStepHasTablePermissionsEnabled": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b133bb41-c98a-45c4-a8f4-fbf40b3c3873"
+          }
+        },
+        "Inventory_Portals_for_this_envt": {
+          "type": "Scope",
+          "actions": {
+            "Get_Basics": {
+              "type": "Scope",
+              "actions": {
+                "Get_Portals_and_Exit_if_no_permissions_or_no_portals": {
+                  "type": "Scope",
+                  "actions": {
+                    "Count_Portals": {
+                      "type": "If",
+                      "expression": {
+                        "and": [
+                          {
+                            "equals": [
+                              "@if(\r\n  equals(variables('varPortalSource'), 'EDM'),\r\n  length(coalesce(outputs('List_Portal_EDM')?['body/value'], json('[]'))),\r\n  length(coalesce(outputs('List_Envt_Portals')?['body/value'], json('[]')))\r\n)\r\n",
+                              0
+                            ]
+                          }
+                        ]
+                      },
+                      "actions": {
+                        "Quit_if_no_Portals": {
+                          "type": "Terminate",
+                          "inputs": {
+                            "runStatus": "Succeeded"
+                          },
+                          "metadata": {
+                            "operationMetadataId": "f8a93c00-c6c9-4716-9e92-62ed6d148503"
+                          }
+                        }
+                      },
+                      "else": {
+                        "actions": {}
+                      },
+                      "runAfter": {
+                        "SetPortalSource(EDM_or_Standard)": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "b7370f16-6982-490a-92dd-0fd0001e2c79"
+                      }
+                    },
+                    "Terminate_if_no_access": {
+                      "type": "Terminate",
+                      "inputs": {
+                        "runStatus": "Succeeded"
+                      },
+                      "runAfter": {
+                        "List_Envt_Portals": [
+                          "Failed"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "713f1ba1-95d3-4176-80c2-0488efa1cb30"
+                      }
+                    },
+                    "List_Envt_Portals": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                          "entityName": "adx_websites",
+                          "$select": "adx_name, modifiedon, createdon, adx_websiteid, adx_primarydomainname",
+                          "$filter": "adx_websiteid ne null"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "ListRecordsWithOrganization",
+                          "connectionName": "shared_commondataserviceforapps"
+                        },
+                        "retryPolicy": {
+                          "type": "exponential",
+                          "count": 20,
+                          "interval": "PT20S"
+                        }
+                      },
+                      "runAfter": {
+                        "List_Portal_EDM": [
+                          "Failed"
+                        ]
+                      },
+                      "runtimeConfiguration": {
+                        "paginationPolicy": {
+                          "minimumItemCount": 100000
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "6ef2cc8a-c705-4ed3-a72a-c92fe9bc39f4"
+                      }
+                    },
+                    "List_Portal_EDM": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                          "entityName": "mspp_websites",
+                          "$select": "mspp_name, mspp_modifiedon, mspp_createdon, mspp_websiteid, mspp_primarydomainname"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "ListRecordsWithOrganization",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "73edf14c-2dbe-4fce-8baf-326160662390"
+                      }
+                    },
+                    "SetPortalSource(EDM_or_Standard)": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "varPortalSource",
+                        "value": "@if(and(equals(outputs('List_Portal_EDM')?['statusCode'], 200), greater(length(outputs('List_Portal_EDM')?['body/value']), 0)), 'EDM', 'Standard')"
+                      },
+                      "runAfter": {
+                        "Terminate_if_no_access": [
+                          "Skipped"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "55b3cf80-4385-405c-95f2-ce8a33017912"
+                      }
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "3e11da85-65c2-4bec-a9d3-76ca594e26b2"
+                  }
+                },
+                "List_Inventory_Portals": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "admin_portals",
+                      "$select": "admin_portalid, admin_portaluniquename, admin_portalwebsiteid, admin_portaldisplayname, admin_portalwebsitename, statecode",
+                      "$filter": "_admin_portalenvironment_value eq '@{triggerOutputs()?['body/admin_environmentid']}' and admin_portaldeleted ne true"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "ListRecords",
+                      "connectionName": "shared_commondataserviceforapps"
+                    },
+                    "retryPolicy": {
+                      "type": "exponential",
+                      "count": 20,
+                      "interval": "PT20S"
+                    }
+                  },
+                  "runAfter": {
+                    "Get_Portals_and_Exit_if_no_permissions_or_no_portals": [
+                      "Succeeded"
+                    ]
+                  },
+                  "runtimeConfiguration": {
+                    "paginationPolicy": {
+                      "minimumItemCount": 100000
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "90eb78c4-2fb8-4e37-af13-0da2fd53c059"
+                  }
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "efeb0f32-2b27-4c3f-b104-0b2d7d855845"
+              }
+            },
+            "Look_for_Portals_to_Inventory": {
+              "type": "Scope",
+              "actions": {
+                "Look_for_new_Portals": {
+                  "type": "Scope",
+                  "actions": {
+                    "Get_Inventory_-_New_Portals": {
+                      "type": "Scope",
+                      "actions": {
+                        "Select_Inventory_-_New_Portals": {
+                          "type": "Select",
+                          "inputs": {
+                            "from": "@outputs('List_Inventory_Portals')?['body/value']",
+                            "select": {
+                              "Portal_Unique": "@item()?['admin_portaluniquename']",
+                              "Portal_NonUnique": "@item()?['admin_portalwebsiteid']"
+                            }
+                          },
+                          "metadata": {
+                            "operationMetadataId": "d9864193-358e-4194-9acd-28dab1de4882"
+                          }
+                        },
+                        "Parse_Inventory_-_New_Portals": {
+                          "type": "ParseJson",
+                          "inputs": {
+                            "content": "@body('Select_Inventory_-_New_Portals')",
+                            "schema": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "Portal_Unique": {
+                                    "type": "string"
+                                  },
+                                  "Portal_NonUnique": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "Portal_Unique",
+                                  "Portal_NonUnique"
+                                ]
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "Select_Inventory_-_New_Portals": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "274daa1f-66a7-4bf4-be08-c3a0e2f758d7"
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "61117d90-0e7a-40c6-8484-f0212a2b0cc4"
+                      }
+                    },
+                    "Get_Actual_-_New_Portals": {
+                      "type": "Scope",
+                      "actions": {
+                        "Select_Actual_-_New_Portals": {
+                          "type": "Select",
+                          "inputs": {
+                            "from": "@if(equals(outputs('List_Portal_EDM')?['statusCode'], 200), outputs('List_Portal_EDM')?['body/value'], outputs('List_Envt_Portals')?['body/value'])",
+                            "select": {
+                              "Portal_Unique": "@concat(triggerOutputs()?['body/admin_environmentid'], '_', coalesce(item()?['mspp_websiteid'], item()?['adx_websiteid']))",
+                              "Portal_NonUnique": "@coalesce(item()?['mspp_websiteid'], item()?['adx_websiteid'])"
+                            }
+                          },
+                          "metadata": {
+                            "operationMetadataId": "8410edf3-be25-420e-9c3d-d5c2a4d8ef20"
+                          }
+                        },
+                        "Parse_Actual_-_New_Portals": {
+                          "type": "ParseJson",
+                          "inputs": {
+                            "content": "@body('Select_Actual_-_New_Portals')",
+                            "schema": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "Portal_Unique": {
+                                    "type": "string"
+                                  },
+                                  "Portal_NonUnique": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "Portal_Unique",
+                                  "Portal_NonUnique"
+                                ]
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "Select_Actual_-_New_Portals": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "bb1cea14-82ae-4c5e-93a4-66f7d675861e"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Get_Inventory_-_New_Portals": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "7343aee1-301c-4197-a13f-d3e6968adc8b"
+                      }
+                    },
+                    "Add_new_ones_to_inventory_array": {
+                      "type": "Scope",
+                      "actions": {
+                        "AddToInventory": {
+                          "type": "Query",
+                          "inputs": {
+                            "from": "@body('Parse_Actual_-_New_Portals')",
+                            "where": "@not(contains(body('Parse_Inventory_-_New_Portals'), item()))"
+                          },
+                          "metadata": {
+                            "operationMetadataId": "ec8ebf56-f3e3-4251-9491-440c69d207e4"
+                          }
+                        },
+                        "Add_new_to_array": {
+                          "type": "Foreach",
+                          "foreach": "@body('AddToInventory')",
+                          "actions": {
+                            "Append_to_portalsToInvenotry_-_new_portals": {
+                              "type": "AppendToArrayVariable",
+                              "inputs": {
+                                "name": "portalsToInvenotry",
+                                "value": "@items('Add_new_to_array')"
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b5cba045-3339-477f-a67f-2b5ce63b9928"
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "AddToInventory": [
+                              "Succeeded"
+                            ]
+                          },
+                          "runtimeConfiguration": {
+                            "concurrency": {
+                              "repetitions": 50
+                            }
+                          },
+                          "metadata": {
+                            "operationMetadataId": "6db8b7e6-0fdd-4817-b396-693634e27477"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Get_Actual_-_New_Portals": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "e201560e-ea4a-4844-a4e1-1a38aeefe1ed"
+                      }
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "0c3972e2-243e-4814-bbac-18203f99e3f9"
+                  }
+                },
+                "If_full_inventory_run": {
+                  "type": "If",
+                  "expression": {
+                    "equals": [
+                      "@parameters('FullInventory (admin_FullInventory)')",
+                      "@true"
+                    ]
+                  },
+                  "actions": {
+                    "Add_every_inventoried_portal_to_portalsToInventory": {
+                      "type": "Foreach",
+                      "foreach": "@outputs('List_Inventory_Portals')?['body/value']",
+                      "actions": {
+                        "Append_to_portalsToInvenotry_-_full_inventory": {
+                          "type": "AppendToArrayVariable",
+                          "inputs": {
+                            "name": "portalsToInvenotry",
+                            "value": {
+                              "Portal_Unique": "@items('Add_every_inventoried_portal_to_portalsToInventory')?['admin_portaluniquename']",
+                              "Portal_NonUnique": "@items('Add_every_inventoried_portal_to_portalsToInventory')?['admin_portalwebsiteid']"
+                            }
+                          },
+                          "metadata": {
+                            "operationMetadataId": "5be2389e-be4a-4737-aa0d-487ae30aa1c4"
+                          }
+                        }
+                      },
+                      "runtimeConfiguration": {
+                        "concurrency": {
+                          "repetitions": 50
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "afd988eb-2f3e-4962-ba12-7e4f2f573c82"
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Look_for_portals_manually_flagged_for_inventory": {
+                        "type": "Scope",
+                        "actions": {
+                          "portalsToInventory_-_ManualRequest": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "parameters": {
+                                "entityName": "admin_portals",
+                                "$select": "admin_portalid, admin_portaluniquename, admin_portalwebsiteid, admin_portaldisplayname, admin_portalwebsitename",
+                                "$filter": "_admin_portalenvironment_value eq '@{triggerOutputs()?['body/admin_environmentid']}' and admin_inventoryme eq true"
+                              },
+                              "host": {
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                "operationId": "ListRecords",
+                                "connectionName": "shared_commondataserviceforapps"
+                              },
+                              "retryPolicy": {
+                                "type": "exponential",
+                                "count": 20,
+                                "interval": "PT20S"
+                              }
+                            },
+                            "runtimeConfiguration": {
+                              "paginationPolicy": {
+                                "minimumItemCount": 100000
+                              }
+                            },
+                            "metadata": {
+                              "operationMetadataId": "0e8d8c5b-cc57-472d-864e-103af0ef245b"
+                            }
+                          },
+                          "Add_manual_requests_to_array": {
+                            "type": "Foreach",
+                            "foreach": "@outputs('portalsToInventory_-_ManualRequest')?['body/value']",
+                            "actions": {
+                              "Append_to_portalsToInvenotry_-_Manual_Requests": {
+                                "type": "AppendToArrayVariable",
+                                "inputs": {
+                                  "name": "portalsToInvenotry",
+                                  "value": {
+                                    "Portal_Unique": "@items('Add_manual_requests_to_array')?['admin_portaluniquename']",
+                                    "Portal_NonUnique": "@items('Add_manual_requests_to_array')?['admin_portalwebsiteid']"
+                                  }
+                                },
+                                "metadata": {
+                                  "operationMetadataId": "f6a9316e-3842-469d-b7b0-2fad69e91448"
+                                }
+                              }
+                            },
+                            "runAfter": {
+                              "portalsToInventory_-_ManualRequest": [
+                                "Succeeded"
+                              ]
+                            },
+                            "runtimeConfiguration": {
+                              "concurrency": {
+                                "repetitions": 50
+                              }
+                            },
+                            "metadata": {
+                              "operationMetadataId": "36d126b2-b699-44ff-91bb-804ce9296a8c"
+                            }
+                          }
+                        },
+                        "metadata": {
+                          "operationMetadataId": "9616f302-9d94-44a0-b657-9b1daa4f78a2"
+                        }
+                      },
+                      "Look_for_ones_modified_since_date": {
+                        "type": "Scope",
+                        "actions": {
+                          "Get_past_time": {
+                            "type": "Expression",
+                            "description": "from env variable",
+                            "kind": "GetPastTime",
+                            "inputs": {
+                              "interval": 255,
+                              "timeUnit": "Day"
+                            },
+                            "metadata": {
+                              "operationMetadataId": "214bd6fa-e96e-4732-9380-2b5f1f449478"
+                            }
+                          },
+                          "Filter_to_portals_modified_since_Get_past_time": {
+                            "type": "Query",
+                            "inputs": {
+                              "from": "@if(equals(variables('varPortalSource'), 'EDM'), outputs('List_Portal_EDM')?['body/value'], outputs('List_Envt_Portals')?['body/value'])",
+                              "where": "@or(equals(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_modifiedon', 'modifiedon')], null), greater(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_modifiedon', 'modifiedon')], body('Get_past_time')))"
+                            },
+                            "runAfter": {
+                              "Get_past_time": [
+                                "Succeeded"
+                              ]
+                            },
+                            "metadata": {
+                              "operationMetadataId": "63cbd0e2-57e8-449a-942a-5d8fd1f78b09"
+                            }
+                          },
+                          "Add_each_recently_modified_to_array": {
+                            "type": "Foreach",
+                            "foreach": "@body('Filter_to_portals_modified_since_Get_past_time')",
+                            "actions": {
+                              "Get_Portal_from_Inventory": {
+                                "type": "OpenApiConnection",
+                                "inputs": {
+                                  "parameters": {
+                                    "entityName": "admin_portals",
+                                    "$select": "admin_portalid, admin_portaluniquename, admin_portalwebsiteid, admin_portaldisplayname, admin_portalwebsitename, admin_portalmodifiedon",
+                                    "$filter": "admin_portaluniquename eq '@{concat(triggerOutputs()?['body/admin_environmentid'], '_', items('Add_each_recently_modified_to_array')?['adx_websiteid'])}'"
+                                  },
+                                  "host": {
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                    "operationId": "ListRecords",
+                                    "connectionName": "shared_commondataserviceforapps"
+                                  },
+                                  "retryPolicy": {
+                                    "type": "exponential",
+                                    "count": 20,
+                                    "interval": "PT20S"
+                                  }
+                                },
+                                "runtimeConfiguration": {
+                                  "paginationPolicy": {
+                                    "minimumItemCount": 100000
+                                  }
+                                },
+                                "metadata": {
+                                  "operationMetadataId": "c2776441-5eeb-4fb9-9e49-21a132061f3a"
+                                }
+                              },
+                              "If_exists_in_inventory": {
+                                "type": "If",
+                                "expression": {
+                                  "greater": [
+                                    "@length(outputs('Get_Portal_from_Inventory')?['body/value'])",
+                                    0
+                                  ]
+                                },
+                                "actions": {
+                                  "see_if_recently_modified": {
+                                    "type": "Scope",
+                                    "actions": {
+                                      "theLastDateModifiedProduct": {
+                                        "type": "Compose",
+                                        "inputs": "@if(equals(items('Add_each_recently_modified_to_array')?['modifiedon'], null), '', formatDateTime(items('Add_each_recently_modified_to_array')?['modifiedon'], 'yyyy-MM-dd HH:mm:ss'))",
+                                        "metadata": {
+                                          "operationMetadataId": "168ece0f-af10-456a-9b2c-2b86b076359c"
+                                        }
+                                      },
+                                      "If_modified_add_to_inventory": {
+                                        "type": "If",
+                                        "expression": {
+                                          "or": [
+                                            {
+                                              "equals": [
+                                                "@length(outputs('theLastDateModifiedCoE'))",
+                                                0
+                                              ]
+                                            },
+                                            {
+                                              "equals": [
+                                                "@length(outputs('theLastDateModifiedProduct'))",
+                                                0
+                                              ]
+                                            },
+                                            {
+                                              "less": [
+                                                "@outputs('theLastDateModifiedCoE')",
+                                                "@outputs('theLastDateModifiedProduct')"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        "actions": {
+                                          "Append_to_array_variable_-_recently_modified": {
+                                            "type": "AppendToArrayVariable",
+                                            "inputs": {
+                                              "name": "portalsToInvenotry",
+                                              "value": {
+                                                "Portal_Unique": "@first(outputs('Get_Portal_from_Inventory')?['body/value'])?['admin_portaluniquename']",
+                                                "Portal_NonUnique": "@first(outputs('Get_Portal_from_Inventory')?['body/value'])?['admin_portalwebsiteid']"
+                                              }
+                                            },
+                                            "metadata": {
+                                              "operationMetadataId": "4737fe2b-cdfd-4ba7-85b9-b515b604a8c2"
+                                            }
+                                          }
+                                        },
+                                        "else": {
+                                          "actions": {}
+                                        },
+                                        "runAfter": {
+                                          "theLastDateModifiedCoE": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "e844dd8a-5c7b-4d80-92e9-7b26ab15397b"
+                                        }
+                                      },
+                                      "theLastDateModifiedCoE": {
+                                        "type": "Compose",
+                                        "inputs": "@if(equals(first(outputs('Get_Portal_from_Inventory')?['body/value'])?['admin_portalmodifiedon'], null), '', formatDateTime(first(outputs('Get_Portal_from_Inventory')?['body/value'])?['admin_portalmodifiedon'], 'yyyy-MM-dd HH:mm:ss'))",
+                                        "runAfter": {
+                                          "theLastDateModifiedProduct": [
+                                            "Succeeded"
+                                          ]
+                                        },
+                                        "metadata": {
+                                          "operationMetadataId": "0a56b9d1-ffc4-433e-abe7-c520c8f318e7"
+                                        }
+                                      }
+                                    },
+                                    "metadata": {
+                                      "operationMetadataId": "24b0a08f-7f0b-4995-8834-add08a612a97"
+                                    }
+                                  }
+                                },
+                                "else": {
+                                  "actions": {}
+                                },
+                                "runAfter": {
+                                  "Get_Portal_from_Inventory": [
+                                    "Succeeded"
+                                  ]
+                                },
+                                "metadata": {
+                                  "operationMetadataId": "c153161f-e91f-4ab1-9dc8-280b4f3816c0"
+                                }
+                              }
+                            },
+                            "runAfter": {
+                              "Filter_to_portals_modified_since_Get_past_time": [
+                                "Succeeded"
+                              ]
+                            },
+                            "runtimeConfiguration": {
+                              "concurrency": {
+                                "repetitions": 50
+                              }
+                            },
+                            "metadata": {
+                              "operationMetadataId": "32127bd9-2400-4d2f-b15e-6d176fc23554"
+                            }
+                          }
+                        },
+                        "runAfter": {
+                          "Look_for_portals_manually_flagged_for_inventory": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "4c090145-2a78-4b48-994e-32e2be8b1c11"
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Look_for_new_Portals": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c0e211f1-0938-41a4-ac62-faf1ae2e371c"
+                  }
+                },
+                "Raw_to_Inventory": {
+                  "type": "Compose",
+                  "inputs": "@variables('portalsToInvenotry')",
+                  "runAfter": {
+                    "If_full_inventory_run": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "ed6ce112-c849-4027-9411-49f382ff01fc"
+                  }
+                },
+                "Distinct_to_Inventory": {
+                  "type": "Compose",
+                  "inputs": "@union(variables('portalsToInvenotry'), variables('portalsToInvenotry'))",
+                  "runAfter": {
+                    "Raw_to_Inventory": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "15557393-f770-4298-8857-aa91a143b52e"
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_Basics": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "b9ef3d69-2a72-41e6-9640-f43ba22c8ed0"
+              }
+            },
+            "Inventory_Portals": {
+              "type": "Scope",
+              "actions": {
+                "For_each_item_to_inventory": {
+                  "type": "Foreach",
+                  "foreach": "@outputs('Distinct_to_Inventory')",
+                  "actions": {
+                    "Get_actual_object": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                          "entityName": "@if(equals(variables('varPortalSource'), 'EDM'), 'mspp_websites', 'adx_websites')",
+                          "recordId": "@items('For_each_item_to_inventory')?['Portal_NonUnique']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "GetItemWithOrganization",
+                          "connectionName": "shared_commondataserviceforapps"
+                        },
+                        "retryPolicy": {
+                          "type": "exponential",
+                          "count": 20,
+                          "interval": "PT20S"
+                        }
+                      },
+                      "metadata": {
+                        "operationMetadataId": "c392d00b-9e49-4834-92e3-ebe566f67ca3"
+                      }
+                    },
+                    "CATCH:_Object_no_longer_exists": {
+                      "type": "Compose",
+                      "inputs": "Object no longer exists",
+                      "runAfter": {
+                        "Get_actual_object": [
+                          "Failed"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "8a5890f6-d918-4a9f-b39f-bd646233e439"
+                      }
+                    },
+                    "Object_Found_so_add_or_update_inventory": {
+                      "type": "Scope",
+                      "actions": {
+                        "See_if_in_inventory": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "entityName": "admin_portals",
+                              "$select": "admin_portalid",
+                              "$filter": "admin_portaluniquename eq '@{items('For_each_item_to_inventory')?['Portal_Unique']}'"
+                            },
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                              "operationId": "ListRecords",
+                              "connectionName": "shared_commondataserviceforapps"
+                            },
+                            "retryPolicy": {
+                              "type": "exponential",
+                              "count": 20,
+                              "interval": "PT20S"
+                            }
+                          },
+                          "runAfter": {
+                            "Get_Owner_Details": [
+                              "Succeeded"
+                            ]
+                          },
+                          "runtimeConfiguration": {
+                            "paginationPolicy": {
+                              "minimumItemCount": 100000
+                            }
+                          },
+                          "metadata": {
+                            "operationMetadataId": "db3e5b77-c2eb-430b-a5a1-2b9fd96c1d71"
+                          }
+                        },
+                        "GUID_to_use": {
+                          "type": "Compose",
+                          "inputs": "@if(equals(length(outputs('See_if_in_inventory')?['body/value']), 0), guid(), first(outputs('See_if_in_inventory')?['body/value'])['admin_portalid'])",
+                          "runAfter": {
+                            "See_if_in_inventory": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "2aa06b3d-bba6-4ec1-a0df-be421c60ae9c"
+                          }
+                        },
+                        "Site_Settings_Filtering_for_Authentication_Types": {
+                          "type": "Scope",
+                          "actions": {
+                            "List_Related_Site_Settings_to_the_portal": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                                  "entityName": "@if(equals(variables('varPortalSource'), 'EDM'), 'mspp_sitesettings', 'adx_sitesettings')",
+                                  "$filter": "@outputs('FilterStringForSiteSettings')"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "ListRecordsWithOrganization",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "runAfter": {
+                                "FilterStringForSiteSettings": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "runtimeConfiguration": {
+                                "paginationPolicy": {
+                                  "minimumItemCount": 100000
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "6ef2cc8a-c705-4ed3-a72a-c92fe9bc39f4"
+                              }
+                            },
+                            "Filter_array:_Return_Local_Auth_Site_Setting": {
+                              "type": "Query",
+                              "inputs": {
+                                "from": "@outputs('List_Related_Site_Settings_to_the_portal')?['body/value']",
+                                "where": "@equals(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_name', 'adx_name')],'Authentication/Registration/LocalLoginEnabled')"
+                              },
+                              "runAfter": {
+                                "List_Related_Site_Settings_to_the_portal": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "22188e6b-29ee-4fc9-b2c1-d4825e46b321"
+                              }
+                            },
+                            "Auth_Local_Authentication_Enabled": {
+                              "type": "Compose",
+                              "description": "if filter returned no rows, default to true, else get value",
+                              "inputs": "@if(equals(length(body('Filter_array:_Return_Local_Auth_Site_Setting')), 0), true, first(body('Filter_array:_Return_Local_Auth_Site_Setting'))?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_value', 'adx_value')])",
+                              "runAfter": {
+                                "Filter_array:_Return_Local_Auth_Site_Setting": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "c830a6dc-adb0-4362-bfa6-51b5f76ead69"
+                              }
+                            },
+                            "Filter_array:_Return_Open_Registration_Enabled_Site_Setting": {
+                              "type": "Query",
+                              "inputs": {
+                                "from": "@outputs('List_Related_Site_Settings_to_the_portal')?['body/value']",
+                                "where": "@equals(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_name', 'adx_name')],'Authentication/Registration/OpenRegistrationEnabled')"
+                              },
+                              "runAfter": {
+                                "Auth_Local_Authentication_Enabled": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b8a3c950-dcee-46b9-b575-b9ff00f3902f"
+                              }
+                            },
+                            "Auth_Open_Registration_Enabled": {
+                              "type": "Compose",
+                              "description": "if filter returned no rows, default to true, else get value",
+                              "inputs": "@if(equals(length(body('Filter_array:_Return_Open_Registration_Enabled_Site_Setting')), 0), true, first(body('Filter_array:_Return_Open_Registration_Enabled_Site_Setting'))?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_value', 'adx_value')])",
+                              "runAfter": {
+                                "Filter_array:_Return_Open_Registration_Enabled_Site_Setting": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "1e351ecc-8fb6-4003-a92a-53283faaf455"
+                              }
+                            },
+                            "Filter_Array:_Return_Local_Registration_Enabled_Site_Setting": {
+                              "type": "Query",
+                              "inputs": {
+                                "from": "@outputs('List_Related_Site_Settings_to_the_portal')?['body/value']",
+                                "where": "@equals(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_name', 'adx_name')],'Authentication/Registration/Enabled')"
+                              },
+                              "runAfter": {
+                                "Auth_Open_Registration_Enabled": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "64aac7ba-017e-4a44-a1a6-490befb619bc"
+                              }
+                            },
+                            "Auth_Local_Registration_Enabled": {
+                              "type": "Compose",
+                              "description": "if filter returned no rows, default to true, else get value",
+                              "inputs": "@if(equals(length(body('Filter_Array:_Return_Local_Registration_Enabled_Site_Setting')), 0), true, first(body('Filter_Array:_Return_Local_Registration_Enabled_Site_Setting'))?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_value', 'adx_value')])",
+                              "runAfter": {
+                                "Filter_Array:_Return_Local_Registration_Enabled_Site_Setting": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "6e8a1960-5207-49fa-b47f-b9e6f6b2b7aa"
+                              }
+                            },
+                            "Filter_Array:_Return_Invitation_Enabled_Site_Setting": {
+                              "type": "Query",
+                              "inputs": {
+                                "from": "@outputs('List_Related_Site_Settings_to_the_portal')?['body/value']",
+                                "where": "@equals(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_name', 'adx_name')],'Authentication/Registration/InvitationEnabled')"
+                              },
+                              "runAfter": {
+                                "Auth_Local_Registration_Enabled": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "a73d4afd-c62c-4e67-8a01-8665998c19e4"
+                              }
+                            },
+                            "Auth_Invitation_Enabled": {
+                              "type": "Compose",
+                              "description": "if filter returned no rows, default to true, else get value",
+                              "inputs": "@if(equals(length(body('Filter_Array:_Return_Invitation_Enabled_Site_Setting')), 0), true, first(body('Filter_Array:_Return_Invitation_Enabled_Site_Setting'))?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_value', 'adx_value')])",
+                              "runAfter": {
+                                "Filter_Array:_Return_Invitation_Enabled_Site_Setting": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "a7097c18-739c-4ffe-a566-d8808c445c2a"
+                              }
+                            },
+                            "Filter_Array:_Return_External_Identities_Enabled_Site_Setting": {
+                              "type": "Query",
+                              "inputs": {
+                                "from": "@outputs('List_Related_Site_Settings_to_the_portal')?['body/value']",
+                                "where": "@equals(item()?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_name', 'adx_name')],'Authentication/Registration/ExternalLoginEnabled')"
+                              },
+                              "runAfter": {
+                                "Auth_Invitation_Enabled": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "55402c9f-bf7b-4b6f-978d-057a1b9987d2"
+                              }
+                            },
+                            "Auth_External_Identities_Enabled": {
+                              "type": "Compose",
+                              "description": "if filter returned no rows, default to true, else get value",
+                              "inputs": "@if(equals(length(body('Filter_Array:_Return_External_Identities_Enabled_Site_Setting')), 0), true, first(body('Filter_Array:_Return_External_Identities_Enabled_Site_Setting'))?[if(equals(variables('varPortalSource'), 'EDM'), 'mspp_value', 'adx_value')])",
+                              "runAfter": {
+                                "Filter_Array:_Return_External_Identities_Enabled_Site_Setting": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "fa6b3a02-12a6-4e45-ad82-8c6732dfc0ae"
+                              }
+                            },
+                            "FilterStringForSiteSettings": {
+                              "type": "Compose",
+                              "inputs": "@if(equals(variables('varPortalSource'), 'EDM'), concat('_mspp_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique']), concat('_adx_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique']))",
+                              "metadata": {
+                                "operationMetadataId": "36551251-aa02-40ff-9606-e224b471a6ec"
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "GUID_to_use": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "6be2280a-56e9-44ab-a4fb-1f806f3a8802"
+                          }
+                        },
+                        "Data_Security": {
+                          "type": "Scope",
+                          "actions": {
+                            "List_Related_Entity_Lists_with_Table_Permissions_Disable": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                                  "entityName": "@if(equals(variables('varPortalSource'), 'EDM'), 'mspp_entitylists', 'adx_entitylists')",
+                                  "$filter": "@if(equals(variables('varPortalSource'), 'EDM'), concat('_mspp_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique'], ' and mspp_entitypermissionsenabled eq false'), concat('_adx_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique'], ' and adx_entitypermissionsenabled eq false'))"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "ListRecordsWithOrganization",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "runtimeConfiguration": {
+                                "paginationPolicy": {
+                                  "minimumItemCount": 100000
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "6ef2cc8a-c705-4ed3-a72a-c92fe9bc39f4"
+                              }
+                            },
+                            "List_Related_Basic_Forms_with_Table_Permissions_Disabled": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                                  "entityName": "@if(equals(variables('varPortalSource'), 'EDM'), 'mspp_entityforms', 'adx_entityforms')",
+                                  "$filter": "@if(equals(variables('varPortalSource'), 'EDM'), concat('_mspp_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique'], ' and mspp_entitypermissionsenabled eq false'), concat('_adx_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique'], ' and adx_entitypermissionsenabled eq false'))"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "ListRecordsWithOrganization",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "runAfter": {
+                                "Entity_List_Table_Permission_Enabled_Value": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "runtimeConfiguration": {
+                                "paginationPolicy": {
+                                  "minimumItemCount": 100000
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "6ef2cc8a-c705-4ed3-a72a-c92fe9bc39f4"
+                              }
+                            },
+                            "List_Related_Advanced_Forms": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                                  "entityName": "@if(equals(variables('varPortalSource'), 'EDM'), 'mspp_webforms', 'adx_webforms')",
+                                  "$filter": "@if(equals(variables('varPortalSource'), 'EDM'), concat('_mspp_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique']), concat('_adx_websiteid_value eq ', items('For_each_item_to_inventory')?['Portal_NonUnique']))"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "ListRecordsWithOrganization",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "runAfter": {
+                                "Basic_Form_Table_Permission_Enabled_Value_": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "runtimeConfiguration": {
+                                "paginationPolicy": {
+                                  "minimumItemCount": 100000
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "6ef2cc8a-c705-4ed3-a72a-c92fe9bc39f4"
+                              }
+                            },
+                            "Entity_List_Table_Permission_Enabled_Value": {
+                              "type": "Compose",
+                              "description": "If Returned entity list count <=0 then table permissions enabled = true. Else  table permissions =false.",
+                              "inputs": "@if(equals(length(outputs('List_Related_Entity_Lists_with_Table_Permissions_Disable')?['body/value']), 0), true, false)",
+                              "runAfter": {
+                                "List_Related_Entity_Lists_with_Table_Permissions_Disable": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "efdbba0b-7f6e-4f4e-b15e-0962b2f6c1f6"
+                              }
+                            },
+                            "Basic_Form_Table_Permission_Enabled_Value_": {
+                              "type": "Compose",
+                              "description": "If Returned entity list count <=0 then table permissions enabled = true. Else  table permissions =false.",
+                              "inputs": "@if(equals(length(outputs('List_Related_Basic_Forms_with_Table_Permissions_Disabled')?['body/value']), 0), true, false)",
+                              "runAfter": {
+                                "List_Related_Basic_Forms_with_Table_Permissions_Disabled": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "9a845ea4-033e-4f4c-8131-8b164c6de28f"
+                              }
+                            },
+                            "Apply_to_each_Advanced_Form": {
+                              "type": "Foreach",
+                              "foreach": "@outputs('List_Related_Advanced_Forms')?['body/value']",
+                              "actions": {
+                                "AdvancedFormID": {
+                                  "type": "Compose",
+                                  "inputs": "@items('Apply_to_each_Advanced_Form')?['adx_webformid']",
+                                  "metadata": {
+                                    "operationMetadataId": "cd606b33-7ed7-43af-92fd-8afe0bf9e94f"
+                                  }
+                                },
+                                "If_found_steps_with_permissions_disabled,_set_the_variable_to_true": {
+                                  "type": "If",
+                                  "expression": {
+                                    "greater": [
+                                      "@length(outputs('List_Related_Advanced_Form_Steps_with_Table_Permissions_Disabled')?['body/value'])",
+                                      0
+                                    ]
+                                  },
+                                  "actions": {
+                                    "Set_AdvancedFormStepHasTablePermissionsEnabled_false": {
+                                      "type": "SetVariable",
+                                      "inputs": {
+                                        "name": "AdvancedFormStepHasTablePermissionsEnabled",
+                                        "value": "@false"
+                                      },
+                                      "metadata": {
+                                        "operationMetadataId": "6a08d25e-b710-4e48-b0b0-767b57ac692c"
+                                      }
+                                    }
+                                  },
+                                  "else": {
+                                    "actions": {}
+                                  },
+                                  "runAfter": {
+                                    "List_Related_Advanced_Form_Steps_with_Table_Permissions_Disabled": [
+                                      "Succeeded"
+                                    ]
+                                  },
+                                  "metadata": {
+                                    "operationMetadataId": "47d2bf8e-6306-4ed5-96f6-4f7394de1295"
+                                  }
+                                },
+                                "List_Related_Advanced_Form_Steps_with_Table_Permissions_Disabled": {
+                                  "type": "OpenApiConnection",
+                                  "inputs": {
+                                    "parameters": {
+                                      "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                                      "entityName": "@if(equals(variables('varPortalSource'), 'EDM'), 'mspp_webformsteps', 'adx_webformsteps')",
+                                      "$filter": "@if(equals(variables('varPortalSource'), 'EDM'), concat('_mspp_webformid_value eq ', outputs('AdvancedFormID'), ' and mspp_entitypermissionsenabled eq false'), concat('_adx_webform_value eq ', outputs('AdvancedFormID'), ' and adx_entitypermissionsenabled eq false'))"
+                                    },
+                                    "host": {
+                                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                      "operationId": "ListRecordsWithOrganization",
+                                      "connectionName": "shared_commondataserviceforapps"
+                                    },
+                                    "retryPolicy": {
+                                      "type": "exponential",
+                                      "count": 20,
+                                      "interval": "PT20S"
+                                    }
+                                  },
+                                  "runAfter": {
+                                    "AdvancedFormID": [
+                                      "Succeeded"
+                                    ]
+                                  },
+                                  "runtimeConfiguration": {
+                                    "paginationPolicy": {
+                                      "minimumItemCount": 100000
+                                    }
+                                  },
+                                  "metadata": {
+                                    "operationMetadataId": "6ef2cc8a-c705-4ed3-a72a-c92fe9bc39f4"
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "List_Related_Advanced_Forms": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "9f377695-101e-40fe-b0ea-9badb2789920"
+                              }
+                            },
+                            "All_Table_Permissions_Enbabled": {
+                              "type": "Compose",
+                              "inputs": "@if(and(variables('AdvancedFormStepHasTablePermissionsEnabled'), outputs('Basic_Form_Table_Permission_Enabled_Value_'), outputs('Entity_List_Table_Permission_Enabled_Value')), true, false)",
+                              "runAfter": {
+                                "Apply_to_each_Advanced_Form": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "a89daeda-14ac-45b2-9f1f-f990fef194f2"
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "Site_Settings_Filtering_for_Authentication_Types": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "9bd701a5-03dc-49cc-82ab-9f28f50e272c"
+                          }
+                        },
+                        "Get_Owner_Details": {
+                          "type": "Scope",
+                          "actions": {
+                            "Get_Owner": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "organization": "@triggerOutputs()?['body/admin_environmentcdsinstanceurl']",
+                                  "entityName": "systemusers",
+                                  "recordId": "@if(equals(variables('varPortalSource'), 'EDM'), outputs('Get_actual_object')?['body/_mspp_createdby_value'], outputs('Get_actual_object')?['body/_createdby_value'])"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "GetItemWithOrganization",
+                                  "connectionName": "shared_commondataserviceforapps_3"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "790069e7-1747-45da-a4f3-f6b9dda38e5a"
+                              }
+                            },
+                            "OwnerID": {
+                              "type": "Compose",
+                              "inputs": "@if(equals(body('Get_Owner')?['azureactivedirectoryobjectid'], null), if(equals(body('Get_Owner')?['fullname'], 'SYSTEM'), parameters('CoE System User ID (admin_CoESystemUserID)'), ''), body('Get_Owner')?['azureactivedirectoryobjectid'])",
+                              "runAfter": {
+                                "Get_Owner": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "56cfa7cf-65cb-4e51-b16a-430bc087d28c"
+                              }
+                            },
+                            "See_if_already_in_Maker_Table": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "entityName": "admin_makers",
+                                  "$filter": "admin_makerid eq @{outputs('OwnerID')}"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "ListRecords",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "runAfter": {
+                                "OwnerID": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "runtimeConfiguration": {
+                                "paginationPolicy": {
+                                  "minimumItemCount": 100000
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "6a7ef4f9-5a59-45f9-a290-e89115a2f36d"
+                              }
+                            },
+                            "If_not,_add_them": {
+                              "type": "If",
+                              "expression": {
+                                "equals": [
+                                  "@length(outputs('See_if_already_in_Maker_Table')?['body/value'])",
+                                  0
+                                ]
+                              },
+                              "actions": {
+                                "OwnerID_for_Helper": {
+                                  "type": "Compose",
+                                  "inputs": "@if(equals(body('Get_Owner')?['azureactivedirectoryobjectid'], null), if(equals(body('Get_Owner')?['fullname'], 'SYSTEM'), 'SYSTEM', ''), body('Get_Owner')?['azureactivedirectoryobjectid'])",
+                                  "metadata": {
+                                    "operationMetadataId": "56cfa7cf-65cb-4e51-b16a-430bc087d28c"
+                                  }
+                                },
+                                "Maker_Check": {
+                                  "type": "Workflow",
+                                  "inputs": {
+                                    "host": {
+                                      "workflowReferenceName": "9301f01a-cb40-ec11-8c62-00224829b4c1"
+                                    },
+                                    "body": {
+                                      "text": "@outputs('OwnerID_for_Helper')",
+                                      "boolean": false
+                                    }
+                                  },
+                                  "runAfter": {
+                                    "OwnerID_for_Helper": [
+                                      "Succeeded"
+                                    ]
+                                  },
+                                  "metadata": {
+                                    "operationMetadataId": "9b77404f-4d8e-4e72-992d-f09db75c4167"
+                                  }
+                                }
+                              },
+                              "else": {
+                                "actions": {}
+                              },
+                              "runAfter": {
+                                "See_if_already_in_Maker_Table": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b0599ae4-1806-47c1-9c32-955838f93048"
+                              }
+                            },
+                            "Get_Maker": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "entityName": "admin_makers",
+                                  "recordId": "@outputs('OwnerID')"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "GetItem",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                },
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 20,
+                                  "interval": "PT20S"
+                                }
+                              },
+                              "runAfter": {
+                                "If_not,_add_them": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "ae6d172a-7fcb-44c7-88dc-32f5b1cec2c8"
+                              }
+                            },
+                            "catch_for_orphans_no_id": {
+                              "type": "Compose",
+                              "inputs": "catch for orphans no id",
+                              "runAfter": {
+                                "Get_Maker": [
+                                  "Failed"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "b420ec58-4b1d-4f34-8cf4-880c0c0b82ab"
+                              }
+                            },
+                            "IsOrphan": {
+                              "type": "Compose",
+                              "inputs": "@if(or(equals(outputs('OwnerID'), null), equals(length(outputs('OwnerID')), 0), equals(outputs('Get_Maker')?['body/admin_makerisorphaned'], true), equals(outputs('Get_Maker')?['body/admin_makerid'], null)), true, false)",
+                              "runAfter": {
+                                "catch_for_orphans_no_id": [
+                                  "Succeeded",
+                                  "Skipped"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "5ba88760-724b-482e-b7c5-72b125a595a0"
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "operationMetadataId": "615c25ea-17df-47c6-b0b2-1620d61d03c7"
+                          }
+                        },
+                        "Upsert_Record": {
+                          "type": "If",
+                          "expression": {
+                            "equals": [
+                              "@outputs('IsOrphan')",
+                              true
+                            ]
+                          },
+                          "actions": {
+                            "Upsert_Portal_(Orphan)": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "parameters": {
+                                  "entityName": "admin_portals",
+                                  "recordId": "@outputs('GUID_to_use')",
+                                  "item/admin_portaldisplayname": "@coalesce(outputs('Get_actual_object')?['body/mspp_name'], outputs('Get_actual_object')?['body/adx_name'])",
+                                  "item/admin_portaluniquename": "@items('For_each_item_to_inventory')?['Portal_Unique']",
+                                  "item/admin_authexternalidentitiesenabled": "@outputs('Auth_External_Identities_Enabled')",
+                                  "item/admin_authinvitationenabled": "@outputs('Auth_Invitation_Enabled')",
+                                  "item/admin_authlocalauthenticationenabled": "@outputs('Auth_Local_Authentication_Enabled')",
+                                  "item/admin_authlocalregistrationenabled": "@outputs('Auth_Local_Registration_Enabled')",
+                                  "item/admin_authopenregistrationenabled": "@outputs('Auth_Open_Registration_Enabled')",
+                                  "item/admin_externalidentitiesenabled": "@outputs('Auth_External_Identities_Enabled')",
+                                  "item/admin_inventoryme": false,
+                                  "item/admin_portaldeleted": false,
+                                  "item/admin_portaldeletedon": "@null",
+                                  "item/admin_PortalEnvironment@odata.bind": "admin_environments(@{triggerOutputs()?['body/admin_environmentid']})",
+                                  "item/admin_portalisophaned": true,
+                                  "item/admin_portalcreatedon": "@coalesce(outputs('Get_actual_object')?['body/mspp_createdon'], outputs('Get_actual_object')?['body/createdon'])",
+                                  "item/admin_portalmodifiedon": "@coalesce(outputs('Get_actual_object')?['body/mspp_modifiedon'], outputs('Get_actual_object')?['body/modifiedon'])",
+                                  "item/admin_portalwebsiteid": "@items('For_each_item_to_inventory')?['Portal_NonUnique']",
+                                  "item/admin_portalwebsitename": "@coalesce(outputs('Get_actual_object')?['body/mspp_primarydomainname'], outputs('Get_actual_object')?['body/adx_primarydomainname'])",
+                                  "item/admin_recordguidasstring": "@outputs('GUID_to_use')",
+                                  "item/admin_authtablepermissionsenabled": "@outputs('All_Table_Permissions_Enbabled')",
+                                  "item/admin_tablepermissionsenabledalladvformstep": "@variables('AdvancedFormStepHasTablePermissionsEnabled')",
+                                  "item/admin_tablepermissionsenabledallbasicforms": "@outputs('Basic_Form_Table_Permission_Enabled_Value_')",
+                                  "item/admin_tablepermissionsenabledalllists": "@outputs('Entity_List_Table_Permission_Enabled_Value')"
+                                },
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                  "operationId": "UpdateRecord",
+                                  "connectionName": "shared_commondataserviceforapps"
+                                }
+                              },
+                              "metadata": {
+                                "operationMetadataId": "ef1ef2d9-f84c-4e71-9af3-c0022402589c"
+                              }
+                            }
+                          },
+                          "else": {
+                            "actions": {
+                              "Upsert_Portal": {
+                                "type": "OpenApiConnection",
+                                "inputs": {
+                                  "parameters": {
+                                    "entityName": "admin_portals",
+                                    "recordId": "@outputs('GUID_to_use')",
+                                    "item/admin_portaldisplayname": "@coalesce(outputs('Get_actual_object')?['body/mspp_name'], outputs('Get_actual_object')?['body/adx_name'])",
+                                    "item/admin_portaluniquename": "@items('For_each_item_to_inventory')?['Portal_Unique']",
+                                    "item/admin_appownerdisplayname": "@outputs('Get_Maker')?['body/admin_displayname']",
+                                    "item/admin_authexternalidentitiesenabled": "@outputs('Auth_External_Identities_Enabled')",
+                                    "item/admin_authinvitationenabled": "@outputs('Auth_Invitation_Enabled')",
+                                    "item/admin_authlocalauthenticationenabled": "@outputs('Auth_Local_Authentication_Enabled')",
+                                    "item/admin_authlocalregistrationenabled": "@outputs('Auth_Local_Registration_Enabled')",
+                                    "item/admin_authopenregistrationenabled": "@outputs('Auth_Open_Registration_Enabled')",
+                                    "item/admin_externalidentitiesenabled": "@outputs('Auth_External_Identities_Enabled')",
+                                    "item/admin_inventoryme": false,
+                                    "item/admin_portaldeleted": false,
+                                    "item/admin_portaldeletedon": "@null",
+                                    "item/admin_PortalEnvironment@odata.bind": "admin_environments(@{triggerOutputs()?['body/admin_environmentid']})",
+                                    "item/admin_portalisophaned": false,
+                                    "item/admin_PortalOwner@odata.bind": "admin_makers(@{outputs('Get_Maker')?['body/admin_makerid']})",
+                                    "item/admin_portalcreatedon": "@coalesce(outputs('Get_actual_object')?['body/mspp_createdon'], outputs('Get_actual_object')?['body/createdon'])",
+                                    "item/admin_portalmodifiedon": "@coalesce(outputs('Get_actual_object')?['body/mspp_modifiedon'], outputs('Get_actual_object')?['body/modifiedon'])",
+                                    "item/admin_portalwebsiteid": "@items('For_each_item_to_inventory')?['Portal_NonUnique']",
+                                    "item/admin_portalwebsitename": "@coalesce(outputs('Get_actual_object')?['body/mspp_primarydomainname'], outputs('Get_actual_object')?['body/adx_primarydomainname'])",
+                                    "item/admin_recordguidasstring": "@outputs('GUID_to_use')",
+                                    "item/admin_authtablepermissionsenabled": "@outputs('All_Table_Permissions_Enbabled')",
+                                    "item/admin_tablepermissionsenabledalladvformstep": "@variables('AdvancedFormStepHasTablePermissionsEnabled')",
+                                    "item/admin_tablepermissionsenabledallbasicforms": "@outputs('Basic_Form_Table_Permission_Enabled_Value_')",
+                                    "item/admin_tablepermissionsenabledalllists": "@outputs('Entity_List_Table_Permission_Enabled_Value')"
+                                  },
+                                  "host": {
+                                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                    "operationId": "UpdateRecord",
+                                    "connectionName": "shared_commondataserviceforapps"
+                                  }
+                                },
+                                "metadata": {
+                                  "operationMetadataId": "ef1ef2d9-f84c-4e71-9af3-c0022402589c"
+                                }
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "Data_Security": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "be0a6eb2-7133-4fd0-912c-f8bba4a7d144"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "CATCH:_Object_no_longer_exists": [
+                          "Skipped"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "28e14234-542b-4cdf-80cc-10089718f981"
+                      }
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "b7cba24f-db60-4fcd-9d25-3367415d1537"
+                  }
+                }
+              },
+              "runAfter": {
+                "Look_for_Portals_to_Inventory": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f69952e0-f7f4-4a4e-bb9b-50ad877ae173"
+              }
+            }
+          },
+          "runAfter": {
+            "varPortalSource": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7fabdbe3-cca0-4e6b-9f0b-b9ac39bea0b9"
+          }
+        },
+        "Error_Handling": {
+          "type": "Scope",
+          "actions": {
+            "Create_a_new_record_-_Sync_Flow_Errors": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "admin_syncflowerrorses",
+                  "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                  "item/admin_environmentname": "@triggerOutputs()?['body/admin_displayname']",
+                  "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                },
+                "retryPolicy": {
+                  "type": "exponential",
+                  "count": 10,
+                  "interval": "PT10S"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+              }
+            },
+            "Terminate": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "500",
+                  "message": "Get Environments Failed"
+                }
+              },
+              "runAfter": {
+                "Update_Last_Run_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+              }
+            },
+            "Get_ID_Fail": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Create_a_new_record_-_Sync_Flow_Errors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+              }
+            },
+            "Update_Last_Run_Fail": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": false
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Get_ID_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+              }
+            }
+          },
+          "runAfter": {
+            "Inventory_Portals_for_this_envt": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+          }
+        },
+        "Update_last_run_as_pass": {
+          "type": "Scope",
+          "actions": {
+            "Update_Last_Run_Successful": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": true
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Get_ID_Pass": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+              }
+            },
+            "Get_ID_Pass": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+              }
+            },
+            "Catch_-_not_ready_to_take_last_run_date": {
+              "type": "Compose",
+              "inputs": "Catch - not ready to take last run date",
+              "runAfter": {
+                "Update_Last_Run_Successful": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+              }
+            }
+          },
+          "runAfter": {
+            "Error_Handling": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+          }
+        },
+        "Initialize_variable_AdvancedFormStepHasTablePermissionsEnabled": {
+          "type": "InitializeVariable",
+          "description": "initialize to true meaning all steps have table permissions enabled",
+          "inputs": {
+            "variables": [
+              {
+                "name": "AdvancedFormStepHasTablePermissionsEnabled",
+                "type": "boolean",
+                "value": "@true"
+              }
+            ]
+          },
+          "runAfter": {
+            "Delay_Object_Inventory": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f1abf91d-ebd9-46e4-abc3-cb6a7ee3350e"
+          }
+        },
+        "Delay_Object_Inventory": {
+          "type": "If",
+          "expression": {
+            "equals": [
+              "@parameters('DelayObjectInventory (admin_DelayObjectInventory)')",
+              true
+            ]
+          },
+          "actions": {
+            "Delay_1_to_300_minutes": {
+              "type": "Wait",
+              "description": "To avoid throttling of the backend to the tenant user, we will randomize the start time of these flows for tenants within a 5 hour range",
+              "inputs": {
+                "interval": {
+                  "count": "@rand(1, 300)",
+                  "unit": "Minute"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "f37a4a9d-c5b4-41ed-8484-636dca60ee81"
+              }
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "Check_if_Portal_can_be_retrieved_for_this_environment": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "49b3d120-232d-4694-b373-a97ecde35cc4"
+          }
+        },
+        "varPortalSource": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varPortalSource",
+                "type": "string"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_portalsToInvenotry": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9b2de0fb-f4b9-44b0-9b83-65d696baa53f"
+          }
+        }
+      },
+      "description": "This flow gets power pages information by using the modern Dataverse connector to fetch from the product tables in each environment. It identifies which ones from inventory need updated and updates them."
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

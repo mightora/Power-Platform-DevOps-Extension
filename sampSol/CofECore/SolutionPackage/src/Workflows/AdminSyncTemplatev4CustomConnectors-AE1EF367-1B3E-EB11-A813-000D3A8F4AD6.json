@@ -1,0 +1,1286 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_sharedcommondataserviceforapps_98924"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_powerappsforappmakers": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECorePowerAppsMakers"
+        },
+        "api": {
+          "name": "shared_powerappsforappmakers"
+        }
+      },
+      "shared_powerplatformforadmins": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECorePowerPlatformforAdmins"
+        },
+        "api": {
+          "name": "shared_powerplatformforadmins"
+        }
+      },
+      "shared_powerappsforadmins": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECorePowerAppsAdmin2"
+        },
+        "api": {
+          "name": "shared_powerappsforadmins"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        },
+        "DelayObjectInventory (admin_DelayObjectInventory)": {
+          "defaultValue": false,
+          "type": "Bool",
+          "metadata": {
+            "schemaName": "admin_DelayObjectInventory",
+            "description": "Inventory - If Yes, will run a delay step to assist with the Dataverse throttling. Things like solutions, apps, flows, will have delays in the individual envt runs. Default No."
+          }
+        }
+      },
+      "triggers": {
+        "When_a_record_is_created_or_updated": {
+          "metadata": {
+            "operationMetadataId": "d26ccf47-c388-4609-8738-670162769be4"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps_1",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 4,
+              "subscriptionRequest/entityname": "admin_environment",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Check_if_Environment_supports_inquiry": {
+          "actions": {
+            "Terminate_for_environments_that_do_not_support_inquiry": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "c96f244b-3c1d-43b6-b930-9df94f180269"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              }
+            }
+          },
+          "runAfter": {},
+          "expression": {
+            "or": [
+              {
+                "equals": [
+                  "@triggerOutputs()?['body/admin_environmentdeleted']",
+                  "@true"
+                ]
+              },
+              {
+                "equals": [
+                  "@triggerOutputs()?['body/admin_excusefrominventory']",
+                  "@true"
+                ]
+              },
+              {
+                "equals": [
+                  "@triggerOutputs()?['body/admin_hascds']",
+                  "@false"
+                ]
+              }
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "63dea944-5e5f-41f8-afd4-50360d37b9d5"
+          },
+          "type": "If"
+        },
+        "Get_Custom_Connectors_and_store_them_in_CoE_CDS_Entity": {
+          "actions": {
+            "Filter_to_custom_connectors": {
+              "runAfter": {
+                "Get_Connectors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "190586f3-7050-46f6-99bc-ca562750d4d9"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Get_Connectors')?['body/value']",
+                "where": "@equals(item()?['properties/isCustomApi'], true)"
+              }
+            },
+            "Apply_to_each_custom_connector": {
+              "foreach": "@body('Filter_to_custom_connectors')",
+              "actions": {
+                "Get_Custom_Connector_Record": {
+                  "runAfter": {
+                    "Compose_isHTTP_2": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "60cec6d2-4ca6-4b62-b599-5826ec936ad0"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "admin_connectors",
+                      "$select": "admin_connectorid",
+                      "$filter": "admin_name eq '@{items('Apply_to_each_custom_connector')?['name']}'"
+                    },
+                    "authentication": "@parameters('$authentication')",
+                    "retryPolicy": {
+                      "type": "exponential",
+                      "count": 10,
+                      "interval": "PT10S"
+                    }
+                  }
+                },
+                "Compose_custom_connector_guid": {
+                  "runAfter": {
+                    "Get_Custom_Connector_Record": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "cd6c4711-b41a-41dc-bf6f-bd65d10f9e79"
+                  },
+                  "type": "Compose",
+                  "inputs": "@if(empty(outputs('Get_Custom_Connector_Record')?['body']), guid(), first(outputs('Get_Custom_Connector_Record')?['body/value'])?['admin_connectorid'])"
+                },
+                "Insert_or_Update_Custom_Connector": {
+                  "actions": {
+                    "Maker_Check_-_Edit": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "a128ad51-9558-4d3d-b4e5-f7560260f0eb"
+                      },
+                      "type": "Workflow",
+                      "inputs": {
+                        "host": {
+                          "workflowReferenceName": "9301f01a-cb40-ec11-8c62-00224829b4c1"
+                        },
+                        "body": {
+                          "text": "@coalesce(items('Apply_to_each_custom_connector')?['properties/createdBy/id'], '')",
+                          "boolean": false
+                        }
+                      }
+                    },
+                    "Check_if_Orphan_-_Edit": {
+                      "actions": {
+                        "Update_Custom_Connector_record_-_orphan": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "6fd5a38f-e88f-4637-bdd0-949a1cce2da4"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "UpdateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_connectors",
+                              "recordId": "@outputs('Compose_custom_connector_guid')",
+                              "item/admin_displayname": "@items('Apply_to_each_custom_connector')?['properties/displayName']",
+                              "item/admin_name": "@items('Apply_to_each_custom_connector')?['name']",
+                              "item/admin_id": "@items('Apply_to_each_custom_connector')?['id']",
+                              "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_custom_connector')?['id'], '/')))",
+                              "item/admin_backgroundcolor": "@items('Apply_to_each_custom_connector')?['properties/iconBrandColor']",
+                              "item/admin_connectorcreateddatetime": "@items('Apply_to_each_custom_connector')?['properties/createdTime']",
+                              "item/admin_connectordeleted": false,
+                              "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                              "item/admin_iconuri": "@items('Apply_to_each_custom_connector')?['properties/iconUri']",
+                              "item/admin_appisorphaned": "Yes",
+                              "item/admin_connectormodified": "@items('Apply_to_each_custom_connector')?['properties/changedTime']",
+                              "item/admin_customconnectorhost": "@items('Apply_to_each_custom_connector')?['properties/backendService/serviceUrl']",
+                              "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP_2')",
+                              "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerOutputs()?['body/admin_environmentid']})",
+                              "item/admin_iscustomapi": true,
+                              "item/admin_recordguidasstring": "@outputs('Compose_custom_connector_guid')",
+                              "item/admin_tier": "Custom"
+                            },
+                            "authentication": "@parameters('$authentication')",
+                            "retryPolicy": {
+                              "type": "exponential",
+                              "count": 10,
+                              "interval": "PT10S"
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Maker_Check_-_Edit": [
+                          "Succeeded"
+                        ]
+                      },
+                      "else": {
+                        "actions": {
+                          "Update_Custom_Connector_record": {
+                            "runAfter": {},
+                            "metadata": {
+                              "operationMetadataId": "16492bd4-17b5-45d5-8207-eebc3c1f383b"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps_1",
+                                "operationId": "UpdateRecord",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "admin_connectors",
+                                "recordId": "@outputs('Compose_custom_connector_guid')",
+                                "item/admin_displayname": "@items('Apply_to_each_custom_connector')?['properties/displayName']",
+                                "item/admin_name": "@items('Apply_to_each_custom_connector')?['name']",
+                                "item/admin_id": "@items('Apply_to_each_custom_connector')?['id']",
+                                "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_custom_connector')?['id'], '/')))",
+                                "item/admin_backgroundcolor": "@items('Apply_to_each_custom_connector')?['properties/iconBrandColor']",
+                                "item/admin_connectorcreateddatetime": "@items('Apply_to_each_custom_connector')?['properties/createdTime']",
+                                "item/admin_connectorcreatordisplayname": "@outputs('Maker_Check_-_Edit')?['Body']?['userdisplayname']",
+                                "item/admin_connectordeleted": false,
+                                "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                                "item/admin_iconuri": "@items('Apply_to_each_custom_connector')?['properties/iconUri']",
+                                "item/admin_appisorphaned": "No",
+                                "item/admin_connectormodified": "@items('Apply_to_each_custom_connector')?['properties/changedTime']",
+                                "item/admin_customconnectorhost": "@items('Apply_to_each_custom_connector')?['properties/backendService/serviceUrl']",
+                                "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP_2')",
+                                "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerOutputs()?['body/admin_environmentid']})",
+                                "item/admin_iscustomapi": true,
+                                "item/admin_Maker@odata.bind": "admin_makers(@{body('Maker_Check_-_Edit')?['userid']})",
+                                "item/admin_recordguidasstring": "@outputs('Compose_custom_connector_guid')",
+                                "item/admin_tier": "Custom"
+                              },
+                              "authentication": "@parameters('$authentication')",
+                              "retryPolicy": {
+                                "type": "exponential",
+                                "count": 10,
+                                "interval": "PT10S"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "expression": {
+                        "equals": [
+                          "@outputs('Maker_Check_-_Edit')?['Body']?['userisorphan']",
+                          "@true"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "b7358272-b0a7-40af-abe2-376ea567c519"
+                      },
+                      "type": "If"
+                    }
+                  },
+                  "runAfter": {
+                    "Compose_custom_connector_guid": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Maker_Check_-_New": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "b443aa3d-d28e-4f49-a59d-95dbf197feac"
+                        },
+                        "type": "Workflow",
+                        "inputs": {
+                          "host": {
+                            "workflowReferenceName": "9301f01a-cb40-ec11-8c62-00224829b4c1"
+                          },
+                          "body": {
+                            "text": "@coalesce(items('Apply_to_each_custom_connector')?['properties/createdBy/id'], '')",
+                            "boolean": false
+                          }
+                        }
+                      },
+                      "Check_if_Orphan_-_New": {
+                        "actions": {
+                          "Insert_Custom_Connector_record_-_orphan": {
+                            "runAfter": {},
+                            "metadata": {
+                              "operationMetadataId": "017c5a0d-557f-4b2c-8220-d0cbc260b838"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps_1",
+                                "operationId": "CreateRecord",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "admin_connectors",
+                                "item/admin_displayname": "@items('Apply_to_each_custom_connector')?['properties/displayName']",
+                                "item/admin_name": "@items('Apply_to_each_custom_connector')?['name']",
+                                "item/admin_id": "@items('Apply_to_each_custom_connector')?['id']",
+                                "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_custom_connector')?['id'], '/')))",
+                                "item/admin_backgroundcolor": "@items('Apply_to_each_custom_connector')?['properties/iconBrandColor']",
+                                "item/admin_connectorcreateddatetime": "@items('Apply_to_each_custom_connector')?['properties/createdTime']",
+                                "item/admin_connectordeleted": false,
+                                "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                                "item/admin_iconuri": "@items('Apply_to_each_custom_connector')?['properties/iconUri']",
+                                "item/admin_appisorphaned": "Yes",
+                                "item/admin_connectormodified": "@items('Apply_to_each_custom_connector')?['properties/changedTime']",
+                                "item/admin_customconnectorhost": "@items('Apply_to_each_custom_connector')?['properties/backendService/serviceUrl']",
+                                "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP_2')",
+                                "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerOutputs()?['body/admin_environmentid']})",
+                                "item/admin_iscustomapi": true,
+                                "item/admin_tier": "Custom"
+                              },
+                              "authentication": "@parameters('$authentication')",
+                              "retryPolicy": {
+                                "type": "exponential",
+                                "count": 10,
+                                "interval": "PT10S"
+                              }
+                            }
+                          },
+                          "Update_Record_GUID_as_String_-_orphan": {
+                            "runAfter": {
+                              "Insert_Custom_Connector_record_-_orphan": [
+                                "Succeeded"
+                              ]
+                            },
+                            "metadata": {
+                              "operationMetadataId": "a6221be5-beca-46ce-a3f2-7fa07be5c546"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps",
+                                "operationId": "UpdateRecord",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "admin_connectors",
+                                "recordId": "@outputs('Insert_Custom_Connector_record_-_orphan')?['body/admin_connectorid']",
+                                "item/admin_recordguidasstring": "@outputs('Insert_Custom_Connector_record_-_orphan')?['body/admin_connectorid']"
+                              },
+                              "authentication": "@parameters('$authentication')"
+                            }
+                          }
+                        },
+                        "runAfter": {
+                          "Maker_Check_-_New": [
+                            "Succeeded"
+                          ]
+                        },
+                        "else": {
+                          "actions": {
+                            "Insert_Custom_Connector_record": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "bedab6c9-f662-48c8-9fe7-64e681e7118b"
+                              },
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "connectionName": "shared_commondataserviceforapps_1",
+                                  "operationId": "CreateRecord",
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                },
+                                "parameters": {
+                                  "entityName": "admin_connectors",
+                                  "item/admin_displayname": "@items('Apply_to_each_custom_connector')?['properties/displayName']",
+                                  "item/admin_name": "@items('Apply_to_each_custom_connector')?['name']",
+                                  "item/admin_id": "@items('Apply_to_each_custom_connector')?['id']",
+                                  "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_custom_connector')?['id'], '/')))",
+                                  "item/admin_backgroundcolor": "@items('Apply_to_each_custom_connector')?['properties/iconBrandColor']",
+                                  "item/admin_connectorcreateddatetime": "@items('Apply_to_each_custom_connector')?['properties/createdTime']",
+                                  "item/admin_connectorcreatordisplayname": "@outputs('Maker_Check_-_New')?['Body']?['userdisplayname']",
+                                  "item/admin_connectordeleted": false,
+                                  "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                                  "item/admin_iconuri": "@items('Apply_to_each_custom_connector')?['properties/iconUri']",
+                                  "item/admin_appisorphaned": "No",
+                                  "item/admin_connectormodified": "@items('Apply_to_each_custom_connector')?['properties/changedTime']",
+                                  "item/admin_customconnectorhost": "@items('Apply_to_each_custom_connector')?['properties/backendService/serviceUrl']",
+                                  "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP_2')",
+                                  "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerOutputs()?['body/admin_environmentid']})",
+                                  "item/admin_iscustomapi": true,
+                                  "item/admin_Maker@odata.bind": "admin_makers(@{body('Maker_Check_-_New')?['userid']})",
+                                  "item/admin_tier": "Custom"
+                                },
+                                "authentication": "@parameters('$authentication')",
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 10,
+                                  "interval": "PT10S"
+                                }
+                              }
+                            },
+                            "Update_Record_GUID_as_String": {
+                              "runAfter": {
+                                "Insert_Custom_Connector_record": [
+                                  "Succeeded"
+                                ]
+                              },
+                              "metadata": {
+                                "operationMetadataId": "dc1cf966-238f-445f-b7a2-85743a2b523c"
+                              },
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "connectionName": "shared_commondataserviceforapps",
+                                  "operationId": "UpdateRecord",
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                },
+                                "parameters": {
+                                  "entityName": "admin_connectors",
+                                  "recordId": "@outputs('Insert_Custom_Connector_record')?['body/admin_connectorid']",
+                                  "item/admin_recordguidasstring": "@outputs('Insert_Custom_Connector_record')?['body/admin_connectorid']"
+                                },
+                                "authentication": "@parameters('$authentication')"
+                              }
+                            }
+                          }
+                        },
+                        "expression": {
+                          "equals": [
+                            "@body('Maker_Check_-_New')?['userisorphan']",
+                            "@true"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "04c8f681-15f6-48ad-9d00-753c16fd7542"
+                        },
+                        "type": "If"
+                      }
+                    }
+                  },
+                  "expression": {
+                    "not": {
+                      "equals": [
+                        "@length(outputs('Get_Custom_Connector_Record')?['body/value'])",
+                        0
+                      ]
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "704eead7-694b-4708-abb0-11cf7f0f99b2"
+                  },
+                  "type": "If"
+                },
+                "Compose_isHTTP_2": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "efc8fdf6-f156-4c77-90c8-12e18c5cb42f"
+                  },
+                  "type": "Compose",
+                  "inputs": "@if(equals(split(items('Apply_to_each_custom_Connector')?['properties/backendService/serviceUrl'], ':')[0], 'http'), true, false)"
+                }
+              },
+              "runAfter": {
+                "Filter_to_custom_connectors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c019e256-000a-4d8e-9a4a-4b53d4203eb7"
+              },
+              "type": "Foreach"
+            },
+            "Get_Connectors": {
+              "runAfter": {
+                "Apply_to_each_Connector": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "fd978791-21e0-4370-a018-26f8414cf7fe"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_powerappsforappmakers",
+                  "operationId": "Get-Connectors",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforappmakers"
+                },
+                "parameters": {
+                  "showApisWithToS": "true",
+                  "$filter": "environment eq '@{triggerOutputs()?['body/admin_environmentname']}'",
+                  "api-version": "2016-11-01",
+                  "$top": 250
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runtimeConfiguration": {
+                "paginationPolicy": {
+                  "minimumItemCount": 100000
+                }
+              }
+            },
+            "Apply_to_each_Connector": {
+              "foreach": "@outputs('Get_Custom_Connectors_as_Admin')?['body/value']",
+              "actions": {
+                "Get_Connector_Record": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "2edb216e-c1cd-49a7-a328-c4ff988beb6c"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps_1",
+                      "operationId": "ListRecords",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "admin_connectors",
+                      "$select": "admin_connectorid",
+                      "$filter": "admin_name eq '@{items('Apply_to_each_Connector')?['name']}'"
+                    },
+                    "authentication": "@parameters('$authentication')",
+                    "retryPolicy": {
+                      "type": "exponential",
+                      "count": 10,
+                      "interval": "PT10S"
+                    }
+                  }
+                },
+                "Compose_connector_upsert_guid": {
+                  "runAfter": {
+                    "Compose_isHTTP": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "adde63ea-19e2-4ffb-b117-6627678616ac"
+                  },
+                  "type": "Compose",
+                  "inputs": "@if(empty(outputs('Get_Connector_Record')?['body']), guid(), first(outputs('Get_Connector_Record')?['body/value'])?['admin_connectorid'])"
+                },
+                "See_if_already_in_CoE": {
+                  "actions": {
+                    "Maker_Check_-_Edit_Connector": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "06afca0d-a5fb-4ac5-892d-83b2dd175d2d"
+                      },
+                      "type": "Workflow",
+                      "inputs": {
+                        "host": {
+                          "workflowReferenceName": "9301f01a-cb40-ec11-8c62-00224829b4c1"
+                        },
+                        "body": {
+                          "text": "@coalesce(items('Apply_to_each_Connector')?['properties/createdBy/id'], '')",
+                          "boolean": false
+                        }
+                      }
+                    },
+                    "Check_if_Orphan_-_Edit_Connector": {
+                      "actions": {
+                        "Update_Custom_Connector_(orphaned)": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "af899fb4-10c9-425d-b59b-e6146a7c8d3d"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "UpdateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_connectors",
+                              "recordId": "@outputs('Compose_connector_upsert_guid')",
+                              "item/admin_displayname": "@items('Apply_to_each_Connector')?['properties/displayName']",
+                              "item/admin_name": "@items('Apply_to_each_Connector')?['name']",
+                              "item/admin_id": "@items('Apply_to_each_Connector')?['id']",
+                              "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_Connector')?['id'], '/')))",
+                              "item/admin_backgroundcolor": "@items('Apply_to_each_Connector')?['properties/iconBrandColor']",
+                              "item/admin_connectorcreateddatetime": "@items('Apply_to_each_Connector')?['properties/createdTime']",
+                              "item/admin_connectordeleted": false,
+                              "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                              "item/admin_iconuri": "@items('Apply_to_each_Connector')?['properties/iconUri']",
+                              "item/admin_appisorphaned": "Yes",
+                              "item/admin_connectormodified": "@items('Apply_to_each_Connector')?['properties/changedTime']",
+                              "item/admin_customconnectorhost": "@items('Apply_to_each_Connector')?['properties/backendService/serviceUrl']",
+                              "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP')",
+                              "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerBody()?['admin_environmentid']})",
+                              "item/admin_iscustomapi": true,
+                              "item/admin_tier": "Custom"
+                            },
+                            "authentication": "@parameters('$authentication')",
+                            "retryPolicy": {
+                              "type": "exponential",
+                              "count": 10,
+                              "interval": "PT10S"
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Maker_Check_-_Edit_Connector": [
+                          "Succeeded"
+                        ]
+                      },
+                      "else": {
+                        "actions": {
+                          "Update_Custom_Connector": {
+                            "runAfter": {},
+                            "metadata": {
+                              "operationMetadataId": "e00024d2-879a-4fd7-9b33-4cb22cdcb266"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps_1",
+                                "operationId": "UpdateRecord",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "admin_connectors",
+                                "recordId": "@outputs('Compose_connector_upsert_guid')",
+                                "item/admin_displayname": "@items('Apply_to_each_Connector')?['properties/displayName']",
+                                "item/admin_name": "@items('Apply_to_each_Connector')?['name']",
+                                "item/admin_id": "@items('Apply_to_each_Connector')?['id']",
+                                "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_Connector')?['id'], '/')))",
+                                "item/admin_backgroundcolor": "@items('Apply_to_each_Connector')?['properties/iconBrandColor']",
+                                "item/admin_connectorcreateddatetime": "@items('Apply_to_each_Connector')?['properties/createdTime']",
+                                "item/admin_connectorcreatordisplayname": "@outputs('Maker_Check_-_Edit_Connector')?['Body']?['userdisplayname']",
+                                "item/admin_connectordeleted": false,
+                                "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                                "item/admin_iconuri": "@items('Apply_to_each_Connector')?['properties/iconUri']",
+                                "item/admin_appisorphaned": "No",
+                                "item/admin_connectormodified": "@items('Apply_to_each_Connector')?['properties/changedTime']",
+                                "item/admin_customconnectorhost": "@items('Apply_to_each_Connector')?['properties/backendService/serviceUrl']",
+                                "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP')",
+                                "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerBody()?['admin_environmentid']})",
+                                "item/admin_iscustomapi": true,
+                                "item/admin_Maker@odata.bind": "admin_makers(@{body('Maker_Check_-_Edit_Connector')?['userid']})",
+                                "item/admin_tier": "Custom"
+                              },
+                              "authentication": "@parameters('$authentication')",
+                              "retryPolicy": {
+                                "type": "exponential",
+                                "count": 10,
+                                "interval": "PT10S"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "expression": {
+                        "equals": [
+                          "@outputs('Maker_Check_-_Edit_Connector')?['Body']?['userisorphan']",
+                          "@true"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "a06eb718-ec1f-411a-8ca9-60e67afd98c7"
+                      },
+                      "type": "If"
+                    }
+                  },
+                  "runAfter": {
+                    "Compose_connector_upsert_guid": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Maker_Check_-_New_Connector": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "b3a42748-adae-45f5-adf0-d0a909b4e045"
+                        },
+                        "type": "Workflow",
+                        "inputs": {
+                          "host": {
+                            "workflowReferenceName": "9301f01a-cb40-ec11-8c62-00224829b4c1"
+                          },
+                          "body": {
+                            "text": "@coalesce(items('Apply_to_each_Connector')?['properties/createdBy/id'], '')",
+                            "boolean": false
+                          }
+                        }
+                      },
+                      "Check_if_Orphan_-_New_Connector": {
+                        "actions": {
+                          "Create_Custom_Connector_(orphaned)": {
+                            "runAfter": {},
+                            "metadata": {
+                              "operationMetadataId": "6fcfc78a-35b2-4165-9090-ff465d3c2843"
+                            },
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "connectionName": "shared_commondataserviceforapps_1",
+                                "operationId": "CreateRecord",
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                              },
+                              "parameters": {
+                                "entityName": "admin_connectors",
+                                "item/admin_displayname": "@items('Apply_to_each_Connector')?['properties/displayName']",
+                                "item/admin_name": "@items('Apply_to_each_Connector')?['name']",
+                                "item/admin_id": "@items('Apply_to_each_Connector')?['id']",
+                                "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_Connector')?['id'], '/')))",
+                                "item/admin_backgroundcolor": "@items('Apply_to_each_Connector')?['properties/iconBrandColor']",
+                                "item/admin_connectorcreateddatetime": "@items('Apply_to_each_Connector')?['properties/createdTime']",
+                                "item/admin_connectordeleted": false,
+                                "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                                "item/admin_iconuri": "@items('Apply_to_each_Connector')?['properties/iconUri']",
+                                "item/admin_appisorphaned": "Yes",
+                                "item/admin_connectormodified": "@items('Apply_to_each_Connector')?['properties/changedTime']",
+                                "item/admin_customconnectorhost": "@items('Apply_to_each_Connector')?['properties/backendService/serviceUrl']",
+                                "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP')",
+                                "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerBody()?['admin_environmentid']})",
+                                "item/admin_iscustomapi": true,
+                                "item/admin_tier": "Custom"
+                              },
+                              "authentication": "@parameters('$authentication')",
+                              "retryPolicy": {
+                                "type": "exponential",
+                                "count": 10,
+                                "interval": "PT10S"
+                              }
+                            }
+                          }
+                        },
+                        "runAfter": {
+                          "Maker_Check_-_New_Connector": [
+                            "Succeeded"
+                          ]
+                        },
+                        "else": {
+                          "actions": {
+                            "Create_Custom_Connector": {
+                              "runAfter": {},
+                              "metadata": {
+                                "operationMetadataId": "00412129-bbac-4c61-8bd8-6e3283a82a32"
+                              },
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "connectionName": "shared_commondataserviceforapps_1",
+                                  "operationId": "CreateRecord",
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                                },
+                                "parameters": {
+                                  "entityName": "admin_connectors",
+                                  "item/admin_displayname": "@items('Apply_to_each_Connector')?['properties/displayName']",
+                                  "item/admin_name": "@items('Apply_to_each_Connector')?['name']",
+                                  "item/admin_id": "@items('Apply_to_each_Connector')?['id']",
+                                  "item/admin_admin_id_short": "@tolower(last(split(items('Apply_to_each_Connector')?['id'], '/')))",
+                                  "item/admin_backgroundcolor": "@items('Apply_to_each_Connector')?['properties/iconBrandColor']",
+                                  "item/admin_connectorcreateddatetime": "@items('Apply_to_each_Connector')?['properties/createdTime']",
+                                  "item/admin_connectorcreatordisplayname": "@outputs('Maker_Check_-_New_Connector')?['Body']?['userdisplayname']",
+                                  "item/admin_connectordeleted": false,
+                                  "item/admin_environmentdisplayname": "@triggerOutputs()?['body/admin_displayname']",
+                                  "item/admin_iconuri": "@items('Apply_to_each_Connector')?['properties/iconUri']",
+                                  "item/admin_appisorphaned": "No",
+                                  "item/admin_connectormodified": "@items('Apply_to_each_Connector')?['properties/changedTime']",
+                                  "item/admin_customconnectorhost": "@items('Apply_to_each_Connector')?['properties/backendService/serviceUrl']",
+                                  "item/admin_customconnectorhostishttp": "@outputs('Compose_isHTTP')",
+                                  "item/admin_EnvironmentCustomConnector@odata.bind": "admin_environments(@{triggerBody()?['admin_environmentid']})",
+                                  "item/admin_iscustomapi": true,
+                                  "item/admin_Maker@odata.bind": "admin_makers(@{body('Maker_Check_-_New_Connector')?['userid']})",
+                                  "item/admin_tier": "Custom"
+                                },
+                                "authentication": "@parameters('$authentication')",
+                                "retryPolicy": {
+                                  "type": "exponential",
+                                  "count": 10,
+                                  "interval": "PT10S"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "expression": {
+                          "equals": [
+                            "@outputs('Maker_Check_-_New_Connector')?['Body']?['userisorphan']",
+                            "@true"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "dcd45f0b-96d0-4b7f-805b-e36f2b8058e0"
+                        },
+                        "type": "If"
+                      }
+                    }
+                  },
+                  "expression": {
+                    "not": {
+                      "equals": [
+                        "@length(outputs('Get_Connector_Record')?['body/value'])",
+                        0
+                      ]
+                    }
+                  },
+                  "metadata": {
+                    "operationMetadataId": "504b09e8-2968-4a74-bff1-9ef735c814f4"
+                  },
+                  "type": "If"
+                },
+                "Compose_isHTTP": {
+                  "runAfter": {
+                    "Get_Connector_Record": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "494ad5a9-cba4-413b-befe-9c4a43bbe3a5"
+                  },
+                  "type": "Compose",
+                  "inputs": "@if(equals(split(items('Apply_to_each_Connector')?['properties/backendService/serviceUrl'], ':')[0], 'http'), true, false)"
+                }
+              },
+              "runAfter": {
+                "Get_Custom_Connectors_as_Admin": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "39e0a1f6-0965-4b21-97aa-817b914cfa41"
+              },
+              "type": "Foreach"
+            },
+            "Recheck_envt_still_exists,_exit_if_not": {
+              "actions": {
+                "Get_Environment_as_Admin": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "43975f51-d8e5-4d7d-9648-0f5c8c032525"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_powerplatformforadmins",
+                      "operationId": "GetSingleEnvironment",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerplatformforadmins"
+                    },
+                    "parameters": {
+                      "environment": "@triggerOutputs()?['body/admin_environmentname']",
+                      "api-version": "2018-10-01"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Set_envtExists_false": {
+                  "runAfter": {
+                    "Get_Environment_as_Admin": [
+                      "Failed"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "fcf0bcf2-1687-4afd-94ed-ed824537811f"
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "envtExists",
+                    "value": "@false"
+                  }
+                },
+                "If_evnt_does_not_exist_exit": {
+                  "actions": {
+                    "Terminate_for_environments_recently_deleted": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "c96f244b-3c1d-43b6-b930-9df94f180269"
+                      },
+                      "type": "Terminate",
+                      "inputs": {
+                        "runStatus": "Succeeded"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Set_envtExists_false": [
+                      "Succeeded",
+                      "Skipped"
+                    ]
+                  },
+                  "expression": {
+                    "equals": [
+                      "@variables('envtExists')",
+                      "@false"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "346f84b2-711e-4972-8b53-f44823f41d3b"
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "92d470ee-d893-464b-8e9b-f1588f45626b"
+              },
+              "type": "Scope"
+            },
+            "Get_Custom_Connectors_as_Admin": {
+              "runAfter": {
+                "Recheck_envt_still_exists,_exit_if_not": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "2b055a0a-f93b-4262-a350-589ac33e3d03"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_powerappsforadmins",
+                  "operationId": "Get-AdminConnectors",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerappsforadmins"
+                },
+                "parameters": {
+                  "environment": "@triggerOutputs()?['body/admin_environmentname']",
+                  "api-version": "2017-05-01",
+                  "$top": 250
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runtimeConfiguration": {
+                "paginationPolicy": {
+                  "minimumItemCount": 100000
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_envtExists_true": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "246a6196-0b55-46a2-a98f-7f57b68b3ed6"
+          },
+          "type": "Scope"
+        },
+        "Initialize_variable_flowEnvironment": {
+          "runAfter": {
+            "Initialize_variable_today": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b1869c0d-3d55-41d2-aba9-9ccff7c0ce47"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "flowEnvironment",
+                "type": "string",
+                "value": "@parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)')"
+              }
+            ]
+          },
+          "description": "Environment location specific Flow URL - remember / at the end"
+        },
+        "Initialize_variable_today": {
+          "runAfter": {
+            "Delay_Object_Inventory": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "da089250-9915-4fb8-84cb-c9d3909a1cb6"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "today",
+                "type": "string",
+                "value": "@{utcNow()}"
+              }
+            ]
+          }
+        },
+        "Error_Handling": {
+          "actions": {
+            "Create_a_new_record_-_Sync_Flow_Errors": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_syncflowerrorses",
+                  "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                  "item/admin_environmentname": "@triggerOutputs()?['body/admin_displayname']",
+                  "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "exponential",
+                  "count": 10,
+                  "interval": "PT10S"
+                }
+              }
+            },
+            "Terminate": {
+              "runAfter": {
+                "Update_Last_Run_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "500",
+                  "message": "Get Environments Failed"
+                }
+              }
+            },
+            "Get_ID_Fail": {
+              "runAfter": {
+                "Create_a_new_record_-_Sync_Flow_Errors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Update_Last_Run_Fail": {
+              "runAfter": {
+                "Get_ID_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": false
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Get_Custom_Connectors_and_store_them_in_CoE_CDS_Entity": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+          },
+          "type": "Scope"
+        },
+        "Update_last_run_as_pass": {
+          "actions": {
+            "Update_Last_Run_Successful": {
+              "runAfter": {
+                "Get_ID_Pass": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_ID_Pass": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Catch_-_not_ready_to_take_last_run_date": {
+              "runAfter": {
+                "Update_Last_Run_Successful": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+              },
+              "type": "Compose",
+              "inputs": "Catch - not ready to take last run date"
+            }
+          },
+          "runAfter": {
+            "Error_Handling": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+          },
+          "type": "Scope"
+        },
+        "Initialize_envtExists_true": {
+          "runAfter": {
+            "Initialize_variable_flowEnvironment": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "a8dd420b-cffa-46e8-8dd6-051717aa07c3"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "envtExists",
+                "type": "boolean",
+                "value": "@true"
+              }
+            ]
+          }
+        },
+        "Delay_Object_Inventory": {
+          "actions": {
+            "Delay_1_to_300_minutes": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "f37a4a9d-c5b4-41ed-8484-636dca60ee81"
+              },
+              "type": "Wait",
+              "inputs": {
+                "interval": {
+                  "count": "@rand(1, 300)",
+                  "unit": "Minute"
+                }
+              },
+              "description": "To avoid throttling of the backend to the tenant user, we will randomize the start time of these flows for tenants within a 5 hour range"
+            }
+          },
+          "runAfter": {
+            "Check_if_Environment_supports_inquiry": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "equals": [
+              "@parameters('DelayObjectInventory (admin_DelayObjectInventory)')",
+              true
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "49b3d120-232d-4694-b373-a97ecde35cc4"
+          },
+          "type": "If"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

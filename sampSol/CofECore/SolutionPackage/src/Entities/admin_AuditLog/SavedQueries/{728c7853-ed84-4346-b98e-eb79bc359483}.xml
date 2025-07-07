@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{728c7853-ed84-4346-b98e-eb79bc359483}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="admin_title" select="1" icon="1" preview="1">
+        <row name="result" id="admin_auditlogid">
+          <cell name="admin_applookup" width="210" />
+          <cell name="admin_appenvironment" width="141" />
+          <cell name="admin_operation" width="156" />
+          <cell name="admin_workload" width="100" />
+          <cell name="admin_userupn" width="193" />
+          <cell name="admin_creationtime" width="175" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="admin_auditlog">
+          <attribute name="admin_auditlogid" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="admin_operation" />
+          <attribute name="admin_userupn" />
+          <attribute name="admin_workload" />
+          <attribute name="admin_creationtime" />
+          <attribute name="admin_applookup" />
+          <order attribute="admin_creationtime" descending="true" />
+          <attribute name="admin_appenvironment" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>0.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Audit Logs" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

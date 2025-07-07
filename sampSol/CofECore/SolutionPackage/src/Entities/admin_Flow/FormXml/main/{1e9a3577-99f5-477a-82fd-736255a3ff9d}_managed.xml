@@ -1,0 +1,762 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{1e9a3577-99f5-477a-82fd-736255a3ff9d}</formid>
+    <IntroducedVersion>0.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="false" maxWidth="1920" headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{f7845e2d-adcd-4c20-9db7-50cc30d44955}" IsUserDefined="1" name="{f7845e2d-adcd-4c20-9db7-50cc30d44955}" locklevel="0" expanded="true" showlabel="true">
+          <labels>
+            <label description="Overview" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="true" IsUserDefined="0" id="{20ddf93c-be90-496c-a8cc-f7707ce9c3d8}" name="{20ddf93c-be90-496c-a8cc-f7707ce9c3d8}" columns="1" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Flow Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{90b9ec71-25aa-4723-a158-3a70170f5ed0}" locklevel="0">
+                        <labels>
+                          <label description="ID" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowidstring" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_flowidstring" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{800b0ddb-706c-d163-412c-cd98a3a3006c}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Flow Environment" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowenvironment" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="admin_flowenvironment" disabled="true" uniqueid="{e0e70aeb-c2ca-6876-eeac-e076ec91a688}">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                            <DisableQuickFind>false</DisableQuickFind>
+                            <DisableViewPicker>false</DisableViewPicker>
+                            <DefaultViewId>{16C8F393-8E98-4318-A2D3-0FEC847C0C7B}</DefaultViewId>
+                            <AllowFilterOff>false</AllowFilterOff>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{544b7956-658e-4127-b322-f09389b4e09c}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Flow State" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowstate" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_flowstate" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{12197a30-29d8-a7db-8ec5-94900b538103}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Maker" languagecode="1033" />
+                        </labels>
+                        <control id="header_admin_flowcreator" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="admin_flowcreator" disabled="true" uniqueid="{dda2c840-d85b-15ca-83d6-eba11b86de3d}">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                            <DisableQuickFind>false</DisableQuickFind>
+                            <DisableViewPicker>false</DisableViewPicker>
+                            <DefaultViewId>{32CB5052-A761-447D-B592-5641A097A171}</DefaultViewId>
+                            <AllowFilterOff>false</AllowFilterOff>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9dbf1077-bb24-4f74-9a88-6d697657386b}" showlabel="true" locklevel="0" visible="false">
+                        <labels>
+                          <label description="Display Name" languagecode="1033" />
+                        </labels>
+                        <control id="admin_displayname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="admin_displayname" uniqueid="{b08bd7a1-2972-5a8b-4c05-a4723b0b8b28}" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e74e6e48-da8a-48ee-a9c6-2cb4221e83aa}" showlabel="true" locklevel="1" visible="false">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" uniqueid="{5609101a-219d-9ae5-2c22-84be56e3a8b6}" disabled="false">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e71eb02b-4cd8-422f-854e-f3b3d882ed6c}" locklevel="0">
+                        <labels>
+                          <label description="Derived Owner" languagecode="1033" />
+                        </labels>
+                        <control id="admin_derivedowner" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="admin_derivedowner" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{46697d71-52d5-4302-baba-d819f727c0f5}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow is Orphaned" languagecode="1033" />
+                        </labels>
+                        <control id="cr5d5_flowisorphaned" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="cr5d5_flowisorphaned" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ea5f345b-76ff-4428-b2f2-27b68a226284}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Trigger" languagecode="1033" />
+                        </labels>
+                        <control id="cr5d5_flowtrigger" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="cr5d5_flowtrigger" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{16751374-1d1b-4014-b9ea-ff193c15fab0}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Template Name" languagecode="1033" />
+                        </labels>
+                        <control id="admin_templatename" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_templatename" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="{f7845e2d-adcd-4c20-9db7-50cc30d44955}_section_5" id="5a7e7e5c-b444-4da5-840d-a4a56ce85c68" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Flow changes" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5c333363-2ec4-4a74-a35c-28e95c331419}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Created On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowcreatedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="admin_flowcreatedon" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7d92f02f-3200-4ebc-807b-6950e0c3007d}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Modified On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowmodifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="admin_flowmodifiedon" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{590a2c8f-5ca5-48a3-b354-542c4948f8e4}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Deleted" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowdeleted" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowdeleted" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{23271804-5776-48fe-8a98-5114f261b7c9}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Deleted On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowdeletedon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_flowdeletedon" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_2" id="a8be0bc4-049a-4096-9024-5c398af2e6c0" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Governance" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_2_section_1" id="64b35778-0fe7-4354-a7e2-11102c9a3a69" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="MAKER REQUIREMENTS" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{66ddffc5-b2b1-4cb2-83ff-e816c839daa1}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Description" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowdescription" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="admin_flowdescription" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3e785215-faa2-47ba-9f3a-46900e55a8c9}" showlabel="true" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Business Justification" languagecode="1033" />
+                        </labels>
+                        <control id="admin_requirement_1" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="admin_requirement_1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{84e82110-2b95-4d00-9c35-6957d39cd303}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Business Impact" languagecode="1033" />
+                        </labels>
+                        <control id="admin_requirement_2" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_requirement_2" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7ecc0fe6-3d6e-4104-bef1-4d7e3f27a92e}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Maker Requirement - Dependencies" languagecode="1033" />
+                        </labels>
+                        <control id="admin_makerrequirementdependencies" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="admin_makerrequirementdependencies" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9c5878fb-2138-44c8-b348-e4c75585267d}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Mitigation Plan Provided" languagecode="1033" />
+                        </labels>
+                        <control id="admin_mitigationplanprovided" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_mitigationplanprovided" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_2_section_4" id="343d9583-75d9-4ac0-869a-05e8ac06aef7" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="DLP Information - coming soon" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell showlabel="false" locklevel="0" id="{b300c135-fc96-47c4-bbf0-b482b0f4ddfb}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_2_section_5" id="4fbcca05-c7aa-403c-acb1-d2e19f3a9937" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="WATCHED PROPERTIES" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{50ae5d93-8156-4d2c-8fd1-1435a797e7d7}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Contains Plain Text Password" languagecode="1033" />
+                        </labels>
+                        <control id="admin_containsplaintextpassword" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_containsplaintextpassword" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7a7377cd-8774-4621-84d8-b158f2295e99}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Contains Broken Connections" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowcontainsbrokenconnections" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowcontainsbrokenconnections" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4f608105-0afe-4ef6-ad09-b8a6c89ee460}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow is Orphaned" languagecode="1033" />
+                        </labels>
+                        <control id="cr5d5_flowisorphaned" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="cr5d5_flowisorphaned" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_2_section_3" id="a66c33f6-46f2-4c32-83c9-796dc706a46b" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="ADMIN REVIEW" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{fb48025b-a500-466a-9fea-fa0deb9bf482}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Admin Requirement - Reviewed Flow" languagecode="1033" />
+                        </labels>
+                        <control id="admin_adminrequirementreviewedflow" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_adminrequirementreviewedflow" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{96171f92-4eff-41ec-bb2c-f0b4158f4d0a}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Admin Requirement - Risk Assessment State" languagecode="1033" />
+                        </labels>
+                        <control id="admin_adminrequirementriskassessmentstate" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_adminrequirementriskassessmentstate" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87345456-79d7-43ed-9437-93ec1d6afb25}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Admin Requirement - Risk Assessment" languagecode="1033" />
+                        </labels>
+                        <control id="admin_adminrequirementriskassessment" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="admin_adminrequirementriskassessment" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell locklevel="0" id="{0b0f3b75-6e5f-4e54-9669-f5476ff4c267}" rowspan="15" colspan="1">
+                        <labels>
+                          <label description="Note Text" languagecode="1033" />
+                        </labels>
+                        <control id="notescontrol" classid="{06375649-C143-495E-A496-C962E5B4488E}" disabled="false" />
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+                <section name="{f7845e2d-adcd-4c20-9db7-50cc30d44955}_section_5" id="99c13791-1270-4677-96ea-9a8550d6a86f" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="SUSPENSION DETAILS" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{885475c3-18a4-4e60-839c-d08af374ff93}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Pending Suspension Reason" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowpendingsuspensionreason" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_flowpendingsuspensionreason" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2af03801-db8a-4037-a757-37ca32432ca1}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Pending Suspension On" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowpendingsuspensionon" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="admin_flowpendingsuspensionon" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8f5311eb-b9bb-4dcc-8d9f-20be24bb6799}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Suspension Reason" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsuspensionreason" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_flowsuspensionreason" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{516aeb07-5c30-454f-9875-e79ffb49b26b}" locklevel="1" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Pending Suspension PowerAppPlanExcluded" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowpendingsuspensionpowerappplanexcluded" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowpendingsuspensionpowerappplanexcluded" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_5" id="2aad0199-d86c-4031-8288-8e19fbefe009" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Connections and Actions" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_5_section_4" id="2e523858-bef4-4175-b074-4490ea6f60f7" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Referenced Recources" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell showlabel="false" locklevel="0" id="{03e10ee4-53d4-4acb-885c-2f0729ea3200}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e0c5e0dd-ed7c-4200-bfda-dc3482ea72ed}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Referenced Services" languagecode="1033" />
+                        </labels>
+                        <control id="admin_referencedresources_services" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_referencedresources_services" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{da34c58f-54b8-473f-89d7-f61daff36042}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Referenced Sharepoint Sites" languagecode="1033" />
+                        </labels>
+                        <control id="admin_referencedresources_sharepointsite" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_referencedresources_sharepointsite" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3ce32c8d-0901-4ab3-af05-3ac2d6f6dd1a}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Referenced Dataverse Tables" languagecode="1033" />
+                        </labels>
+                        <control id="admin_referencedresources_dvtables" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="admin_referencedresources_dvtables" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="{f7845e2d-adcd-4c20-9db7-50cc30d44955}_section_4" id="2d60cb02-2029-41cb-9662-0536ae4287e7" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Flow Action Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{5fd7ba2e-23dc-43ce-b2dc-d0a03763db9e}" rowspan="1" colspan="1" auto="false">
+                        <labels>
+                          <label description=" " languagecode="1033" />
+                        </labels>
+                        <control id="Subgrid_1" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}" indicationOfSubgrid="true">
+                          <parameters>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <TargetEntityType>admin_flowactiondetail</TargetEntityType>
+                            <ViewId>{7054D76F-DD3E-4A25-9B3F-7FD6424E3224}</ViewId>
+                            <ViewIds>{7054D76F-DD3E-4A25-9B3F-7FD6424E3224}</ViewIds>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <RelationshipName>admin_FlowActionDetail_admin_Flow_admin_F</RelationshipName>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="{f7845e2d-adcd-4c20-9db7-50cc30d44955}_section_3" showlabel="true" showbar="true" locklevel="0" id="{958aa618-3aa7-32d4-2a3d-8ea2b5c719d9}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Connection References" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{92530c34-365c-ace3-6108-866e41e9349b}" showlabel="false" colspan="1" auto="false" rowspan="6">
+                        <labels>
+                          <label description="Connection References (Flow Connection Reference)" languagecode="1033" />
+                        </labels>
+                        <control id="Flow_ConnectionReferences" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{31e075a8-7a82-8772-069c-ebae1954a144}">
+                          <parameters>
+                            <ViewId>{77D83805-EB50-EE11-BE6F-000D3A3411D9}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>admin_rel_FlowConnectionReference</RelationshipName>
+                            <TargetEntityType>admin_connectionreference</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds>{0EFCDF8F-7A1C-414E-AEB0-3C5590DA39BB},{BAC63B0F-A389-E911-A856-000D3A372932},{77D83805-EB50-EE11-BE6F-000D3A3411D9}</ViewIds>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId />
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_6" id="8e54b494-8567-494a-8bfd-3d567bdb3a24" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Shared with" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab_6_section_1" id="5bd60660-e75e-4731-9545-06d04d3bf67d" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="11" labelwidth="115">
+                  <labels>
+                    <label description="Shared With Summary" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{016ba032-f624-4aca-90cf-bdf5ba000411}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="# Run Only Users" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsharedusers" classid="{C6D124CA-7EDA-4A60-AEA9-7FB8D318B68F}" datafieldname="admin_flowsharedusers" disabled="true" />
+                      </cell>
+                      <cell locklevel="0" id="{faacbdec-5675-4cd8-a866-cc0d576b725c}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{fcb5078c-4bec-4644-8060-07993d77b03a}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="# Flow Co-owners" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsharededitors" classid="{C6D124CA-7EDA-4A60-AEA9-7FB8D318B68F}" datafieldname="admin_flowsharededitors" disabled="true" />
+                      </cell>
+                      <cell locklevel="0" id="{5f97567e-56c7-4fa0-8829-c90dffe30a68}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{565a8215-843f-4e13-bdc3-98746e80c572}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="# Groups Shared With" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsharedgroups" classid="{C6D124CA-7EDA-4A60-AEA9-7FB8D318B68F}" datafieldname="admin_flowsharedgroups" disabled="true" />
+                      </cell>
+                      <cell locklevel="0" id="{f196f14e-5cbd-41ed-9fb0-6071b2792501}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0d96927f-1c64-48cd-99ec-840db6889e4a}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Has Guest Run Only Users" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsharedguestuser" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowsharedguestuser" disabled="true" />
+                      </cell>
+                      <cell locklevel="0" id="{349c03a2-73a8-4068-9042-05495fe25333}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e15fa382-d0fd-438a-948c-dc862c4ad771}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Has Guest Co-owners" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsharedguesteditor" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowsharedguesteditor" disabled="true" />
+                      </cell>
+                      <cell locklevel="0" id="{81a4ba39-1d80-4f92-b324-0de9e69a17c7}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{bdb8e96b-5fb2-49b0-8218-4c17185be5d4}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="is Guest User Owned" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowsharedguestowner" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowsharedguestowner" disabled="true" />
+                      </cell>
+                      <cell locklevel="0" id="{531e48f8-0d4a-42ce-9db1-f6cd59f6d379}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_6_section_3" id="e01cac7e-a432-493b-8640-41f688254c03" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="11" labelwidth="115">
+                  <labels>
+                    <label description="FLOW SHARED WITH (LIST)" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell locklevel="0" id="{598c5c3b-0fc5-4bea-a86e-c40afc0af91f}" rowspan="4" colspan="1" auto="true">
+                        <labels>
+                          <label description="Flow Owners Co-Owners" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Flow_Owners" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>100</RecordsPerPage>
+                            <AutoExpand>Auto</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_powerplatformuserrole</TargetEntityType>
+                            <ViewId>{C39DBB98-FF2B-EF11-840A-00224809C8D8}</ViewId>
+                            <ViewIds>{252402B7-BD6F-415C-8613-958FDD8B8DE0},{C39DBB98-FF2B-EF11-840A-00224809C8D8}</ViewIds>
+                            <RelationshipName>admin_PowerPlatformUserRole_Flow_admin_Fl</RelationshipName>
+                            <VisualizationId>{28904A82-8DAC-EA11-A812-000D3A31CB42}</VisualizationId>
+                          </parameters>
+                        </control>
+                      </cell>
+                      <cell locklevel="0" id="{e0242b02-c5d8-4013-ae4c-b35c1a11a338}" rowspan="4" colspan="1" auto="true">
+                        <labels>
+                          <label description="Run only users" languagecode="1033" />
+                        </labels>
+                        <control indicationOfSubgrid="true" id="Run_only_users" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+                          <parameters>
+                            <RecordsPerPage>100</RecordsPerPage>
+                            <AutoExpand>Auto</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <ChartGridMode>All</ChartGridMode>
+                            <TargetEntityType>admin_powerplatformuserrole</TargetEntityType>
+                            <ViewId>{1C25AB87-22AC-EA11-A812-000D3A31CB42}</ViewId>
+                            <ViewIds>{252402B7-BD6F-415C-8613-958FDD8B8DE0},{1C25AB87-22AC-EA11-A812-000D3A31CB42}</ViewIds>
+                            <RelationshipName>admin_PowerPlatformUserRole_Flow_admin_Fl</RelationshipName>
+                            <VisualizationId>{28904A82-8DAC-EA11-A812-000D3A31CB42}</VisualizationId>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_3" id="9e54561f-6227-4517-bc1e-04f8b8848156" IsUserDefined="0" locklevel="0" showlabel="true">
+          <labels>
+            <label description="Settings" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab_3_section_1" id="cf626d2f-cb16-4a6d-9856-ed7f36e38481" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Settings" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{1ae20e08-afc3-456b-b067-7f961df21147}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Excuse From Inactivity Flows" languagecode="1033" />
+                        </labels>
+                        <control id="admin_flowexcusedfromarchival" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_flowexcusedfromarchival" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1f11d7ab-f3b7-4ec7-ae0e-904b283dc0ee}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Inventory Me" languagecode="1033" />
+                        </labels>
+                        <control id="admin_inventoryme" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_inventoryme" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{00d6d075-1bf0-4573-bbae-1372f9359dfc}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Inventory My FlowActionDetails" languagecode="1033" />
+                        </labels>
+                        <control id="admin_inventorymyflowactiondetails" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="admin_inventorymyflowactiondetails" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{1965f97e-df40-454d-8a71-f12832e8dae5}" columns="111">
+        <rows>
+          <row>
+            <cell id="{1a71cc85-f75a-4ea2-934b-4c578c856a9b}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{f2977b1e-283a-4477-9f87-8376bac23595}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{e4dc5103-a81e-4462-ad1f-c995996912a0}" columns="111">
+        <rows>
+          <row>
+            <cell id="{9fc727e3-cbcd-445f-b8b4-c83aff8c101c}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{b61dea52-c7ca-4f56-8199-ec97703f4d7c}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{7d442b28-b2fd-47a4-aed1-43fb394d0a67}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <Navigation>
+        <NavBar />
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <controlDescriptions />
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Main Flow Form" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{0206fe31-9325-4cde-ba6b-b188e27e0d4f}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="admin_capacitytype" select="1" icon="1" preview="1">
+        <row name="result" id="admin_environmentcapacityid">
+          <cell name="admin_environment" width="210" />
+          <cell name="admin_percentusedofapproved" width="189" />
+          <cell name="admin_approvedcapacity" width="150" />
+          <cell name="admin_actualconsumption" width="150" />
+          <cell name="admin_ratedconsumption" width="150" />
+          <cell name="admin_capacityunit" width="150" />
+          <cell name="admin_capacitytype" width="168" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical" distinct="true">
+        <entity name="admin_environmentcapacity">
+          <attribute name="admin_environmentcapacityid" />
+          <attribute name="admin_capacitytype" />
+          <attribute name="admin_actualconsumption" />
+          <attribute name="admin_capacityunit" />
+          <attribute name="admin_approvedcapacity" />
+          <attribute name="admin_ratedconsumption" />
+          <attribute name="admin_percentusedofapproved" />
+          <order attribute="admin_percentusedofapproved" descending="true" />
+          <attribute name="admin_environment" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+            <condition attribute="admin_environmentdeleted" operator="eq" value="0" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active Environment Capacities" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

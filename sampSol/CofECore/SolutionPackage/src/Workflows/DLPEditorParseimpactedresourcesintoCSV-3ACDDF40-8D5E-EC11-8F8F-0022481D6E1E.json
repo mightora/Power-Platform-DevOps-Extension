@@ -1,0 +1,1499 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps_1": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreDataverse2"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_office365users": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreOffice365Users"
+        },
+        "api": {
+          "name": "shared_office365users"
+        }
+      },
+      "shared_office365_1": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "admin_CoECoreO365Outlook"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "eMail Body Start (admin_eMailBodyStart)": {
+          "defaultValue": "<body>     <div id='content'>         <table id='form'>             <tr>                 <td><img id='logo' src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1280px-Microsoft_logo_%282012%29.svg.png' width='300'></td>             </tr>             <tr>                 <td>                     <p id='header'>Power Platform</p>                 </td>             </tr>             <tr id='ribbon'>                 <td>                     <tr>                         <td></td>                     </tr>                     <tr id='message'>                         <td>",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_eMailBodyStart",
+            "description": "Inventory - Starter HTML format for eMails"
+          }
+        },
+        "eMail Body Stop (admin_eMailBodyStop)": {
+          "defaultValue": "</td>                     </tr>         </table>     </div> </body>",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_eMailBodyStop",
+            "description": "Inventory - Ending HTML format for eMails"
+          }
+        },
+        "eMail Header Style (admin_eMailHeaderStyle)": {
+          "defaultValue": "<head>     <style>         body {             background-color: #efefef;             font-family: Segoe UI;             text-align: center;         }          #content {             border: 1px solid #742774;             background-color: #ffffff;             width: 650px;             margin-bottom: 50px;             display: inline-block;         }          #logo {             margin-left: 52px;             margin-top: 40px;             width: 60px;             height: 12px;         }          #header {             font-size: 24px;             margin-left: 50px;             margin-top: 20px;             margin-bottom: 20px;         }          #ribbon {             background-color: #742774;         }          #ribbonContent {             font-size: 20px;             padding-left: 30px;             padding-top: 10px;             padding-bottom: 20px;             color: white;             width: 100%;             padding-right: 10px;         }          #message>td {             font-size: 14px;             padding-left: 60px;             padding-right: 60px;             padding-top: 20px;             padding-bottom: 40px;         }          #footer>td {             font-size: 12px;             background-color: #cfcfcf;             height: 40px;             padding-top: 15px;             padding-left: 40px;             padding-bottom: 20px;         }          #form {             width: 100%;             border-collapse: collapse;         }          #app {             width: 60%;             font-size: 12px;         }          .label {             color: #5f5f5f         }          table {             border-collapse: collapse;             width: 100%;         }          th,         td {             padding: 8px;             text-align: left;             border-bottom: 1px solid #ddd;         }     </style> </head>",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_eMailHeaderStyle",
+            "description": "Inventory - CSS/Style used for eMails"
+          }
+        },
+        "Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)": {
+          "defaultValue": "https://flow.microsoft.com/manage/environments/",
+          "type": "String",
+          "metadata": {
+            "schemaName": "admin_PowerAutomateEnvironmentVariable",
+            "description": "Inventory - REQUIRED. Environment, including geographic location, for Power Automate - Ex for commercial: https://flow.microsoft.com/manage/environments/"
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "33354685-7eb6-436d-801c-c9b0326ef571"
+          },
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "environmentsInPolicy",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "businessConnectors",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
+                  "title": "nonBusinessConnectors",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_3": {
+                  "title": "blockedConnectors",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_4": {
+                  "title": "emailTo",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_5": {
+                  "title": "exportType",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_6": {
+                  "title": "policyName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_7": {
+                  "title": "policyId",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Please enter your input",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2",
+                "text_3",
+                "text_4",
+                "text_5",
+                "text_6",
+                "text_7"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Initialize_variable": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "745280d5-220e-4d36-bd71-cfb3719b76c5"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varImpactedApps",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Initialize_variable_2": {
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2a49175f-5f3b-42f9-a284-3e977b4408a4"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varImpactedFlows",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Initialize_emailGUID": {
+          "runAfter": {
+            "Initialize_variable_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dad8eca6-7937-47c0-aa57-f2d48dd1c5a2"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "emailGUID",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Send_DLP_CSV": {
+          "actions": {
+            "Parse_Environments": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "2533b9e8-852b-4b3a-bde5-4730d23a8083"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()['text']",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
+                  }
+                }
+              }
+            },
+            "Select_Environments": {
+              "runAfter": {
+                "Parse_Environments": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "3f597f0c-4f6c-497d-b55b-6eaea6cdc511"
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Parse_Environments')",
+                "select": "@item()['name']"
+              }
+            },
+            "List_apps": {
+              "runAfter": {
+                "Select_Environments": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "06fa203d-e828-4f0d-a4aa-ebc41015b394"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_apps",
+                  "$select": "admin_appconnections,admin_appid,admin_appenvironmentdisplayname,admin_appownerdisplayname,admin_appenvironmentid,admin_displayname,admin_applastlaunchedon",
+                  "$filter": "Microsoft.Dynamics.CRM.In(PropertyName='admin_appenvironmentid',PropertyValues=@{body('Select_Environments')}) and admin_appdeleted eq false and admin_appconnections ne null",
+                  "$expand": "admin_AppOwner($select=admin_userprincipalname,admin_makerid)"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runtimeConfiguration": {
+                "paginationPolicy": {
+                  "minimumItemCount": 100000
+                }
+              }
+            },
+            "List_flows": {
+              "runAfter": {
+                "List_apps": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "b34831c1-3c52-42bd-a5a3-72340a937900"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_flows",
+                  "$select": "admin_flowconnections,admin_flowid,admin_flowenvironmentdisplayname,admin_flowmakerdisplayname,admin_flowenvironmentid,admin_displayname,admin_flowstate",
+                  "$filter": "Microsoft.Dynamics.CRM.In(PropertyName='admin_flowenvironmentid',PropertyValues=@{body('Select_Environments')}) and admin_flowdeleted eq false and admin_flowconnections ne null and admin_flowispublished ne false",
+                  "$expand": "admin_FlowCreator($select=admin_userprincipalname,admin_makerid)"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runtimeConfiguration": {
+                "paginationPolicy": {
+                  "minimumItemCount": 100000
+                }
+              }
+            },
+            "Parse_Business_connectors": {
+              "runAfter": {
+                "List_flows": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "cff4a545-5991-4052-894b-cbcd2cc10baa"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()['text_1']",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ]
+                  }
+                }
+              }
+            },
+            "Select_business": {
+              "runAfter": {
+                "Parse_Business_connectors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "71ba5df5-e490-4a96-946a-0b8aa63296b0"
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Parse_Business_connectors')",
+                "select": "@item()['id']"
+              }
+            },
+            "Parse_Non-Business_connectors": {
+              "runAfter": {
+                "Filter_business": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "a53bfb51-e9b4-4e8f-83b6-bcd1dffb8863"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()['text_2']",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ]
+                  }
+                }
+              }
+            },
+            "Select_nonbusiness": {
+              "runAfter": {
+                "Parse_Non-Business_connectors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "b6c8c37c-0b06-4506-b60a-f297c43dcaac"
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Parse_Non-Business_connectors')",
+                "select": "@item()['id']"
+              }
+            },
+            "Parse_Blocked_Connectors": {
+              "runAfter": {
+                "Filter_nonbusiness": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "740d75d5-a818-4852-8ef6-41dfa490dc50"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()['text_3']",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ]
+                  }
+                }
+              }
+            },
+            "Select_blocked": {
+              "runAfter": {
+                "Parse_Blocked_Connectors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "41b74a81-4559-4040-9110-5a0c818a7a2e"
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Parse_Blocked_Connectors')",
+                "select": "@item()['id']"
+              }
+            },
+            "Apply_to_each_app": {
+              "foreach": "@outputs('List_apps')?['body/value']",
+              "actions": {
+                "If_App_has_connections": {
+                  "actions": {
+                    "If_apps_with_both_business_and_non_business_connections_found": {
+                      "actions": {
+                        "Add_app_to_impacted_apps_2": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "c4a23435-6402-4d5c-bb7e-1585d1f2b3d2"
+                          },
+                          "type": "AppendToArrayVariable",
+                          "inputs": {
+                            "name": "varImpactedApps",
+                            "value": {
+                              "appOwner": "@items('Apply_to_each_app')?['admin_appownerdisplayname']",
+                              "appName": "@items('Apply_to_each_app')?['admin_displayname']",
+                              "appOwnerEmail": "@coalesce(items('Apply_to_each_app')?['admin_appowner/admin_userprincipalname'], '')",
+                              "appMaker": "@items('Apply_to_each_app')?['admin_appowner/admin_makerid']",
+                              "appId": "@items('Apply_to_each_app')?['admin_appid']",
+                              "appEnvironmentId": "@items('Apply_to_each_app')?['admin_appenvironmentid']",
+                              "appLastLaunched": "@items('Apply_to_each_app')?['admin_applastlaunchedon']",
+                              "blockedConnector": "",
+                              "businessConnector": "@outputs('Compose_-_Business_Impact_as_String')",
+                              "nonBusinessConnector": "@outputs('Compose_-_NonBusiness_Impact_as_String')"
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Compose_-_NonBusiness_Impact_as_String": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "and": [
+                          {
+                            "equals": [
+                              "@empty(body('Conflict_-_BusinessApps'))",
+                              "@false"
+                            ]
+                          },
+                          {
+                            "equals": [
+                              "@empty(body('Conflict_-_NonBusinessApps'))",
+                              "@false"
+                            ]
+                          }
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "f83eda25-e634-4527-9cf7-d026ad2d5ce1"
+                      },
+                      "type": "If"
+                    },
+                    "Conflict_-_NonBusinessApps": {
+                      "runAfter": {
+                        "Compose_-_Business_Impact_as_String": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "36f0e261-de81-401f-865c-ce84f2496b30"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@split(items('Apply_to_each_app')['admin_appconnections'], ',')",
+                        "where": "@contains(body('Filter_nonbusiness'), item())"
+                      }
+                    },
+                    "Conflict_-_BusinessApps": {
+                      "runAfter": {
+                        "If_apps_with_blocked_connections_found": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "58089950-9c9a-40f4-86ea-a7ee5957036b"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@split(items('Apply_to_each_app')['admin_appconnections'], ',')",
+                        "where": "@contains(body('Filter_business'), item())"
+                      }
+                    },
+                    "If_apps_with_blocked_connections_found": {
+                      "actions": {
+                        "Add_app_to_impacted_apps": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "31802361-0e19-4d86-bc40-2d3535a90795"
+                          },
+                          "type": "AppendToArrayVariable",
+                          "inputs": {
+                            "name": "varImpactedApps",
+                            "value": {
+                              "appOwner": "@items('Apply_to_each_app')?['admin_appownerdisplayname']",
+                              "appName": "@items('Apply_to_each_app')?['admin_displayname']",
+                              "appOwnerEmail": "@coalesce(items('Apply_to_each_app')?['admin_appowner/admin_userprincipalname'], '')",
+                              "appMaker": "@items('Apply_to_each_app')?['admin_appowner/admin_makerid']",
+                              "appId": "@items('Apply_to_each_app')?['admin_appid']",
+                              "appEnvironmentId": "@items('Apply_to_each_app')?['admin_appenvironmentid']",
+                              "appLastLaunched": "@items('Apply_to_each_app')?['admin_applastlaunchedon']",
+                              "blockedConnectors": "@outputs('Compose_-_Impacted_Apps_as_String')",
+                              "businessConnector": "",
+                              "nonBusinessConnector": ""
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Compose_-_Impacted_Apps_as_String": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "equals": [
+                          "@empty(body('Blocked_-_Impacted_Apps'))",
+                          "@false"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "6a8dd835-76f3-4419-862d-255710e0e5e2"
+                      },
+                      "type": "If"
+                    },
+                    "Blocked_-_Impacted_Apps": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "8a72d016-14e5-4ef8-a6a6-55ae2925fa59"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@split(items('Apply_to_each_app')['admin_appconnections'], ',')",
+                        "where": "@contains(body('Select_blocked'), item())"
+                      }
+                    },
+                    "Compose_-_Impacted_Apps_as_String": {
+                      "runAfter": {
+                        "Blocked_-_Impacted_Apps": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "b677fcf0-855f-499c-b508-02bd20ba0c12"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Blocked_-_Impacted_Apps'), ',')"
+                    },
+                    "Compose_-_Business_Impact_as_String": {
+                      "runAfter": {
+                        "Conflict_-_BusinessApps": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "79659c01-4b34-4ba4-a780-72bc7403d592"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Conflict_-_BusinessApps'), ',')"
+                    },
+                    "Compose_-_NonBusiness_Impact_as_String": {
+                      "runAfter": {
+                        "Conflict_-_NonBusinessApps": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "21ca9ae5-65d1-4040-9a19-57b9f36b7863"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Conflict_-_NonBusinessApps'), ',')"
+                    }
+                  },
+                  "runAfter": {},
+                  "expression": {
+                    "equals": [
+                      "@empty(items('Apply_to_each_app')?['admin_appconnections'])",
+                      "@false"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "c5e2802c-324c-45d3-8700-e3c68b2f0f2e"
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {
+                "Select_blocked": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f038732a-eaf8-4894-9cb7-acb5da93b80c"
+              },
+              "type": "Foreach",
+              "runtimeConfiguration": {
+                "concurrency": {
+                  "repetitions": 50
+                }
+              }
+            },
+            "Apply_to_each_flow": {
+              "foreach": "@outputs('List_flows')?['body/value']",
+              "actions": {
+                "If_Flow_has_connections": {
+                  "actions": {
+                    "Blocked_-_Impacted_Flows": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "aeb0f0ed-d850-495e-bf48-be2b09ebf6be"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@split(items('Apply_to_each_flow')['admin_flowconnections'], ',')",
+                        "where": "@contains(body('Select_blocked'), item())"
+                      }
+                    },
+                    "If_flows_with_blocked_connections_found": {
+                      "actions": {
+                        "Add_flow_to_impacted_flows": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "17f758f8-abf4-4ee1-b521-c706cd662cb5"
+                          },
+                          "type": "AppendToArrayVariable",
+                          "inputs": {
+                            "name": "varImpactedFlows",
+                            "value": {
+                              "flowOwner": "@coalesce(items('Apply_to_each_flow')?['admin_flowmakerdisplayname'], '')",
+                              "flowName": "@items('Apply_to_each_flow')?['admin_displayname']",
+                              "flowOwnerEmail": "@coalesce(items('Apply_to_each_flow')?['admin_flowcreator/admin_userprincipalname'], '')",
+                              "flowMaker": "@items('Apply_to_each_flow')?['admin_flowcreator/admin_makerid']",
+                              "flowId": "@items('Apply_to_each_flow')?['admin_flowid']",
+                              "flowEnvironmentId": "@items('Apply_to_each_flow')?['admin_flowenvironmentid']",
+                              "flowState": "@items('Apply_to_each_flow')?['admin_flowstate']",
+                              "blockedConnectors": "@outputs('Compose_-_Blocked_Flows_as_String')",
+                              "businessConnector": "",
+                              "nonBusinessConnector": ""
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Compose_-_Blocked_Flows_as_String": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "equals": [
+                          "@empty(body('Blocked_-_Impacted_Flows'))",
+                          "@false"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "86619a00-94c7-4adf-9eb0-da2ce9e5601f"
+                      },
+                      "type": "If"
+                    },
+                    "Conflict_-_Business_Flows": {
+                      "runAfter": {
+                        "If_flows_with_blocked_connections_found": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "b3c6ce18-cb6f-4a5a-bf46-c0fdd7eae73e"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@split(items('Apply_to_each_flow')['admin_flowconnections'], ',')",
+                        "where": "@contains(body('Select_business'), item())"
+                      }
+                    },
+                    "If_flows_with_both_business_and_non_business_connections_found": {
+                      "actions": {
+                        "Add_flow_to_impacted_flows_2": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "b6448393-0c44-4705-be2b-79b7debf8319"
+                          },
+                          "type": "AppendToArrayVariable",
+                          "inputs": {
+                            "name": "varImpactedFlows",
+                            "value": {
+                              "flowOwner": "@coalesce(items('Apply_to_each_flow')?['admin_flowmakerdisplayname'], '')",
+                              "flowName": "@items('Apply_to_each_flow')?['admin_displayname']",
+                              "flowOwnerEmail": "@coalesce(items('Apply_to_each_flow')?['admin_flowcreator/admin_userprincipalname'], '')",
+                              "flowMaker": "@items('Apply_to_each_flow')?['admin_flowcreator/admin_makerid']",
+                              "flowId": "@items('Apply_to_each_flow')?['admin_flowid']",
+                              "flowEnvironmentId": "@items('Apply_to_each_flow')?['admin_flowenvironmentid']",
+                              "flowState": "@items('Apply_to_each_flow')?['admin_flowstate']",
+                              "blockedConnectors": "",
+                              "businessConnector": "@outputs('Compose_-_Business_Impact_Flows_as_String')",
+                              "nonBusinessConnector": "@outputs('Compose_-_NonBusiness_Impact_Flows_as_String')"
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Compose_-_NonBusiness_Impact_Flows_as_String": [
+                          "Succeeded"
+                        ]
+                      },
+                      "expression": {
+                        "and": [
+                          {
+                            "equals": [
+                              "@empty(body('Conflict_-_Business_Flows'))",
+                              "@false"
+                            ]
+                          },
+                          {
+                            "equals": [
+                              "@empty(body('Conflict_-_NonBusinessFlows'))",
+                              "@false"
+                            ]
+                          }
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "e4a6d320-9344-4559-b09a-83bb5323921a"
+                      },
+                      "type": "If"
+                    },
+                    "Conflict_-_NonBusinessFlows": {
+                      "runAfter": {
+                        "Compose_-_Business_Impact_Flows_as_String": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "cab6f0b5-81f9-478a-a16c-c04e80fa7d51"
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@split(items('Apply_to_each_flow')['admin_flowconnections'], ',')",
+                        "where": "@contains(body('Select_nonbusiness'), item())"
+                      }
+                    },
+                    "Compose_-_Blocked_Flows_as_String": {
+                      "runAfter": {
+                        "Blocked_-_Impacted_Flows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "7ab5b9a7-f683-422c-a8fa-3453c1eb138a"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Blocked_-_Impacted_Flows'), ',')"
+                    },
+                    "Compose_-_Business_Impact_Flows_as_String": {
+                      "runAfter": {
+                        "Conflict_-_Business_Flows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "b772d371-72d7-43aa-8f58-954bb76e9d2a"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Conflict_-_Business_Flows'), ',')"
+                    },
+                    "Compose_-_NonBusiness_Impact_Flows_as_String": {
+                      "runAfter": {
+                        "Conflict_-_NonBusinessFlows": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "38a801b6-71ad-4880-9df0-4436a0d7d3bc"
+                      },
+                      "type": "Compose",
+                      "inputs": "@join(body('Conflict_-_NonBusinessFlows'), ',')"
+                    }
+                  },
+                  "runAfter": {},
+                  "expression": {
+                    "equals": [
+                      "@empty(items('Apply_to_each_flow')?['admin_flowconnections'])",
+                      "@false"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "2dd35457-ffa1-416d-9d47-db4ee7328f89"
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {
+                "Apply_to_each_app": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "66333f69-f6fc-4330-a2d0-7144892ec652"
+              },
+              "type": "Foreach",
+              "runtimeConfiguration": {
+                "concurrency": {
+                  "repetitions": 50
+                }
+              }
+            },
+            "Create_CSV_table_for_flows": {
+              "runAfter": {
+                "If_App_list_empty_and_export_type_csv": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "44a05c9c-4f51-4fd8-affd-a77b756c5e46"
+              },
+              "type": "Table",
+              "inputs": {
+                "from": "@variables('varImpactedFlows')",
+                "format": "CSV"
+              }
+            },
+            "Filter_business": {
+              "runAfter": {
+                "Select_business": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "d3534905-937a-4fe8-951b-b023f3c5abfd"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Select_business')",
+                "where": "@not(equals(item(), 'shared_logicflows'))"
+              }
+            },
+            "Filter_nonbusiness": {
+              "runAfter": {
+                "Select_nonbusiness": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "8906c225-d6fb-4464-af9f-fb2bbf0c013e"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Select_nonbusiness')",
+                "where": "@not(equals(item(), 'shared_logicflows'))"
+              }
+            },
+            "Create_CSV_table_for_apps": {
+              "runAfter": {
+                "Create_CSV_table_for_flows": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c92647b1-e704-498c-9f33-7adc20c65e3f"
+              },
+              "type": "Table",
+              "inputs": {
+                "from": "@variables('varImpactedApps')",
+                "format": "CSV"
+              }
+            },
+            "Switch_export_option": {
+              "runAfter": {
+                "Create_CSV_table_for_apps": [
+                  "Succeeded"
+                ]
+              },
+              "cases": {
+                "Export_to_CSV": {
+                  "case": "csv",
+                  "actions": {
+                    "Get_user_profile_(V2)": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "5c040609-7080-4699-acce-099612680591"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_office365users",
+                          "operationId": "UserProfile_V2",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
+                        },
+                        "parameters": {
+                          "id": "@triggerBody()['text_4']",
+                          "$select": "preferredLanguage, mail"
+                        },
+                        "authentication": "@parameters('$authentication')",
+                        "retryPolicy": {
+                          "type": "exponential",
+                          "count": 10,
+                          "interval": "PT10S"
+                        }
+                      }
+                    },
+                    "Get_Row_-_Send_Impacted_Objects": {
+                      "actions": {
+                        "emailGUID_to_en-US": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "3c46d691-0f2a-4c36-9611-c2c7de1ec33d"
+                          },
+                          "type": "Compose",
+                          "inputs": "b0f83a79-fc63-ec11-8f8f-000d3a13d289"
+                        },
+                        "List_emails_for_preferred_language": {
+                          "runAfter": {
+                            "emailGUID_to_en-US": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "29188a43-3a3a-46da-a4f6-f162180d8254"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "ListRecords",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_customizedemails",
+                              "$select": "admin_customizedemailid",
+                              "$filter": "admin_basedon eq '@{outputs('emailGUID_to_en-US')}' and admin_language eq '@{outputs('Get_user_profile_(V2)')?['body/preferredLanguage']}'"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "Set_emailGUID_to_localized_row": {
+                          "runAfter": {
+                            "List_emails_for_preferred_language": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "1e1c0a09-41a6-4b3d-a558-df89f10ca738"
+                          },
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "emailGUID",
+                            "value": "@{if(greater(length(outputs('List_emails_for_preferred_language')?['body/value']), 0), first(body('List_emails_for_preferred_language')?['value'])['admin_customizedemailid'], outputs('emailGUID_to_en-US'))}"
+                          },
+                          "description": "if(greater(length(outputs('List_emails_for_preferred_language')?['body/value']),0), first(body('List_emails_for_preferred_language')?['value'])['admin_customizedemailid'], outputs('emailGUID_to_en-US'))"
+                        },
+                        "Get_a_row_by_ID": {
+                          "runAfter": {
+                            "Set_emailGUID_to_localized_row": [
+                              "Succeeded"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "c34df6f5-d327-47a2-8e25-e33c207762e2"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "GetItem",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_customizedemails",
+                              "recordId": "@variables('emailGUID')",
+                              "$select": "admin_body, admin_cc, admin_replyto, admin_sendonbehalf, admin_subject, admin_importance"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Get_user_profile_(V2)": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "74c8fe2a-d9bd-4ab1-a2a7-1ceffc6c9c18"
+                      },
+                      "type": "Scope"
+                    },
+                    "Send_Impacted_Objects": {
+                      "runAfter": {
+                        "Get_Row_-_Send_Impacted_Objects": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "092e6070-b489-41d3-bd1e-80dd44d6a4da"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_office365_1",
+                          "operationId": "SendEmailV2",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+                        },
+                        "parameters": {
+                          "emailMessage/To": "@outputs('Get_user_profile_(V2)')?['body/mail']",
+                          "emailMessage/Subject": "@outputs('Get_a_row_by_ID')?['body/admin_subject']",
+                          "emailMessage/Body": "<p>@{parameters('eMail Header Style (admin_eMailHeaderStyle)')}<br>\n@{parameters('eMail Body Start (admin_eMailBodyStart)')}<br>\n@{outputs('Get_a_row_by_ID')?['body/admin_body']}<br>\n@{parameters('eMail Body Stop (admin_eMailBodyStop)')}</p>",
+                          "emailMessage/From": "@if(equals(outputs('Get_a_row_by_ID')?['body/admin_sendonbehalf'], null), '', outputs('Get_a_row_by_ID')?['body/admin_sendonbehalf'])",
+                          "emailMessage/Cc": "@if(equals(outputs('Get_a_row_by_ID')?['body/admin_cc'], null), '', outputs('Get_a_row_by_ID')?['body/admin_cc'])",
+                          "emailMessage/Attachments": [
+                            {
+                              "Name": "ImpactedFlows.csv",
+                              "ContentBytes": "@body('Create_CSV_table_for_flows')"
+                            },
+                            {
+                              "Name": "ImpactedApps.csv",
+                              "ContentBytes": "@body('Create_CSV_table_for_apps')"
+                            }
+                          ],
+                          "emailMessage/ReplyTo": "@if(equals(outputs('Get_a_row_by_ID')?['body/admin_replyto'], null), '', outputs('Get_a_row_by_ID')?['body/admin_replyto'])",
+                          "emailMessage/Importance": "@if(equals(outputs('Get_a_row_by_ID')?['body/admin_importance'], null), '', outputs('Get_a_row_by_ID')?['body/admin_importance'])"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    }
+                  }
+                },
+                "Export_to_Task_List": {
+                  "case": "task",
+                  "actions": {
+                    "Add_impacted_apps_to_task_list": {
+                      "foreach": "@variables('varImpactedApps')",
+                      "actions": {
+                        "Add_impacted_app_to_table": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "6c2528bb-562f-4019-a3ab-210d5da0e54f"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "CreateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_dlpimpactanalysises",
+                              "item/admin_name": "@items('Add_impacted_apps_to_task_list')?['appName']",
+                              "item/admin_conflictingconnectorblocked": "@item()?['blockedConnectors']",
+                              "item/admin_conflictingconnectorbusiness": "@item()?['businessConnector']",
+                              "item/admin_conflictingconnectornonbusiness": "@item()?['nonBusinessConnector']",
+                              "item/admin_datapolicyid": "@triggerBody()['text_7']",
+                              "item/admin_dlppolicyname": "@triggerBody()['text_6']",
+                              "item/admin_ImpactOwner@odata.bind": "admin_makers(@{items('Add_impacted_apps_to_task_list')?['appMaker']})",
+                              "item/admin_ImpactedApp@odata.bind": "admin_apps(@{item()?['appId']})",
+                              "item/admin_ImpactedEnvironment@odata.bind": "admin_environments(@{replace(items('Add_impacted_apps_to_task_list')?['appEnvironmentId'],'Default-','')})"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "Add_impacted_app_to_table_-_try_as_orphan": {
+                          "runAfter": {
+                            "Add_impacted_app_to_table": [
+                              "Failed"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "6c2528bb-562f-4019-a3ab-210d5da0e54f"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "CreateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_dlpimpactanalysises",
+                              "item/admin_name": "@items('Add_impacted_apps_to_task_list')?['appName']",
+                              "item/admin_conflictingconnectorblocked": "@item()?['blockedConnectors']",
+                              "item/admin_conflictingconnectorbusiness": "@item()?['businessConnector']",
+                              "item/admin_conflictingconnectornonbusiness": "@item()?['nonBusinessConnector']",
+                              "item/admin_datapolicyid": "@triggerBody()['text_7']",
+                              "item/admin_dlppolicyname": "@triggerBody()['text_6']",
+                              "item/admin_ImpactedApp@odata.bind": "admin_apps(@{item()?['appId']})",
+                              "item/admin_ImpactedEnvironment@odata.bind": "admin_environments(@{replace(items('Add_impacted_apps_to_task_list')?['appEnvironmentId'],'Default-','')})"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      },
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "9f9f83ef-2099-4de9-adb5-47ba29c23117"
+                      },
+                      "type": "Foreach"
+                    },
+                    "Add_impacted_flows_to_task_list": {
+                      "foreach": "@variables('varImpactedFlows')",
+                      "actions": {
+                        "Add_impacted_flow_to_table": {
+                          "runAfter": {},
+                          "metadata": {
+                            "operationMetadataId": "78ac6826-a960-4cb5-8429-fd0225e1e7e0"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "CreateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_dlpimpactanalysises",
+                              "item/admin_name": "@items('Add_impacted_flows_to_task_list')?['flowName']",
+                              "item/admin_conflictingconnectorblocked": "@item()?['blockedConnectors']",
+                              "item/admin_conflictingconnectorbusiness": "@item()?['businessConnector']",
+                              "item/admin_conflictingconnectornonbusiness": "@item()?['nonBusinessConnector']",
+                              "item/admin_datapolicyid": "@triggerBody()['text_7']",
+                              "item/admin_dlppolicyname": "@triggerBody()['text_6']",
+                              "item/admin_ImpactOwner@odata.bind": "admin_makers(@{items('Add_impacted_flows_to_task_list')?['flowMaker']})",
+                              "item/admin_ImpactedEnvironment@odata.bind": "admin_environments(@{replace(items('Add_impacted_flows_to_task_list')?['flowEnvironmentId'],'Default-','')})",
+                              "item/admin_ImpactedFlow@odata.bind": "admin_flows(@{item()?['flowId']})"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        },
+                        "Add_impacted_flow_to_table_-_try_as_orphan": {
+                          "runAfter": {
+                            "Add_impacted_flow_to_table": [
+                              "Failed"
+                            ]
+                          },
+                          "metadata": {
+                            "operationMetadataId": "78ac6826-a960-4cb5-8429-fd0225e1e7e0"
+                          },
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "connectionName": "shared_commondataserviceforapps_1",
+                              "operationId": "CreateRecord",
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                            },
+                            "parameters": {
+                              "entityName": "admin_dlpimpactanalysises",
+                              "item/admin_name": "@items('Add_impacted_flows_to_task_list')?['flowName']",
+                              "item/admin_conflictingconnectorblocked": "@item()?['blockedConnectors']",
+                              "item/admin_conflictingconnectorbusiness": "@item()?['businessConnector']",
+                              "item/admin_conflictingconnectornonbusiness": "@item()?['nonBusinessConnector']",
+                              "item/admin_datapolicyid": "@triggerBody()['text_7']",
+                              "item/admin_dlppolicyname": "@triggerBody()['text_6']",
+                              "item/admin_ImpactedEnvironment@odata.bind": "admin_environments(@{replace(items('Add_impacted_flows_to_task_list')?['flowEnvironmentId'],'Default-','')})",
+                              "item/admin_ImpactedFlow@odata.bind": "admin_flows(@{item()?['flowId']})"
+                            },
+                            "authentication": "@parameters('$authentication')"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Add_impacted_apps_to_task_list": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "f733cbb1-2249-463a-a8ad-158ddd53c6aa"
+                      },
+                      "type": "Foreach"
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {}
+              },
+              "expression": "@triggerBody()['text_5']",
+              "metadata": {
+                "operationMetadataId": "d440b77c-5679-4ac7-bf11-fa88f7deed9c"
+              },
+              "type": "Switch"
+            },
+            "If_Flow_list_empty_and_export_type_csv": {
+              "actions": {
+                "Add_no_flows_note_to_impacted_flows": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "17f758f8-abf4-4ee1-b521-c706cd662cb5"
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "varImpactedFlows",
+                    "value": {
+                      "NOTE": "No impacted flows"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Apply_to_each_flow": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@length(variables('varImpactedFlows'))",
+                      0
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@triggerBody()['text_5']",
+                      "csv"
+                    ]
+                  }
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f361e14a-4f14-4610-9632-60af6e0bc3d7"
+              },
+              "type": "If"
+            },
+            "If_App_list_empty_and_export_type_csv": {
+              "actions": {
+                "Add_no_apps_note_to_impacted_apps": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "17f758f8-abf4-4ee1-b521-c706cd662cb5"
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "varImpactedApps",
+                    "value": {
+                      "NOTE": "No impacted apps"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "If_Flow_list_empty_and_export_type_csv": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@length(variables('varImpactedApps'))",
+                      0
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@triggerBody()['text_5']",
+                      "csv"
+                    ]
+                  }
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9fc38746-30d4-49ce-af08-05d19c66e027"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Initialize_emailGUID": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "3586ed4b-989d-4fbd-84c1-854e8f548480"
+          },
+          "type": "Scope"
+        },
+        "Error_Handling": {
+          "actions": {
+            "Create_a_new_record_-_Sync_Flow_Errors": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "87961ff0-e261-4890-9ab9-a53f88fe0de5"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_syncflowerrorses",
+                  "item/admin_name": "@workflow()?['tags']['flowDisplayName']",
+                  "item/admin_flowinstanceurl": "@concat(parameters('Power Automate Environment Variable (admin_PowerAutomateEnvironmentVariable)'), workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "exponential",
+                  "count": 10,
+                  "interval": "PT10S"
+                }
+              }
+            },
+            "Terminate": {
+              "runAfter": {
+                "Update_Last_Run_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9e5a2a18-dba2-47a1-96d5-3356f4348e5a"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "500",
+                  "message": "Get Environments Failed"
+                }
+              }
+            },
+            "Get_ID_Fail": {
+              "runAfter": {
+                "Create_a_new_record_-_Sync_Flow_Errors": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "47329bf2-8aac-400d-9778-a793b4f1180f"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Update_Last_Run_Fail": {
+              "runAfter": {
+                "Get_ID_Fail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c63eb7cc-6101-4567-b520-a4a8881264e9"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Fail')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": false
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Send_DLP_CSV": [
+              "Failed"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "38ae684e-622d-42ea-abd2-ee571aee3a5f"
+          },
+          "type": "Scope"
+        },
+        "Update_last_run_as_pass": {
+          "actions": {
+            "Update_Last_Run_Successful": {
+              "runAfter": {
+                "Get_ID_Pass": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "78ef70e5-7f67-4737-9a02-8533f12caa19"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "recordId": "@first(outputs('Get_ID_Pass')?['body/value'])?['admin_coesolutionmetadataid']",
+                  "item/admin_lastrun": "@utcNow()",
+                  "item/admin_lastrunpassed": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_ID_Pass": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "f4f314b6-89d3-4056-af1c-73115e7d6bd1"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps_1",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "admin_coesolutionmetadatas",
+                  "$select": "admin_coesolutionmetadataid",
+                  "$filter": "admin_objectname eq '@{workflow()?['tags']['flowDisplayName']}'",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Catch_-_not_ready_to_take_last_run_date": {
+              "runAfter": {
+                "Update_Last_Run_Successful": [
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "f88cdefe-c402-49d7-8f4a-934475e6f741"
+              },
+              "type": "Compose",
+              "inputs": "Catch - not ready to take last run date"
+            }
+          },
+          "runAfter": {
+            "Error_Handling": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c140442-d939-4ca4-8ec8-d1ee2bed4a81"
+          },
+          "type": "Scope"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}
