@@ -142,38 +142,6 @@ This task updates specific XML nodes within Power Platform solution files, allow
 ```
 
 
-## Dataverse 4 Teams Export
-
-### Overview
-This task exports and unpacks solutions from a Dataverse for Teams environment, automating the process and allowing easy management and versioning of Power Platform assets.
-
-### Key Features
-- **Solution Export**: Automates the export of a solution from Dataverse for Teams.
-- **Canvas App Unpacking**: Unpacks `.msapp` files for version control and customization.
-- **Solution Settings Template**: Generates a settings template file.
-- **PAC CLI Integration**: Uses the Power Platform CLI for authentication and solution operations.
-
-### How to Use
-1. Add the task to your Azure DevOps pipeline.
-2. Configure the inputs:
-    - `solutionName`: Name of the solution to export.
-    - `exportDirectory`: Directory to save the exported solution.
-    - `unpackDirectory`: Directory to unpack the solution.
-    - `environment`: URL of the Dataverse for Teams environment.
-3. Ensure PAC CLI is installed in your pipeline environment.
-4. Run the pipeline to export and unpack the solution.
-
-### Example Pipeline Usage
-
-```yaml
-- task: dataverse4TeamsExport@1
-  inputs:
-    solutionName: "MySolution"
-    exportDirectory: "$(Build.ArtifactStagingDirectory)/ExportedSolutions"
-    unpackDirectory: "$(Build.ArtifactStagingDirectory)/UnpackedSolutions"
-    environment: "https://your-environment-url"
-```
-
 ## Commit To Git Repository
 
 ### Overview
@@ -198,3 +166,8 @@ This task automates committing changes made during a pipeline run to your Git re
   inputs:
     commitMsg: "Automated commit from pipeline"
 ```
+
+## Removed Tasks
+
+### Dataverse for Teams Export and Import
+These tasks have been removed as the underlying PAC commands have stopped working.

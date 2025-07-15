@@ -74,12 +74,16 @@
             "packagePath": "solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "src/dataverse4TeamsImport",
-            "packagePath": "dataverse4TeamsImport"
-        },
-        {
             "path": "src/documentSolutionManifest",
             "packagePath": "documentSolutionManifest"
+        },
+        {
+            "path": "src/documentOptionSets",
+            "packagePath": "documentOptionSets"
+        },
+        {
+            "path": "src/documentWorkflows",
+            "packagePath": "documentWorkflows"
         }
     ],
     "contributions": [
@@ -144,16 +148,6 @@
             }
         },
         {
-            "id": "mightora-dataverse4TeamsImport-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "dataverse4TeamsImport"
-            }
-        },
-        {
             "id": "mightora-documentSolutionManifest-task",
             "type": "ms.vss-distributed-task.task",
             "targets": [
@@ -161,6 +155,26 @@
             ],
             "properties": {
                 "name": "documentSolutionManifest"
+            }
+        },
+        {
+            "id": "mightora-documentOptionSets-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentOptionSets"
+            }
+        },
+        {
+            "id": "mightora-documentWorkflows-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentWorkflows"
             }
         }
     ]
