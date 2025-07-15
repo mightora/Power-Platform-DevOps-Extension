@@ -4,14 +4,14 @@
     "name": "documentSolutionManifest",
     "friendlyName": "Solution Manifest Documentation Generator",
     "instanceNameFormat": "Mightora Power Platform Solution Manifest Documentation Generator",
-    "description": "Comprehensive documentation generator for Power Platform solution manifests. This task extracts and documents all information from the Solution.xml file including solution metadata, publisher details, root components, missing dependencies, and version information. Perfect for creating detailed solution documentation and tracking solution composition across environments.",
+    "description": "Docs generator for solution manifests",
     "helpMarkDown": "See [mightora.io](https://mightora.io)",
     "category": "Build",
     "author": "mightoraio",
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 1
+        "Patch": 2
     },
     "groups": [
         {
