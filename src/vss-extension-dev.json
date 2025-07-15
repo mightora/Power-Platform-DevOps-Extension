@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension-dev",
     "name": "DEV - Mightora.io Power Platform DevOps Extension",
-    "version": "1.0.82",
+    "version": "1.0.83",
     "publisher": "mightoraio",
     "targets": [
         {
@@ -50,39 +50,39 @@
     },
     "files": [
         {
-            "path": "src/test",
+            "path": "tasks/test",
             "packagePath": "test"
         },
         {
-            "path": "src/documentSolutionTables",
+            "path": "tasks/documentSolutionTables",
             "packagePath": "documentSolutionTables"
         },
         {
-            "path": "src/commitToRepo",
+            "path": "tasks/commitToRepo",
             "packagePath": "commitToRepo"
         },
         {
-            "path": "src/documentTableRelationships",
+            "path": "tasks/documentTableRelationships",
             "packagePath": "documentTableRelationships"
         },
         {
-            "path": "src/solutionXMLNodeUpdater",
+            "path": "tasks/solutionXMLNodeUpdater",
             "packagePath": "solutionXMLNodeUpdater"
         },
         {
-            "path": "src/solutionXMLNodeAttributeUpdater",
+            "path": "tasks/solutionXMLNodeAttributeUpdater",
             "packagePath": "solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "src/documentSolutionManifest",
+            "path": "tasks/documentSolutionManifest",
             "packagePath": "documentSolutionManifest"
         },
         {
-            "path": "src/documentOptionSets",
+            "path": "tasks/documentOptionSets",
             "packagePath": "documentOptionSets"
         },
         {
-            "path": "src/documentWorkflows",
+            "path": "tasks/documentWorkflows",
             "packagePath": "documentWorkflows"
         }
     ],
