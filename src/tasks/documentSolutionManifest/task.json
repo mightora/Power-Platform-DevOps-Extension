@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "8e42a891-3f65-4c2d-9b87-f12a8c9e4d73",
     "name": "documentSolutionManifest",
-    "friendlyName": "Solution Manifest Documentation Generator",
+    "friendlyName": "Solution Manifest Doc Generator",
     "instanceNameFormat": "Mightora Power Platform Solution Manifest Documentation Generator",
     "description": "Docs generator for solution manifests",
     "helpMarkDown": "See [mightora.io](https://mightora.io)",
@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 2
+        "Patch": 3
     },
     "groups": [
         {
