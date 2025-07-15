@@ -2,16 +2,16 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "63a17026-912b-4242-a76c-1aefdfe6e929",
     "name": "solutionXMLNodeAttributeUpdater",
-    "friendlyName": "Solution XML Node Attribute Updater",
+    "friendlyName": "(DEPRECATED) Solution XML Node Attribute Updater",
     "instanceNameFormat": "Mightora Power Platform Solution XML Node Attribute Updater",
     "description": "Easily update XML node values within your solution components during a pipeline run. This task automates the modification of XML nodes based on XPath expressions, allowing you to dynamically adjust key values in your Power Platform solution XML files. Perfect for scenarios where configuration values need to be modified on the fly in build and release pipelines.",
-    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "helpMarkDown": "See [updated extension](https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-power-platform-solution-modifier)",
     "category": "Build",
     "author": "mightoraio",
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 9
+        "Patch": 10
     },
     "groups": [
         {
