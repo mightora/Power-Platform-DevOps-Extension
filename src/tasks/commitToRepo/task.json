@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "579190ac-ccd4-4451-a199-a6150001cf1a",
     "name": "commitToRepo",
-    "friendlyName": "(DEPRECATED) Commit To Git Repository",
+    "friendlyName": "(DEPRECATED) Commit To Git Repo",
     "instanceNameFormat": "Commit To Git Repository",
     "description": "Moved to https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-commit-to-repo-extension",
     "helpMarkDown": "See [updated extension](https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-commit-to-repo-extension)",
