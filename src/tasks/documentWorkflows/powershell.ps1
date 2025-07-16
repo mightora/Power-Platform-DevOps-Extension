@@ -38,34 +38,6 @@ Write-Host "==========================================================="
 if (-not $devMode -and -not $solutionPath) {
     # Get inputs from the task when running in VSTS and no parameters provided
     try {
-        # Import VstsTaskSdk module if available
-        $vstsTaskSdkPaths = @(
-            # Local ps_modules directory relative to script
-            (Join-Path $PSScriptRoot "ps_modules\VstsTaskSdk\VstsTaskSdk.psd1"),
-            # Parent directory ps_modules (src level)
-            (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) "ps_modules\VstsTaskSdk\VstsTaskSdk.psd1"),
-            # Alternative path structure
-            (Join-Path (Split-Path $PSScriptRoot -Parent) "ps_modules\VstsTaskSdk\VstsTaskSdk.psd1")
-        )
-        
-        $moduleLoaded = $false
-        foreach ($vstsPath in $vstsTaskSdkPaths) {
-            if (Test-Path $vstsPath) {
-                Write-Output "Loading VstsTaskSdk from: $vstsPath"
-                Import-Module $vstsPath -Force
-                $moduleLoaded = $true
-                break
-            }
-        }
-        
-        if (-not $moduleLoaded) {
-            Write-Warning "VstsTaskSdk module not found. Checked paths:"
-            foreach ($path in $vstsTaskSdkPaths) {
-                Write-Warning "  - $path"
-            }
-            throw "VstsTaskSdk module not found"
-        }
-        
         $solutionPath = Get-VstsInput -Name 'solutionPath'
         $outputLocation = Get-VstsInput -Name 'outputLocation'
         $includeDetails = [bool](Get-VstsInput -Name 'includeDetails')
@@ -73,7 +45,7 @@ if (-not $devMode -and -not $solutionPath) {
         
         Write-Output "Successfully retrieved inputs from VSTS task"
     } catch {
-        Write-Output "VSTS environment not available or module loading failed: $($_.Exception.Message)"
+        Write-Output "VSTS environment not available: $($_.Exception.Message)"
         Write-Output "Please provide parameters directly when running outside of Azure DevOps pipeline."
     }
 }
