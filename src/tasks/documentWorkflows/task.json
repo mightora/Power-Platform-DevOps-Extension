@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "e8a4b123-c456-4f89-a0bc-def123456789",
     "name": "mightoraDocumentWorkflows",
-    "friendlyName": "Workflows Documentation Generator",
+    "friendlyName": "Workflows Doc Generator (Preview)",
     "instanceNameFormat": "Mightora Power Platform Workflows Documentation Generator",
     "description": "Generates comprehensive documentation for Power Platform Workflows and Power Automate Flows. This task extracts and documents all workflow information including triggers, parameters, states, execution settings, and creates individual markdown files with PlantUML diagrams for Power Automate flows. Perfect for creating detailed documentation and tracking workflows across environments.",
     "helpMarkDown": "See [mightora.io](https://mightora.io)",
@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 3
+        "Patch": 4
     },
     "groups": [
         {
