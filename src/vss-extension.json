@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension",
     "name": "Power Platform Documentation Extension",
-    "version": "2.1.10",
+    "version": "2.1.11",
     "publisher": "mightoraio",
     "galleryFlags": [
         "Public",
@@ -229,6 +229,26 @@
             ],
             "properties": {
                 "name": "documentWorkflows"
+            }
+        },
+        {
+            "id": "mightora-convertMarkdownToDocx-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-convertMarkdownToDocx"
+            }
+        },
+        {
+            "id": "mightora-convertConvertInlineDiagrams-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-convertConvertInlineDiagrams"
             }
         }
     ]
