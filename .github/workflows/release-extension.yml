@@ -3,8 +3,7 @@ name: Release Extension
 on:
   push:
     branches:
-#      - main
-       - none
+      - '**'  # Trigger on all branches
 
 jobs:
   release:
@@ -26,8 +25,16 @@ jobs:
       - name: Install tfx-cli
         run: npm install -g tfx-cli
 
-      # Run the tfx extension publish command
-      - name: Publish Extension to Visual Studio Marketplace
+      # Run the tfx extension publish command based on branch
+      - name: Publish Extension to Visual Studio Marketplace (Main Branch)
+        if: github.ref == 'refs/heads/main'
         run: |
           cd src
           tfx extension publish --publisher mightoraio --manifest-globs vss-extension.json --token ${{ secrets.VS_MARKETPLACE_TOKEN }} --rev-version
+
+      # Run the tfx extension publish command for development branches
+      - name: Publish Extension to Visual Studio Marketplace (Development Branch)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          cd src
+          tfx extension publish --publisher mightoraio --manifest-globs vss-extension-dev.json --token ${{ secrets.VS_MARKETPLACE_TOKEN }} --rev-version

@@ -142,36 +142,203 @@ This task updates specific XML nodes within Power Platform solution files, allow
 ```
 
 
-## Dataverse 4 Teams Export
+## ER Diagram Generator
 
 ### Overview
-This task exports and unpacks solutions from a Dataverse for Teams environment, automating the process and allowing easy management and versioning of Power Platform assets.
+This task automates the process of documenting Dataverse table relationships using Entity-Relationship diagrams. It generates comprehensive visual documentation that shows the relationships between tables in an easy-to-understand diagram format.
 
 ### Key Features
-- **Solution Export**: Automates the export of a solution from Dataverse for Teams.
-- **Canvas App Unpacking**: Unpacks `.msapp` files for version control and customization.
-- **Solution Settings Template**: Generates a settings template file.
-- **PAC CLI Integration**: Uses the Power Platform CLI for authentication and solution operations.
+- **Visual Relationship Documentation**: Creates ER diagrams to visualize table relationships.
+- **Automated Documentation**: Parses relationship data from XML files automatically.
+- **Comprehensive Coverage**: Documents one-to-many, many-to-one, and many-to-many associations.
+- **Professional Output**: Generates clean, professional diagrams for documentation.
 
 ### How to Use
 1. Add the task to your Azure DevOps pipeline.
 2. Configure the inputs:
-    - `solutionName`: Name of the solution to export.
-    - `exportDirectory`: Directory to save the exported solution.
-    - `unpackDirectory`: Directory to unpack the solution.
-    - `environment`: URL of the Dataverse for Teams environment.
-3. Ensure PAC CLI is installed in your pipeline environment.
-4. Run the pipeline to export and unpack the solution.
+    - `locationOfUnpackedSolution`: Path to the folder with the unpacked Dataverse solution.
+    - `wikiLocation`: Path where the generated documentation will be stored.
+    - `authors`: List of Power Platform authors (comma separated).
+3. Run the pipeline to generate the ER diagrams.
 
 ### Example Pipeline Usage
 
 ```yaml
-- task: dataverse4TeamsExport@1
+- task: mightora-powerplatform-documentationgenerator-erdiagram@1
   inputs:
-    solutionName: "MySolution"
-    exportDirectory: "$(Build.ArtifactStagingDirectory)/ExportedSolutions"
-    unpackDirectory: "$(Build.ArtifactStagingDirectory)/UnpackedSolutions"
-    environment: "https://your-environment-url"
+    locationOfUnpackedSolution: "$(Build.ArtifactStagingDirectory)/UnpackedSolution"
+    wikiLocation: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+    authors: "Author1, Author2"
+```
+
+## Option Sets Documentation Generator
+
+### Overview
+This task generates comprehensive documentation for Power Platform Option Sets, extracting and documenting all information including metadata, values, and descriptions.
+
+### Key Features
+- **Complete Option Sets Documentation**: Documents all Option Sets in your solution.
+- **Metadata Extraction**: Captures Option Set values, descriptions, and metadata.
+- **Automated Processing**: Processes Option Sets from unpacked solution files.
+- **Tracking Capabilities**: Perfect for tracking Option Sets across environments.
+
+### How to Use
+1. Add the task to your Azure DevOps pipeline.
+2. Configure the inputs:
+    - `unpackedSolutionPath`: Path to the unpacked solution folder.
+    - `outputLocation`: Path to save the generated documentation.
+3. Run the pipeline to generate Option Sets documentation.
+
+### Example Pipeline Usage
+
+```yaml
+- task: mightoraDocumentOptionSets@1
+  inputs:
+    unpackedSolutionPath: "$(Build.ArtifactStagingDirectory)/UnpackedSolution"
+    outputLocation: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+```
+
+## Roles Documentation Generator
+
+### Overview
+This task simplifies the process of creating documentation for role permissions in Dataverse. It automatically creates easy-to-read tables in Markdown format from role XML files.
+
+### Key Features
+- **Role Permissions Documentation**: Documents all role permissions and access levels.
+- **Security Management**: Makes it easier to review and manage role permissions.
+- **Flexible Output**: Choose between single file or separate files for each role.
+- **Organized Documentation**: Ensures documentation is accessible for security management.
+
+### How to Use
+1. Add the task to your Azure DevOps pipeline.
+2. Configure the inputs:
+    - `locationOfUnpackedSolution`: Path to the unpacked solution folder.
+    - `wikiLocation`: Path where the generated documentation will be stored.
+    - `useSingleFile`: Choose `true` for single file or `false` for separate files.
+3. Run the pipeline to generate roles documentation.
+
+### Example Pipeline Usage
+
+```yaml
+- task: documentRoles@1
+  inputs:
+    locationOfUnpackedSolution: "$(Build.ArtifactStagingDirectory)/UnpackedSolution"
+    wikiLocation: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+    useSingleFile: true
+```
+
+## Workflows Documentation Generator (Preview)
+
+### Overview
+This task generates comprehensive documentation for Power Platform Workflows and Power Automate Flows, including triggers, parameters, states, and execution settings.
+
+### Key Features
+- **Comprehensive Workflow Documentation**: Documents workflows and Power Automate flows.
+- **Visual Diagrams**: Creates PlantUML diagrams for Power Automate flows.
+- **Detailed Information**: Captures triggers, parameters, states, and execution settings.
+- **Individual Documentation**: Creates separate markdown files for each flow.
+
+### How to Use
+1. Add the task to your Azure DevOps pipeline.
+2. Configure the inputs:
+    - `solutionPath`: Path to the solution source folder containing workflow files.
+    - `outputLocation`: Path to save the generated documentation.
+    - `includeDetails`: Set to `true` to include detailed information.
+3. Run the pipeline to generate workflows documentation.
+
+### Example Pipeline Usage
+
+```yaml
+- task: mightoraDocumentWorkflows@1
+  inputs:
+    solutionPath: "$(Build.ArtifactStagingDirectory)/UnpackedSolution"
+    outputLocation: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+    includeDetails: true
+```
+
+## Solution Manifest Documentation Generator
+
+### Overview
+This task generates documentation for Power Platform solution manifests, providing detailed information about solution components and configurations.
+
+### Key Features
+- **Solution Manifest Documentation**: Documents solution.xml files automatically.
+- **Component Details**: Includes information about solution components.
+- **Configuration Documentation**: Captures solution settings and metadata.
+- **Version Tracking**: Helps track solution changes across environments.
+
+### How to Use
+1. Add the task to your Azure DevOps pipeline.
+2. Configure the inputs:
+    - `solutionXmlPath`: Path to the Solution.xml file in the src/Other/ folder.
+    - `outputLocation`: Path where the generated documentation will be stored.
+    - `includeComponents`: Set to `true` to include component details.
+3. Run the pipeline to generate solution manifest documentation.
+
+### Example Pipeline Usage
+
+```yaml
+- task: documentSolutionManifest@1
+  inputs:
+    solutionXmlPath: "$(Build.ArtifactStagingDirectory)/UnpackedSolution/src/Other/Solution.xml"
+    outputLocation: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+    includeComponents: true
+```
+
+## Convert Inline Diagrams to Images
+
+### Overview
+This task converts inline diagrams in Markdown files to images, making documentation more accessible and compatible with various documentation platforms.
+
+### Key Features
+- **Diagram Conversion**: Converts inline diagrams to image format.
+- **Documentation Enhancement**: Makes diagrams viewable in platforms that don't support inline diagrams.
+- **Automated Processing**: Processes all Markdown files in a directory.
+- **Image Generation**: Creates separate image files for diagrams.
+
+### How to Use
+1. Add the task to your Azure DevOps pipeline.
+2. Configure the inputs:
+    - `locationOfSourceMDFiles`: Directory containing the Markdown files.
+    - `outputLocation`: Directory where images and new MD files will be saved.
+3. Run the pipeline to convert diagrams to images.
+
+### Example Pipeline Usage
+
+```yaml
+- task: convertConvertInlineDiagrams@1
+  inputs:
+    locationOfSourceMDFiles: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+    outputLocation: "$(Build.ArtifactStagingDirectory)/ProcessedDocs"
+```
+
+## Convert Markdown to DOCX
+
+### Overview
+This task converts Markdown documentation files to DOCX format, enabling easy sharing and distribution of documentation in Microsoft Word format.
+
+### Key Features
+- **Format Conversion**: Converts Markdown files to DOCX format.
+- **Template Support**: Supports custom DOCX templates for consistent formatting.
+- **Bulk Processing**: Processes multiple Markdown files at once.
+- **Professional Output**: Creates polished Word documents for distribution.
+
+### How to Use
+1. Add the task to your Azure DevOps pipeline.
+2. Configure the inputs:
+    - `locationOfMDFiles`: Directory containing the Markdown files.
+    - `outputLocation`: Directory where DOCX files will be saved.
+    - `templateFile`: Path to a DOCX template file (optional).
+3. Run the pipeline to convert Markdown to DOCX.
+
+### Example Pipeline Usage
+
+```yaml
+- task: convertMarkdownToDocx@1
+  inputs:
+    locationOfMDFiles: "$(Build.ArtifactStagingDirectory)/WikiDocs"
+    outputLocation: "$(Build.ArtifactStagingDirectory)/DocxDocs"
+    templateFile: "$(Build.SourcesDirectory)/Templates/template.docx"
 ```
 
 ## Commit To Git Repository
@@ -198,3 +365,13 @@ This task automates committing changes made during a pipeline run to your Git re
   inputs:
     commitMsg: "Automated commit from pipeline"
 ```
+
+## Deprecated and Removed Tasks
+
+### Dataverse for Teams Export and Import
+**Status: REMOVED**
+These tasks have been removed as the underlying PAC commands have stopped working with the deprecation of Dataverse for Teams functionality.
+
+### Test Task
+**Status: DEPRECATED**
+The test task is used for internal development and testing purposes only and should not be used in production pipelines.

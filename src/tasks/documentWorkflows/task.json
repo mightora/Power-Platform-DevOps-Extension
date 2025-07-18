@@ -1,0 +1,71 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "e8a4b123-c456-4f89-a0bc-def123456789",
+    "name": "mightoraDocumentWorkflows",
+    "friendlyName": "Workflows Doc Generator (Preview)",
+    "instanceNameFormat": "Mightora Power Platform Workflows Documentation Generator",
+    "description": "Generates comprehensive documentation for Power Platform Workflows and Power Automate Flows. This task extracts and documents all workflow information including triggers, parameters, states, execution settings, and creates individual markdown files with PlantUML diagrams for Power Automate flows. Perfect for creating detailed documentation and tracking workflows across environments.",
+    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "category": "Build",
+    "author": "mightoraio",
+    "version": {
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 4
+    },
+    "groups": [
+        {
+            "name": "inputGroup",
+            "displayName": "Source",
+            "isExpanded": true
+        },
+        {
+            "name": "optionsGroup",
+            "displayName": "Documentation Options",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "solutionPath",
+            "type": "filePath",
+            "label": "Solution Source Path",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "inputGroup",
+            "helpMarkDown": "Path to the solution source folder containing workflow XML files and Power Automate JSON files."
+        },
+        {
+            "name": "outputLocation",
+            "type": "filePath",
+            "label": "Output Location",
+            "defaultValue": "",
+            "required": true,
+            "groupName": "inputGroup",
+            "helpMarkDown": "Path to save the generated workflows documentation and individual Power Automate flow markdown files."
+        },
+        {
+            "name": "includeDetails",
+            "type": "boolean",
+            "label": "Include Detailed Information",
+            "defaultValue": "true",
+            "required": false,
+            "groupName": "optionsGroup",
+            "helpMarkDown": "Include detailed workflow information including triggers, parameters, settings, and individual Power Automate flow documentation with PlantUML diagrams."
+        },
+        {
+            "name": "includeUsage",
+            "type": "boolean",
+            "label": "Include Usage Statistics",
+            "defaultValue": "true",
+            "required": false,
+            "groupName": "optionsGroup",
+            "helpMarkDown": "Include usage statistics and categorization of workflows including both XML workflows and Power Automate flows."
+        }
+    ],
+    "execution": {
+        "PowerShell3": {
+            "target": "powershell.ps1"
+        }
+    }
+}

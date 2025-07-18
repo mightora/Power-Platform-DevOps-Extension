@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension",
     "name": "Power Platform Documentation Extension",
-    "version": "2.0.8",
+    "version": "2.1.12",
     "publisher": "mightoraio",
     "galleryFlags": [
         "Public",
@@ -105,14 +105,6 @@
             "packagePath": "solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "tasks/dataverse4TeamsImport",
-            "packagePath": "dataverse4TeamsImport"
-        },
-        {
-            "path": "tasks/dataverse4TeamsExport",
-            "packagePath": "mightora-dataverse4TeamsExport"
-        },
-        {
             "path": "tasks/documentRoles",
             "packagePath": "mightora-documentRoles"
         },
@@ -123,6 +115,18 @@
         {
             "path": "tasks/convertConvertInlineDiagrams",
             "packagePath": "mightora-convertConvertInlineDiagrams"
+        },
+        {
+            "path": "tasks/documentSolutionManifest",
+            "packagePath": "documentSolutionManifest"
+        },
+        {
+            "path": "tasks/documentOptionSets",
+            "packagePath": "documentOptionSets"
+        },
+        {
+            "path": "tasks/documentWorkflows",
+            "packagePath": "documentWorkflows"
         }
     ],
     "contributions": [
@@ -188,53 +192,63 @@
             }
         },
         {
-            "id": "mightora-dataverse4TeamsImport-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "dataverse4TeamsImport"
-            }
-        },
-        {
-            "id": "mightora-dataverse4TeamsExport-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "mightora-dataverse4TeamsExport"
-            }
-        },
-        {
             "id": "mightora-documentRoles-task",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "mightora-documentRoles"
+                "name": "documentRoles"
             }
         },
         {
-            "id": "mightora-convertMarkdownToDocx",
+            "id": "mightora-documentSolutionManifest-task",
             "type": "ms.vss-distributed-task.task",
             "targets": [
-              "ms.vss-distributed-task.tasks"
+                "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-              "name": "mightora-convertMarkdownToDocx"
+                "name": "documentSolutionManifest"
             }
         },
         {
-            "id": "mightora-convertConvertInlineDiagrams",
+            "id": "mightora-documentOptionSets-task",
             "type": "ms.vss-distributed-task.task",
             "targets": [
-              "ms.vss-distributed-task.tasks"
+                "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-              "name": "mightora-convertConvertInlineDiagrams"
+                "name": "documentOptionSets"
+            }
+        },
+        {
+            "id": "mightora-documentWorkflows-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentWorkflows"
+            }
+        },
+        {
+            "id": "mightora-convertMarkdownToDocx-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-convertMarkdownToDocx"
+            }
+        },
+        {
+            "id": "mightora-convertConvertInlineDiagrams-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-convertConvertInlineDiagrams"
             }
         }
     ]

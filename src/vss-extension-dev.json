@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension-dev",
-    "name": "DEV - Mightora.io Power Platform DevOps Extension",
-    "version": "1.0.82",
+    "name": "DEV 1.0.211 - Power Platform Documentation Extension",
+    "version": "1.0.211",
     "publisher": "mightoraio",
     "targets": [
         {
@@ -18,7 +18,7 @@
     },
     "content": {
         "details": {
-            "path": "readme.md"
+            "path": "details.md"
         },
         "pricing": {
             "path": "pricing.md"
@@ -50,32 +50,48 @@
     },
     "files": [
         {
-            "path": "src/test",
+            "path": "tasks/test",
             "packagePath": "test"
         },
         {
-            "path": "src/documentSolutionTables",
+            "path": "tasks/documentSolutionTables",
             "packagePath": "documentSolutionTables"
         },
         {
-            "path": "src/commitToRepo",
+            "path": "tasks/commitToRepo",
             "packagePath": "commitToRepo"
         },
         {
-            "path": "src/documentTableRelationships",
+            "path": "tasks/documentTableRelationships",
             "packagePath": "documentTableRelationships"
         },
         {
-            "path": "src/solutionXMLNodeUpdater",
+            "path": "tasks/solutionXMLNodeUpdater",
             "packagePath": "solutionXMLNodeUpdater"
         },
         {
-            "path": "src/solutionXMLNodeAttributeUpdater",
+            "path": "tasks/solutionXMLNodeAttributeUpdater",
             "packagePath": "solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "src/dataverse4TeamsImport",
-            "packagePath": "dataverse4TeamsImport"
+            "path": "tasks/documentSolutionManifest",
+            "packagePath": "documentSolutionManifest"
+        },
+        {
+            "path": "tasks/documentOptionSets",
+            "packagePath": "documentOptionSets"
+        },
+        {
+            "path": "tasks/documentWorkflows",
+            "packagePath": "documentWorkflows"
+        },
+        {
+            "path": "tasks/convertMarkdownToDocx",
+            "packagePath": "mightora-convertMarkdownToDocx"
+        },
+        {
+            "path": "tasks/convertConvertInlineDiagrams",
+            "packagePath": "mightora-convertConvertInlineDiagrams"
         }
     ],
     "contributions": [
@@ -140,13 +156,53 @@
             }
         },
         {
-            "id": "mightora-dataverse4TeamsImport-task",
+            "id": "mightora-documentSolutionManifest-task",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "dataverse4TeamsImport"
+                "name": "documentSolutionManifest"
+            }
+        },
+        {
+            "id": "mightora-documentOptionSets-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentOptionSets"
+            }
+        },
+        {
+            "id": "mightora-documentWorkflows-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "documentWorkflows"
+            }
+        },
+        {
+            "id": "mightora-convertMarkdownToDocx-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-convertMarkdownToDocx"
+            }
+        },
+        {
+            "id": "mightora-convertConvertInlineDiagrams-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "mightora-convertConvertInlineDiagrams"
             }
         }
     ]

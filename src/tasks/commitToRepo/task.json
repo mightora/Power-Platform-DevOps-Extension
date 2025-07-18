@@ -2,16 +2,16 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "579190ac-ccd4-4451-a199-a6150001cf1a",
     "name": "commitToRepo",
-    "friendlyName": "Commit To Git Repository",
+    "friendlyName": "(DEPRECATED) Commit To Git Repo",
     "instanceNameFormat": "Commit To Git Repository",
-    "description": "Effortlessly commit your pipeline's working directory changes to your Git repository. This task handles everything from staging all modifications to pushing them using secure authentication via the System.AccessToken variable. It simplifies the process of managing Git commits during your build or release pipeline, ensuring your repository is always up-to-date with the latest changes.",
-    "helpMarkDown": "See [mightora.io](https://mightora.io)",
+    "description": "Moved to https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-commit-to-repo-extension",
+    "helpMarkDown": "See [updated extension](https://marketplace.visualstudio.com/items?itemName=mightoraio.mightora-commit-to-repo-extension)",
     "category": "Build",
     "author": "mightoraio",
     "version": {
         "Major": 2,
         "Minor": 2,
-        "Patch": 13
+        "Patch": 14
     },
     "groups": [
         {
