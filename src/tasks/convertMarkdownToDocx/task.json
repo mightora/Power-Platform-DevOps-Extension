@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "cda9a03e-0d85-48e8-945a-365ce0719692",
+    "id": "cda9a03e-0d85-48e8-945a-365ce0719693",
     "name": "convertMarkdownToDocx",
     "friendlyName": "convertMarkdownToDocx",
     "instanceNameFormat": "convertMarkdownToDocx",
@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 53
+        "Patch": 54
     },
     "groups": [
         {
