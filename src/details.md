@@ -6,7 +6,7 @@
 # Mightora Power Platform Extension
 The Mightora Power Platform DevOps Extension is a comprehensive set of tools designed to generate Power Platform Solution Documentation from within an Azure DevOps Pipeline. We have also included some other useful tools within the solution such as the **XML Node Updater** and **XML Node Attribute Updater** allowing advanced users to edit a solution within a release pipeline. Alongside this we have included tools which allow you to connect to **Dataverse for Teams** from Azure DevOps allowing ALM and a handy extension allowing for easy commit to repo from a Pipeline. 
 
-**Created by:**
+**Created by:** 
 
 [![Mightora Logo](https://raw.githubusercontent.com/TechTweedie/techtweedie.github.io/main/static/logo-01_150x150.png)](https://techtweedie.github.io)
 
