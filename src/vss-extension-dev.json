@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension-dev",
-    "name": "DEV 2.2.4 - Power Platform Documentation Extension",
-    "version": "2.2.4",
+    "name": "DEV 2.2.5 - Power Platform Documentation Extension",
+    "version": "2.2.5",
     "publisher": "mightoraio",
     "targets": [
         {
@@ -51,11 +51,7 @@
     "files": [
         {
             "path": "tasks/documentSolutionTables",
-            "packagePath": "tasks/documentSolutionTables"
-        },
-        {
-            "path": "tasks/commitToRepo",
-            "packagePath": "commitToRepo"
+            "packagePath": "documentSolutionTables"
         },
         {
             "path": "tasks/documentTableRelationships",
@@ -107,16 +103,6 @@
             ],
             "properties": {
                 "name": "documentSolutionTables"
-            }
-        },
-        {
-            "id": "mightora-commitToRepo-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "commitToRepo"
             }
         },
         {
