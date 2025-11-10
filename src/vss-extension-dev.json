@@ -50,40 +50,48 @@
     },
     "files": [
         {
-            "path": "tasks/documentSolutionTables"
+            "path": "tasks/documentSolutionTables",
+            "packagePath": "tasks/documentSolutionTables"
         },
         {
-            "path": "tasks/documentTableRelationships"
+            "path": "tasks/documentTableRelationships",
+            "packagePath": "tasks/documentTableRelationships"
         },
         {
             "path": "tasks/documentTableRelationshipsAsERDiagram",
-            "packagePath": "mightora-powerplatform-documentationgenerator-erdiagram"
+            "packagePath": "tasks/documentTableRelationshipsAsERDiagram"
         },
         {
-            "path": "tasks/solutionXMLNodeUpdater"
+            "path": "tasks/solutionXMLNodeUpdater",
+            "packagePath": "tasks/solutionXMLNodeUpdater"
         },
         {
-            "path": "tasks/solutionXMLNodeAttributeUpdater"
+            "path": "tasks/solutionXMLNodeAttributeUpdater",
+            "packagePath": "tasks/solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "tasks/documentRoles"
+            "path": "tasks/documentRoles",
+            "packagePath": "tasks/documentRoles"
         },
         {
             "path": "tasks/convertMarkdownToDocx",
-            "packagePath": "mightora-convertMarkdownToDocx"
+            "packagePath": "tasks/convertMarkdownToDocx"
         },
         {
             "path": "tasks/convertConvertInlineDiagrams",
-            "packagePath": "mightora-convertConvertInlineDiagrams"
+            "packagePath": "tasks/convertConvertInlineDiagrams"
         },
         {
-            "path": "tasks/documentSolutionManifest"
+            "path": "tasks/documentSolutionManifest",
+            "packagePath": "tasks/documentSolutionManifest"
         },
         {
-            "path": "tasks/documentOptionSets"
+            "path": "tasks/documentOptionSets",
+            "packagePath": "tasks/documentOptionSets"
         },
         {
-            "path": "tasks/documentWorkflows"
+            "path": "tasks/documentWorkflows",
+            "packagePath": "tasks/documentWorkflows"
         }
     ],
     "contributions": [
@@ -94,7 +102,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentSolutionTables"
+                "name": "tasks/documentSolutionTables"
             }
         },
         {
@@ -104,7 +112,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentTableRelationships"
+                "name": "tasks/documentTableRelationships"
             }
         },
         {
@@ -114,7 +122,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "mightora-powerplatform-documentationgenerator-erdiagram"
+                "name": "tasks/documentTableRelationshipsAsERDiagram"
             }
         },
         {
@@ -124,7 +132,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "solutionXMLNodeUpdater"
+                "name": "tasks/solutionXMLNodeUpdater"
             }
         },
         {
@@ -134,7 +142,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "solutionXMLNodeAttributeUpdater"
+                "name": "tasks/solutionXMLNodeAttributeUpdater"
             }
         },
         {
@@ -144,7 +152,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentRoles"
+                "name": "tasks/documentRoles"
             }
         },
         {
@@ -154,7 +162,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentSolutionManifest"
+                "name": "tasks/documentSolutionManifest"
             }
         },
         {
@@ -164,7 +172,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentOptionSets"
+                "name": "tasks/documentOptionSets"
             }
         },
         {
@@ -174,7 +182,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentWorkflows"
+                "name": "tasks/documentWorkflows"
             }
         },
         {
@@ -184,7 +192,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "mightora-convertMarkdownToDocx"
+                "name": "tasks/convertMarkdownToDocx"
             }
         },
         {
@@ -194,7 +202,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "mightora-convertConvertInlineDiagrams"
+                "name": "tasks/convertConvertInlineDiagrams"
             }
         }
     ]
