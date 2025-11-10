@@ -30,6 +30,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cd src
+          pwd
+          ls -la
           tfx extension publish --publisher mightoraio --manifest-globs vss-extension.json --token ${{ secrets.VS_MARKETPLACE_TOKEN }} --rev-version
 
       # Run the tfx extension publish command for development branches
@@ -37,4 +39,6 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: |
           cd src
+          pwd
+          ls -la
           tfx extension publish --publisher mightoraio --manifest-globs vss-extension-dev.json --token ${{ secrets.VS_MARKETPLACE_TOKEN }} --rev-version

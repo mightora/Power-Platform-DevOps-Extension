@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension-dev",
-    "name": "DEV 1.0.211 - Power Platform Documentation Extension",
-    "version": "1.0.211",
+    "name": "DEV 2.2.7 - Power Platform Documentation Extension",
+    "version": "2.2.7",
     "publisher": "mightoraio",
     "targets": [
         {
@@ -50,61 +50,51 @@
     },
     "files": [
         {
-            "path": "tasks/test",
-            "packagePath": "test"
-        },
-        {
             "path": "tasks/documentSolutionTables",
-            "packagePath": "documentSolutionTables"
-        },
-        {
-            "path": "tasks/commitToRepo",
-            "packagePath": "commitToRepo"
+            "packagePath": "tasks/documentSolutionTables"
         },
         {
             "path": "tasks/documentTableRelationships",
-            "packagePath": "documentTableRelationships"
+            "packagePath": "tasks/documentTableRelationships"
+        },
+        {
+            "path": "tasks/documentTableRelationshipsAsERDiagram",
+            "packagePath": "tasks/documentTableRelationshipsAsERDiagram"
         },
         {
             "path": "tasks/solutionXMLNodeUpdater",
-            "packagePath": "solutionXMLNodeUpdater"
+            "packagePath": "tasks/solutionXMLNodeUpdater"
         },
         {
             "path": "tasks/solutionXMLNodeAttributeUpdater",
-            "packagePath": "solutionXMLNodeAttributeUpdater"
+            "packagePath": "tasks/solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "tasks/documentSolutionManifest",
-            "packagePath": "documentSolutionManifest"
-        },
-        {
-            "path": "tasks/documentOptionSets",
-            "packagePath": "documentOptionSets"
-        },
-        {
-            "path": "tasks/documentWorkflows",
-            "packagePath": "documentWorkflows"
+            "path": "tasks/documentRoles",
+            "packagePath": "tasks/documentRoles"
         },
         {
             "path": "tasks/convertMarkdownToDocx",
-            "packagePath": "mightora-convertMarkdownToDocx"
+            "packagePath": "tasks/convertMarkdownToDocx"
         },
         {
             "path": "tasks/convertConvertInlineDiagrams",
-            "packagePath": "mightora-convertConvertInlineDiagrams"
+            "packagePath": "tasks/convertConvertInlineDiagrams"
+        },
+        {
+            "path": "tasks/documentSolutionManifest",
+            "packagePath": "tasks/documentSolutionManifest"
+        },
+        {
+            "path": "tasks/documentOptionSets",
+            "packagePath": "tasks/documentOptionSets"
+        },
+        {
+            "path": "tasks/documentWorkflows",
+            "packagePath": "tasks/documentWorkflows"
         }
     ],
     "contributions": [
-        {
-            "id": "mightora-test-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "test"
-            }
-        },
         {
             "id": "mightora-documentSolutionTables-task",
             "type": "ms.vss-distributed-task.task",
@@ -112,17 +102,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentSolutionTables"
-            }
-        },
-        {
-            "id": "mightora-commitToRepo-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "commitToRepo"
+                "name": "tasks/documentSolutionTables"
             }
         },
         {
@@ -132,7 +112,17 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentTableRelationships"
+                "name": "tasks/documentTableRelationships"
+            }
+        },
+        {
+            "id": "mightora-powerplatform-documentationgenerator-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/documentTableRelationshipsAsERDiagram"
             }
         },
         {
@@ -142,7 +132,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "solutionXMLNodeUpdater"
+                "name": "tasks/solutionXMLNodeUpdater"
             }
         },
         {
@@ -152,7 +142,17 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "solutionXMLNodeAttributeUpdater"
+                "name": "tasks/solutionXMLNodeAttributeUpdater"
+            }
+        },
+        {
+            "id": "mightora-documentRoles-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/documentRoles"
             }
         },
         {
@@ -162,7 +162,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentSolutionManifest"
+                "name": "tasks/documentSolutionManifest"
             }
         },
         {
@@ -172,7 +172,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentOptionSets"
+                "name": "tasks/documentOptionSets"
             }
         },
         {
@@ -182,7 +182,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "documentWorkflows"
+                "name": "tasks/documentWorkflows"
             }
         },
         {
@@ -192,7 +192,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "mightora-convertMarkdownToDocx"
+                "name": "tasks/convertMarkdownToDocx"
             }
         },
         {
@@ -202,7 +202,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "mightora-convertConvertInlineDiagrams"
+                "name": "tasks/convertConvertInlineDiagrams"
             }
         }
     ]
