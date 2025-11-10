@@ -50,28 +50,23 @@
     },
     "files": [
         {
-            "path": "tasks/documentSolutionTables",
-            "packagePath": "documentSolutionTables"
+            "path": "tasks/documentSolutionTables"
         },
         {
-            "path": "tasks/documentTableRelationships",
-            "packagePath": "documentTableRelationships"
+            "path": "tasks/documentTableRelationships"
         },
         {
             "path": "tasks/documentTableRelationshipsAsERDiagram",
             "packagePath": "mightora-powerplatform-documentationgenerator-erdiagram"
         },
         {
-            "path": "tasks/solutionXMLNodeUpdater",
-            "packagePath": "solutionXMLNodeUpdater"
+            "path": "tasks/solutionXMLNodeUpdater"
         },
         {
-            "path": "tasks/solutionXMLNodeAttributeUpdater",
-            "packagePath": "solutionXMLNodeAttributeUpdater"
+            "path": "tasks/solutionXMLNodeAttributeUpdater"
         },
         {
-            "path": "tasks/documentRoles",
-            "packagePath": "documentRoles"
+            "path": "tasks/documentRoles"
         },
         {
             "path": "tasks/convertMarkdownToDocx",
@@ -82,16 +77,13 @@
             "packagePath": "mightora-convertConvertInlineDiagrams"
         },
         {
-            "path": "tasks/documentSolutionManifest",
-            "packagePath": "documentSolutionManifest"
+            "path": "tasks/documentSolutionManifest"
         },
         {
-            "path": "tasks/documentOptionSets",
-            "packagePath": "documentOptionSets"
+            "path": "tasks/documentOptionSets"
         },
         {
-            "path": "tasks/documentWorkflows",
-            "packagePath": "documentWorkflows"
+            "path": "tasks/documentWorkflows"
         }
     ],
     "contributions": [
