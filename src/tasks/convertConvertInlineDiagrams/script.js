@@ -195,10 +195,9 @@ async function run() {
             // Read the Markdown content
             const mdContent = fs.readFileSync(mdFilePath, 'utf8');
 
-            console.log(`====================================================================================================`);
-            console.log(`====================================================================================================`);
+            console.log(``);
             console.log(`Converting ${mdFilePath} to ${outputMdFilePath}`);
-            console.log(`====================================================================================================`);
+            console.log(`=================`);
 
             // Convert Mermaid diagrams to images
             let updatedMdContent = mdContent.replace(/(```|:::)(mermaid)([\s\S]*?)(```|:::)/g, (match, p1, p2, p3, p4, offset) => {
@@ -464,8 +463,7 @@ async function run() {
                 console.log(`Skipping final write for this file and continuing with next...`);
             }
             
-            console.log(`====================================================================================================`);
-            console.log(`====================================================================================================`);
+
         });
 
         // Summary statistics
