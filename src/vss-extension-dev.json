@@ -50,8 +50,7 @@
     },
     "files": [
         {
-            "path": "tasks/documentSolutionTables",
-            "packagePath": "documentSolutionTables"
+            "path": "tasks/documentSolutionTables"
         },
         {
             "path": "tasks/commitToRepo",
