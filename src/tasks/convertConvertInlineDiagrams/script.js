@@ -61,6 +61,10 @@ function hasInlineDiagrams(filePath) {
 
 async function run() {
     try {
+        console.log('\n' + '='.repeat(80));
+        console.log('🚀 STEP 1: INITIALIZATION');
+        console.log('='.repeat(80));
+        
         // Fetch and display the developer message
         const developerMessage = await fetchDeveloperMessage().catch((err) => err);
         console.log(`Developer Message: ${developerMessage}`);
@@ -76,6 +80,10 @@ async function run() {
             fs.mkdirSync(outputLocation, { recursive: true });
         }
 
+        console.log('\n' + '='.repeat(80));
+        console.log('🔧 STEP 2: INSTALLING REQUIRED TOOLS');
+        console.log('='.repeat(80));
+        
         // Install necessary tools (skip if already installed to save time)
         console.log('Checking and installing required tools...');
         
@@ -106,26 +114,68 @@ async function run() {
             execSync('choco install imagemagick -y', { stdio: 'inherit' });
         }
 
+        console.log('\n' + '='.repeat(80));
+        console.log('📁 STEP 3: SCANNING MARKDOWN FILES');
+        console.log('='.repeat(80));
+
         // Get all Markdown files from the input directory and subdirectories
         const allMdFiles = getAllMarkdownFiles(locationOfMDFiles);
-        console.log(`📄 Found ${allMdFiles.length} markdown files, scanning for diagrams...`);
+        console.log(`📄 Found ${allMdFiles.length} markdown files`);
         
-        // Pre-scan to only process files with diagrams
-        const mdFiles = allMdFiles.filter(filePath => {
-            const hasDiagrams = hasInlineDiagrams(filePath);
-            if (!hasDiagrams) {
-                console.log(`⏭️  Skipping ${path.basename(filePath)} (no diagrams found)`);
-            }
-            return hasDiagrams;
-        });
-        
-        console.log(`🎯 Processing ${mdFiles.length} files with diagrams (skipped ${allMdFiles.length - mdFiles.length} files)`);
+        // Separate files with and without diagrams
+        const filesWithDiagrams = [];
+        const filesWithoutDiagrams = [];
 
+        allMdFiles.forEach(filePath => {
+            if (hasInlineDiagrams(filePath)) {
+                filesWithDiagrams.push(filePath);
+            } else {
+                filesWithoutDiagrams.push(filePath);
+            }
+        });
+
+        console.log(`🎯 ${filesWithDiagrams.length} files with diagrams to process`);
+        console.log(`📋 ${filesWithoutDiagrams.length} files without diagrams to copy`);
+
+        console.log('\n' + '='.repeat(80));
+        console.log('📋 STEP 4: COPYING FILES WITHOUT DIAGRAMS');
+        console.log('='.repeat(80));
+
+        // First, copy all files without diagrams
+        console.log(`Copying ${filesWithoutDiagrams.length} files without diagrams...`);
+        filesWithoutDiagrams.forEach((mdFilePath, index) => {
+            const progress = `[${index + 1}/${filesWithoutDiagrams.length}]`;
+            console.log(`${progress} Copying: ${path.basename(mdFilePath)}`);
+            
+            const relativePath = path.relative(locationOfMDFiles, mdFilePath);
+            const outputMdFilePath = path.join(outputLocation, relativePath);
+            const outputMdDir = path.dirname(outputMdFilePath);
+            
+            // Ensure output directory exists
+            if (!fs.existsSync(outputMdDir)) {
+                fs.mkdirSync(outputMdDir, { recursive: true });
+            }
+            
+            try {
+                fs.copyFileSync(mdFilePath, outputMdFilePath);
+                console.log(`✓ Copied to: ${outputMdFilePath}`);
+            } catch (error) {
+                console.error('\x1b[31m%s\x1b[0m', `ERROR: Failed to copy file: ${mdFilePath}`);
+                console.error('\x1b[31m%s\x1b[0m', `Error: ${error.message}`);
+            }
+        });
+
+        console.log('\n' + '='.repeat(80));
+        console.log('🎯 STEP 5: PROCESSING FILES WITH DIAGRAMS');
+        console.log('='.repeat(80));
+
+        // Then process files with diagrams
+        console.log(`Processing ${filesWithDiagrams.length} files with diagrams...`);
         let processedCount = 0;
         const startTime = Date.now();
 
-        mdFiles.forEach((mdFilePath, index) => {
-            const progress = `[${index + 1}/${mdFiles.length}]`;
+        filesWithDiagrams.forEach((mdFilePath, index) => {
+            const progress = `[${index + 1}/${filesWithDiagrams.length}]`;
             console.log(`${progress} Processing: ${path.basename(mdFilePath)}`);
             
             processedCount++;
@@ -423,9 +473,13 @@ async function run() {
         const totalTime = (endTime - startTime) / 1000;
         console.log(`\n🎉 Processing Complete!`);
         console.log(`📊 Summary:`);
-        console.log(`   • Files processed: ${processedCount}`);
-        console.log(`   • Total time: ${totalTime.toFixed(2)} seconds`);
-        console.log(`   • Average time per file: ${(totalTime / processedCount).toFixed(2)} seconds`);
+        console.log(`   • Total files found: ${allMdFiles.length}`);
+        console.log(`   • Files with diagrams processed: ${processedCount}`);
+        console.log(`   • Files without diagrams copied: ${filesWithoutDiagrams.length}`);
+        console.log(`   • Total processing time: ${totalTime.toFixed(2)} seconds`);
+        if (processedCount > 0) {
+            console.log(`   • Average time per processed file: ${(totalTime / processedCount).toFixed(2)} seconds`);
+        }
         console.log(`   • Cached diagrams used: ${[...diagramCache.keys()].length}`);
 
     } catch (err) {
