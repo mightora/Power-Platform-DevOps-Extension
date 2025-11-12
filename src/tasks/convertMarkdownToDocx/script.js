@@ -67,6 +67,7 @@ async function run() {
         console.log('Installing plantuml...');
         execSync('choco install plantuml -y', { stdio: 'inherit' });
 
+        // Used by pandoc for processing images
         console.log('Installing imagemagick...');
         execSync('choco install imagemagick -y', { stdio: 'inherit' });
 
@@ -87,7 +88,12 @@ async function run() {
                     processDirectory(itemPath, itemOutputPath);
                 } else if (item.endsWith('.md')) {
                     // Process the Markdown file
-                    processMarkdownFile(itemPath, itemOutputPath.replace(/\.md$/, '.docx'));
+                    try {
+                        processMarkdownFile(itemPath, itemOutputPath.replace(/\.md$/, '.docx'));
+                    } catch (error) {
+                        console.error(`Failed to process ${itemPath}: ${error.message}`);
+                        console.log('Continuing with next file...');
+                    }
                 }
             });
         }

@@ -162,7 +162,14 @@ function fetchDeveloperMessage() {
                     return row;
                 });
 
+                // Determine the title based on whether it's a single file or multiple files
+                const roleName = path.basename(file, '.xml');
+                const title = useSingleFile 
+                    ? `# Role Permissions Documentation\n\n## ${roleName}\n`
+                    : `# ${roleName} Role Permissions\n`;
+
                 const markdownContent = [
+                    title,
                     actionTable,
                     header.join(' | '),
                     header.map(() => '---').join(' | '),
