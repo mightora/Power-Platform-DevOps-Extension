@@ -7,7 +7,7 @@
 [CmdletBinding()]
 
 param(
-    [string]$solutionPath,
+    [string]$unpackedSolutionPath,
     [string]$outputLocation,
     [bool]$includeDetails = $true,
     [bool]$includeUsage = $true,
@@ -35,28 +35,27 @@ Write-Host "Task: Mightora Power Platform Option Sets Documentation Generator"
 Write-Host "Date: $(Get-Date -Format 'yyyy-MM-dd')"
 Write-Host "==========================================================="
 
-if (-not $devMode -and -not $solutionPath) {
+if (-not $devMode -and -not $unpackedSolutionPath) {
     # Get inputs from the task when running in VSTS and no parameters provided
     try {
-        $solutionPath = Get-VstsInput -Name 'solutionPath'
+        $unpackedSolutionPath = Get-VstsInput -Name 'unpackedSolutionPath'
         $outputLocation = Get-VstsInput -Name 'outputLocation'
-        $includeDetails = [bool](Get-VstsInput -Name 'includeDetails')
-        $includeUsage = [bool](Get-VstsInput -Name 'includeUsage')
+        # includeDetails and includeUsage will use their default values since they're not in task.json
     } catch {
         Write-Output "VSTS environment not available. Please provide parameters directly."
     }
 }
 
 # Validation: Check if required parameters have been provided
-if (-not $solutionPath -or -not $outputLocation) {
-    Write-Output "Both solutionPath and outputLocation parameters are required."
-    Write-Output "Usage: .\powershell.ps1 -solutionPath '.\sampSol\CofECore\SolutionPackage\src' -outputLocation '.\testOutput'"
+if (-not $unpackedSolutionPath -or -not $outputLocation) {
+    Write-Output "Both unpackedSolutionPath and outputLocation parameters are required."
+    Write-Output "Usage: .\powershell.ps1 -unpackedSolutionPath '.\sampSol\CofECore\SolutionPackage\src' -outputLocation '.\testOutput'"
     exit 1
 }
 
 # Check if the solution path exists
-if (-not (Test-Path -Path $solutionPath)) {
-    Write-Output "Solution path not found at: $solutionPath"
+if (-not (Test-Path -Path $unpackedSolutionPath)) {
+    Write-Output "Solution path not found at: $unpackedSolutionPath"
     exit 1
 }
 
@@ -66,7 +65,7 @@ if (-not $devMode -and $env:Build_SourcesDirectory) {
     Write-Output "Working Directory Updated to: $(Get-Location)"
 }
 
-Write-Output "Solution path: $solutionPath"
+Write-Output "Solution path: $unpackedSolutionPath"
 Write-Output "Output location: $outputLocation"
 Write-Output "Include Details: $includeDetails"
 Write-Output "Include Usage: $includeUsage"
@@ -79,12 +78,12 @@ if (-not (Test-Path -Path $outputLocation)) {
 }
 
 # Find all option set XML files in the solution
-$optionSetFiles = Get-ChildItem -Path $solutionPath -Filter "*.xml" -Recurse | 
+$optionSetFiles = Get-ChildItem -Path $unpackedSolutionPath -Filter "*.xml" -Recurse | 
     Where-Object { $_.DirectoryName -like "*OptionSets*" -or $_.Name -like "*optionset*" }
 
 if (-not $optionSetFiles) {
     # Alternative search for option sets in solution components
-    $optionSetFiles = Get-ChildItem -Path $solutionPath -Filter "*.xml" -Recurse | 
+    $optionSetFiles = Get-ChildItem -Path $unpackedSolutionPath -Filter "*.xml" -Recurse | 
         Where-Object { 
             try {
                 [xml]$content = Get-Content $_.FullName -ErrorAction SilentlyContinue
@@ -96,7 +95,7 @@ if (-not $optionSetFiles) {
 }
 
 if (-not $optionSetFiles) {
-    Write-Output "No option set files found in the solution path: $solutionPath"
+    Write-Output "No option set files found in the solution path: $unpackedSolutionPath"
     exit 1
 }
 
@@ -174,9 +173,9 @@ if ($allOptionSets.Count -eq 0) {
 }
 
 # Generate solution name from path
-$solutionName = Split-Path -Path $solutionPath -Leaf
+$solutionName = Split-Path -Path $unpackedSolutionPath -Leaf
 if ($solutionName -eq "src") {
-    $solutionName = Split-Path -Path (Split-Path -Path $solutionPath -Parent) -Leaf
+    $solutionName = Split-Path -Path (Split-Path -Path $unpackedSolutionPath -Parent) -Leaf
 }
 
 # Initialize Markdown content

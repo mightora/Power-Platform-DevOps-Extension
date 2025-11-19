@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "mightora-power-platform-devOps-extension-dev",
-    "name": "DEV 2.2.10 - Power Platform Documentation Extension",
-    "version": "2.2.10",
+    "name": "DEV 2.2.20 - Power Platform Documentation Extension",
+    "version": "2.2.20",
     "publisher": "mightoraio",
     "targets": [
         {

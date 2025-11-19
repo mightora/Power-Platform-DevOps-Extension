@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 2,
-        "Patch": 57
+        "Patch": 58
     },
     "groups": [
         {
@@ -29,10 +29,10 @@
         {
             "name": "locationOfMDFiles",
             "type": "string",
-            "label": "Unpacked Solution Folder",
+            "label": "Location of MD Files",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "The path to the directory containing the Dataverse unpacked Solution, each of which should have an Entity.xml file.",
+            "helpMarkDown": "The path to the directory containing the Markdown files with images converted.",
             "groupName": "inputGroup"
         },
         {
