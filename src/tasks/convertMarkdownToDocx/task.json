@@ -11,7 +11,7 @@
     "version": {
         "Major": 1,
         "Minor": 2,
-        "Patch": 57
+        "Patch": 59
     },
     "groups": [
         {
@@ -29,16 +29,16 @@
         {
             "name": "locationOfMDFiles",
             "type": "string",
-            "label": "Unpacked Solution Folder",
+            "label": "Location of MD Files",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "The path to the directory containing the Dataverse unpacked Solution, each of which should have an Entity.xml file.",
+            "helpMarkDown": "The path to the directory containing the Markdown files with images converted.",
             "groupName": "inputGroup"
         },
         {
             "name": "outputLocation",
             "type": "string",
-            "label": "outputLocation",
+            "label": "Output Location",
             "defaultValue": "",
             "required": true,
             "helpMarkDown": "The directory where the generated Markdown documentation files will be stored. If this directory doesn't exist, the script will create it.",
@@ -47,7 +47,7 @@
         {
             "name": "templateFile",
             "type": "string",
-            "label": "templateFile",
+            "label": "Template File",
             "defaultValue": "",
             "required": false,
             "helpMarkDown": "The path to the template file that will be used to generate the Markdown documentation. This file should be in the same directory as the script.",
